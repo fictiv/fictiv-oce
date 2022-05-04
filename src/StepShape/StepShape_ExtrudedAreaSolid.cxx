@@ -11,18 +11,16 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepShape_ExtrudedAreaSolid.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepGeom_CurveBoundedSurface.hxx>
+#include <StepGeom_Direction.hxx>
+#include <StepShape_ExtrudedAreaSolid.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepShape_ExtrudedAreaSolid,StepShape_SweptAreaSolid)
 
 StepShape_ExtrudedAreaSolid::StepShape_ExtrudedAreaSolid ()  {}
-
-void StepShape_ExtrudedAreaSolid::Init(
-	const Handle(TCollection_HAsciiString)& aName,
-	const Handle(StepGeom_CurveBoundedSurface)& aSweptArea)
-{
-
-	StepShape_SweptAreaSolid::Init(aName, aSweptArea);
-}
 
 void StepShape_ExtrudedAreaSolid::Init(
 	const Handle(TCollection_HAsciiString)& aName,

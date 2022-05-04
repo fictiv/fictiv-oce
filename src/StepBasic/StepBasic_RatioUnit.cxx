@@ -11,8 +11,11 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepBasic_RatioUnit.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepBasic_RatioUnit.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepBasic_RatioUnit,StepBasic_NamedUnit)
 
 StepBasic_RatioUnit::StepBasic_RatioUnit ()  {}
 

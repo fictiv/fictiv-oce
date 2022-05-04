@@ -15,13 +15,17 @@
 
 // Generator:	ExpToCas (EXPRESS -> CASCADE/XSTEP Translator) V1.2
 
-#include <StepFEA_CurveElementInterval.ixx>
+#include <Standard_Type.hxx>
+#include <StepBasic_EulerAngles.hxx>
+#include <StepFEA_CurveElementInterval.hxx>
+#include <StepFEA_CurveElementLocation.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepFEA_CurveElementInterval,Standard_Transient)
 
 //=======================================================================
 //function : StepFEA_CurveElementInterval
 //purpose  : 
 //=======================================================================
-
 StepFEA_CurveElementInterval::StepFEA_CurveElementInterval ()
 {
 }

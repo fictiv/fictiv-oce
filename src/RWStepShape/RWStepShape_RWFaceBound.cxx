@@ -11,18 +11,18 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <RWStepShape_RWFaceBound.ixx>
-#include <StepShape_Loop.hxx>
-#include <StepShape_EdgeLoop.hxx>
-#include <StepShape_OrientedEdge.hxx>
-#include <StepShape_Edge.hxx>
 
-
+#include <Interface_Check.hxx>
 #include <Interface_EntityIterator.hxx>
-
-
+#include <Interface_ShareTool.hxx>
+#include <RWStepShape_RWFaceBound.hxx>
+#include <StepData_StepReaderData.hxx>
+#include <StepData_StepWriter.hxx>
+#include <StepShape_Edge.hxx>
+#include <StepShape_EdgeLoop.hxx>
 #include <StepShape_FaceBound.hxx>
-
+#include <StepShape_Loop.hxx>
+#include <StepShape_OrientedEdge.hxx>
 
 RWStepShape_RWFaceBound::RWStepShape_RWFaceBound () {}
 
@@ -125,7 +125,7 @@ void RWStepShape_RWFaceBound::Check
 	Standard_Boolean sharOE2 = aShto.IsShared(theOE2);
 	if(!sharOE2){
 #ifdef OCCT_DEBUG
-	  cout << "OrientedEdge2 not shared" <<endl;
+	  std::cout << "OrientedEdge2 not shared" <<std::endl;
 #endif
 	}
 	else {
@@ -137,7 +137,7 @@ void RWStepShape_RWFaceBound::Check
 	  Standard_Boolean sharEL2 = aShto.IsShared(theEL2);
 	  if(!sharEL2){
 #ifdef OCCT_DEBUG
-	    cout << "EdgeLoop2 not shared" <<endl;
+	    std::cout << "EdgeLoop2 not shared" <<std::endl;
 #endif
 	  }
 	  else {
@@ -151,7 +151,7 @@ void RWStepShape_RWFaceBound::Check
 	    }
 	    else {
 #ifdef OCCT_DEBUG
-	      cout << "EdgeLoop not referenced by FaceBound" << endl;
+	      std::cout << "EdgeLoop not referenced by FaceBound" << std::endl;
 #endif
 	    }
 	  }
@@ -174,7 +174,7 @@ void RWStepShape_RWFaceBound::Check
   } //end if(!theEL1.IsNull)
   else {
 #ifdef OCCT_DEBUG
-    cout << "no EdgeLoop in FaceBound" << endl;
+    std::cout << "no EdgeLoop in FaceBound" << std::endl;
 #endif
   }
 }

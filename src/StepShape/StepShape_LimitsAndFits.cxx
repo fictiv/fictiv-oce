@@ -11,7 +11,12 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepShape_LimitsAndFits.ixx>
+
+#include <Standard_Type.hxx>
+#include <StepShape_LimitsAndFits.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepShape_LimitsAndFits,Standard_Transient)
 
 StepShape_LimitsAndFits::StepShape_LimitsAndFits ()    {  }
 

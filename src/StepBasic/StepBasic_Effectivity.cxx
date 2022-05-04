@@ -11,7 +11,12 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepBasic_Effectivity.ixx>
+
+#include <Standard_Type.hxx>
+#include <StepBasic_Effectivity.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepBasic_Effectivity,Standard_Transient)
 
 StepBasic_Effectivity::StepBasic_Effectivity  ()    {  }
 

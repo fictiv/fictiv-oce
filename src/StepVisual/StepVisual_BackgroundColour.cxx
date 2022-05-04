@@ -11,8 +11,12 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepVisual_BackgroundColour.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepVisual_AreaOrView.hxx>
+#include <StepVisual_BackgroundColour.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepVisual_BackgroundColour,StepVisual_Colour)
 
 StepVisual_BackgroundColour::StepVisual_BackgroundColour ()  {}
 

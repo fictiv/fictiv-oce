@@ -11,20 +11,23 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <RWStepBasic_RWSiUnitAndThermodynamicTemperatureUnit.ixx>
-#include <StepBasic_SiUnit.hxx>
-#include <StepBasic_ThermodynamicTemperatureUnit.hxx>
+
+#include <Interface_Check.hxx>
+#include <RWStepBasic_RWSiUnit.hxx>
+#include <RWStepBasic_RWSiUnitAndThermodynamicTemperatureUnit.hxx>
 #include <StepBasic_DimensionalExponents.hxx>
 #include <StepBasic_SiPrefix.hxx>
+#include <StepBasic_SiUnit.hxx>
+#include <StepBasic_SiUnitAndThermodynamicTemperatureUnit.hxx>
 #include <StepBasic_SiUnitName.hxx>
-#include <RWStepBasic_RWSiUnit.hxx>
-
+#include <StepBasic_ThermodynamicTemperatureUnit.hxx>
+#include <StepData_StepReaderData.hxx>
+#include <StepData_StepWriter.hxx>
 
 //=======================================================================
 //function : RWStepBasic_RWSiUnitAndThermodynamicTemperatureUnit
 //purpose  : 
 //=======================================================================
-
 RWStepBasic_RWSiUnitAndThermodynamicTemperatureUnit::RWStepBasic_RWSiUnitAndThermodynamicTemperatureUnit ()
 {
 }
@@ -75,7 +78,7 @@ void RWStepBasic_RWSiUnitAndThermodynamicTemperatureUnit::ReadStep
   }
   
   // --- field : name ---
-  StepBasic_SiUnitName aName = StepBasic_sunMetre; // 0
+  StepBasic_SiUnitName aName;
   if (data->ParamType(num,2) == Interface_ParamEnum) {
     Standard_CString text = data->ParamCValue(num,2);
     if(!reader.DecodeName(aName,text)){
@@ -92,8 +95,6 @@ void RWStepBasic_RWSiUnitAndThermodynamicTemperatureUnit::ReadStep
   num = data->NextForComplex(num);
   if (!data->CheckNbParams(num,0,ach,"thermodynamic_temperature_unit")) return;
 
-   // @todo Apart the fail, nothing is done , and wrong enum values are used
- 
   //--- Initialisation of the red entity ---
   ent->Init(hasAprefix,aPrefix,aName);
 }

@@ -11,22 +11,18 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepShape_FacetedBrepAndBrepWithVoids.ixx>
 
-#include <StepShape_FacetedBrep.hxx>
-
+#include <Standard_Type.hxx>
 #include <StepShape_BrepWithVoids.hxx>
+#include <StepShape_ClosedShell.hxx>
+#include <StepShape_FacetedBrep.hxx>
+#include <StepShape_FacetedBrepAndBrepWithVoids.hxx>
+#include <StepShape_OrientedClosedShell.hxx>
+#include <TCollection_HAsciiString.hxx>
 
+IMPLEMENT_STANDARD_RTTIEXT(StepShape_FacetedBrepAndBrepWithVoids,StepShape_ManifoldSolidBrep)
 
 StepShape_FacetedBrepAndBrepWithVoids::StepShape_FacetedBrepAndBrepWithVoids ()  {}
-
-void StepShape_FacetedBrepAndBrepWithVoids::Init
-(const Handle(TCollection_HAsciiString)& aName,
- const Handle(StepShape_ClosedShell)& aOuter)
-{
-  
-  StepShape_ManifoldSolidBrep::Init(aName, aOuter);
-}
 
 void StepShape_FacetedBrepAndBrepWithVoids::Init
 (const Handle(TCollection_HAsciiString)& aName,

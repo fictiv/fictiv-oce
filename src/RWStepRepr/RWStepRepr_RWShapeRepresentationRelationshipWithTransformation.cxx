@@ -11,16 +11,15 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <RWStepRepr_RWShapeRepresentationRelationshipWithTransformation.ixx>
-#include <StepRepr_Representation.hxx>
-#include <StepRepr_Transformation.hxx>
 
-
+#include <Interface_Check.hxx>
 #include <Interface_EntityIterator.hxx>
-
-
+#include <RWStepRepr_RWShapeRepresentationRelationshipWithTransformation.hxx>
+#include <StepData_StepReaderData.hxx>
+#include <StepData_StepWriter.hxx>
+#include <StepRepr_Representation.hxx>
 #include <StepRepr_ShapeRepresentationRelationshipWithTransformation.hxx>
-
+#include <StepRepr_Transformation.hxx>
 
 RWStepRepr_RWShapeRepresentationRelationshipWithTransformation::RWStepRepr_RWShapeRepresentationRelationshipWithTransformation () {}
 
@@ -38,7 +37,7 @@ void RWStepRepr_RWShapeRepresentationRelationshipWithTransformation::ReadStep
         // --- Instance of plex componant RepresentationRelationship ---
 
         Standard_Integer num = 0;  // num0;
-        data->NamedForComplex("REPRESENTATION_RELATIONSHIP RPRRLT",num0,num,ach);
+        data->NamedForComplex("REPRESENTATION_RELATIONSHIP", "RPRRLT",num0,num,ach);
 
 	// --- Number of Parameter Control ---
 
@@ -71,7 +70,7 @@ void RWStepRepr_RWShapeRepresentationRelationshipWithTransformation::ReadStep
 
         // --- Instance of plex componant RepresentationRelationshipWithTransformation ---
 
-        data->NamedForComplex("REPRESENTATION_RELATIONSHIP_WITH_TRANSFORMATION RRWT",num0,num,ach);
+        data->NamedForComplex("REPRESENTATION_RELATIONSHIP_WITH_TRANSFORMATION", "RRWT",num0,num,ach);
 	if (!data->CheckNbParams(num,1,ach,"representation_relationship_with_transformation")) return;
 
 	// --- own field : transformation_operator
@@ -82,7 +81,7 @@ void RWStepRepr_RWShapeRepresentationRelationshipWithTransformation::ReadStep
 
         // --- Instance of plex componant ShapeRepresentationRelationship ---
 
-        data->NamedForComplex("SHAPE_REPRESENTATION_RELATIONSHIP SHRPRL",num0,num,ach);
+        data->NamedForComplex("SHAPE_REPRESENTATION_RELATIONSHIP", "SHRPRL",num0,num,ach);
 	if (!data->CheckNbParams(num,0,ach,"shape_representation_relationship")) return;
 
 	//--- Initialisation of the read entity ---

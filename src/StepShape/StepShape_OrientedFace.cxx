@@ -11,18 +11,16 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepShape_OrientedFace.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepShape_Face.hxx>
+#include <StepShape_FaceBound.hxx>
+#include <StepShape_OrientedFace.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepShape_OrientedFace,StepShape_Face)
 
 StepShape_OrientedFace::StepShape_OrientedFace ()  {}
-
-void StepShape_OrientedFace::Init(
-	const Handle(TCollection_HAsciiString)& aName,
-	const Handle(StepShape_HArray1OfFaceBound)& aBounds)
-{
-
-	StepShape_Face::Init(aName, aBounds);
-}
 
 void StepShape_OrientedFace::Init(
 	const Handle(TCollection_HAsciiString)& aName,
@@ -63,7 +61,7 @@ void StepShape_OrientedFace::SetBounds(const Handle(StepShape_HArray1OfFaceBound
 {
 	// WARNING : the field is redefined.
 	// field set up forbidden.
-	cout << "Field is redefined, SetUp Forbidden" << endl;
+	std::cout << "Field is redefined, SetUp Forbidden" << std::endl;
 }
 
 Handle(StepShape_HArray1OfFaceBound) StepShape_OrientedFace::Bounds() const

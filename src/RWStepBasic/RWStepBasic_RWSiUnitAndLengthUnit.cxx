@@ -13,14 +13,17 @@
 
 // pdn 24.12.98 t3d_opt.stp: treatment of unsorted uncertanties
 
-#include <RWStepBasic_RWSiUnitAndLengthUnit.ixx>
-#include <StepBasic_SiUnit.hxx>
-#include <StepBasic_LengthUnit.hxx>
-#include <StepBasic_DimensionalExponents.hxx>
-#include <StepBasic_SiPrefix.hxx>
-#include <StepBasic_SiUnitName.hxx>
+#include <Interface_Check.hxx>
 #include <RWStepBasic_RWSiUnit.hxx>
-
+#include <RWStepBasic_RWSiUnitAndLengthUnit.hxx>
+#include <StepBasic_DimensionalExponents.hxx>
+#include <StepBasic_LengthUnit.hxx>
+#include <StepBasic_SiPrefix.hxx>
+#include <StepBasic_SiUnit.hxx>
+#include <StepBasic_SiUnitAndLengthUnit.hxx>
+#include <StepBasic_SiUnitName.hxx>
+#include <StepData_StepReaderData.hxx>
+#include <StepData_StepWriter.hxx>
 
 RWStepBasic_RWSiUnitAndLengthUnit::RWStepBasic_RWSiUnitAndLengthUnit ()
 {
@@ -32,13 +35,13 @@ void RWStepBasic_RWSiUnitAndLengthUnit::ReadStep(const Handle(StepData_StepReade
 						 const Handle(StepBasic_SiUnitAndLengthUnit)& ent) const
 {
   Standard_Integer num = 0;  // num0;
-  Standard_Boolean sorted = data->NamedForComplex("LENGTH_UNIT LNGUNT",num0,num,ach);
+  Standard_Boolean sorted = data->NamedForComplex("LENGTH_UNIT", "LNGUNT",num0,num,ach);
 
   // --- Instance of plex componant LengthUnit ---
   if (!data->CheckNbParams(num,0,ach,"length_unit")) return;
 
   if (!sorted) num = 0; //pdn unsorted case 
-  sorted &=data->NamedForComplex("NAMED_UNIT NMDUNT",num0,num,ach);
+  sorted &=data->NamedForComplex("NAMED_UNIT", "NMDUNT",num0,num,ach);
 
   // --- Instance of common supertype NamedUnit ---
   if (!data->CheckNbParams(num,1,ach,"named_unit")) return;
@@ -49,7 +52,7 @@ void RWStepBasic_RWSiUnitAndLengthUnit::ReadStep(const Handle(StepData_StepReade
   data->CheckDerived(num,1,"dimensions",ach,Standard_False);
 
   if (!sorted) num = 0; //pdn unsorted case 
-  data->NamedForComplex("SI_UNIT SUNT",num0,num,ach);
+  data->NamedForComplex("SI_UNIT", "SUNT",num0,num,ach);
 
   // --- Instance of plex componant SiUnit ---
   if (!data->CheckNbParams(num,2,ach,"si_unit")) return;
@@ -74,7 +77,7 @@ void RWStepBasic_RWSiUnitAndLengthUnit::ReadStep(const Handle(StepData_StepReade
   } 
   
   // --- field : name ---
-  StepBasic_SiUnitName aName = StepBasic_sunMetre; // 0
+  StepBasic_SiUnitName aName;
   if (data->ParamType(num,2) == Interface_ParamEnum) {
     Standard_CString text = data->ParamCValue(num,2);
     if(!reader.DecodeName(aName,text)){
@@ -86,8 +89,6 @@ void RWStepBasic_RWSiUnitAndLengthUnit::ReadStep(const Handle(StepData_StepReade
     ach->AddFail("Parameter #2 (name) is not an enumeration");
     return;
   }
-
-  // @todo Apart the fail, nothing is done , and wrong enum values are used
 
   //--- Initialisation of the red entity ---
   ent->Init(hasAprefix,aPrefix,aName);

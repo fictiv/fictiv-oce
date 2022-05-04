@@ -14,7 +14,13 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepBasic_SiUnitAndAreaUnit.ixx>
+
+#include <Standard_Type.hxx>
+#include <StepBasic_AreaUnit.hxx>
+#include <StepBasic_DimensionalExponents.hxx>
+#include <StepBasic_SiUnitAndAreaUnit.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepBasic_SiUnitAndAreaUnit,StepBasic_SiUnit)
 
 StepBasic_SiUnitAndAreaUnit::StepBasic_SiUnitAndAreaUnit () 
 {
@@ -28,14 +34,4 @@ void StepBasic_SiUnitAndAreaUnit::SetAreaUnit(const Handle(StepBasic_AreaUnit)& 
 Handle(StepBasic_AreaUnit) StepBasic_SiUnitAndAreaUnit::AreaUnit() const
 {
   return areaUnit;
-}
-
-void StepBasic_SiUnitAndAreaUnit::SetDimensions(const Handle(StepBasic_DimensionalExponents)& aDimensions)
-{
-  StepBasic_NamedUnit::SetDimensions(aDimensions);
-}
-
-Handle(StepBasic_DimensionalExponents) StepBasic_SiUnitAndAreaUnit::Dimensions() const
-{
-  return StepBasic_NamedUnit::Dimensions();
 }

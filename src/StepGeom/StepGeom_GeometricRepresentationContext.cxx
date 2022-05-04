@@ -11,18 +11,14 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepGeom_GeometricRepresentationContext.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepGeom_GeometricRepresentationContext.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepGeom_GeometricRepresentationContext,StepRepr_RepresentationContext)
 
 StepGeom_GeometricRepresentationContext::StepGeom_GeometricRepresentationContext ()  {}
-
-void StepGeom_GeometricRepresentationContext::Init(
-	const Handle(TCollection_HAsciiString)& aContextIdentifier,
-	const Handle(TCollection_HAsciiString)& aContextType)
-{
-
-	StepRepr_RepresentationContext::Init(aContextIdentifier, aContextType);
-}
 
 void StepGeom_GeometricRepresentationContext::Init(
 	const Handle(TCollection_HAsciiString)& aContextIdentifier,

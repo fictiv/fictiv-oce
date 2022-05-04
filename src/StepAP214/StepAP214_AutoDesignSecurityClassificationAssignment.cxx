@@ -11,17 +11,15 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepAP214_AutoDesignSecurityClassificationAssignment.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepAP214_AutoDesignSecurityClassificationAssignment.hxx>
+#include <StepBasic_Approval.hxx>
+#include <StepBasic_SecurityClassification.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepAP214_AutoDesignSecurityClassificationAssignment,StepBasic_SecurityClassificationAssignment)
 
 StepAP214_AutoDesignSecurityClassificationAssignment::StepAP214_AutoDesignSecurityClassificationAssignment ()  {}
-
-void StepAP214_AutoDesignSecurityClassificationAssignment::Init(
-	const Handle(StepBasic_SecurityClassification)& aAssignedSecurityClassification)
-{
-
-	StepBasic_SecurityClassificationAssignment::Init(aAssignedSecurityClassification);
-}
 
 void StepAP214_AutoDesignSecurityClassificationAssignment::Init(
 	const Handle(StepBasic_SecurityClassification)& aAssignedSecurityClassification,

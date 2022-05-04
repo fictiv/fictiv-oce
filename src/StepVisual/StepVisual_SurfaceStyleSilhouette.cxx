@@ -11,8 +11,12 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepVisual_SurfaceStyleSilhouette.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepVisual_CurveStyle.hxx>
+#include <StepVisual_SurfaceStyleSilhouette.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepVisual_SurfaceStyleSilhouette,Standard_Transient)
 
 StepVisual_SurfaceStyleSilhouette::StepVisual_SurfaceStyleSilhouette ()  {}
 

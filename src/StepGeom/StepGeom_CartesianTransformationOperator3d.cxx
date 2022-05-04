@@ -11,24 +11,16 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepGeom_CartesianTransformationOperator3d.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepGeom_CartesianPoint.hxx>
+#include <StepGeom_CartesianTransformationOperator3d.hxx>
+#include <StepGeom_Direction.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepGeom_CartesianTransformationOperator3d,StepGeom_CartesianTransformationOperator)
 
 StepGeom_CartesianTransformationOperator3d::StepGeom_CartesianTransformationOperator3d ()  {}
-
-void StepGeom_CartesianTransformationOperator3d::Init(
-	const Handle(TCollection_HAsciiString)& aName,
-	const Standard_Boolean hasAaxis1,
-	const Handle(StepGeom_Direction)& aAxis1,
-	const Standard_Boolean hasAaxis2,
-	const Handle(StepGeom_Direction)& aAxis2,
-	const Handle(StepGeom_CartesianPoint)& aLocalOrigin,
-	const Standard_Boolean hasAscale,
-	const Standard_Real aScale)
-{
-
-	StepGeom_CartesianTransformationOperator::Init(aName, hasAaxis1, aAxis1, hasAaxis2, aAxis2, aLocalOrigin, hasAscale, aScale);
-}
 
 void StepGeom_CartesianTransformationOperator3d::Init(
 	const Handle(TCollection_HAsciiString)& aName,

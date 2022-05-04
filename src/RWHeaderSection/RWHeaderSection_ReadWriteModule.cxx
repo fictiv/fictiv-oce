@@ -11,27 +11,30 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <RWHeaderSection_ReadWriteModule.ixx>
-#include <Interface_ReaderLib.hxx>
-#include <StepData_WriterLib.hxx>
+
+#include <HeaderSection_FileDescription.hxx>
+#include <HeaderSection_FileName.hxx>
+#include <HeaderSection_FileSchema.hxx>
 #include <HeaderSection_Protocol.hxx>
+#include <Interface_Check.hxx>
 #include <Interface_Macros.hxx>
 #include <Interface_ParamType.hxx>
-
-
-#include <HeaderSection_FileName.hxx>
-#include <HeaderSection_FileDescription.hxx>
-#include <HeaderSection_FileSchema.hxx>
-
-#include <StepData_UndefinedEntity.hxx>
-
-
-#include <RWHeaderSection_RWFileName.hxx>
+#include <Interface_ReaderLib.hxx>
+#include <RWHeaderSection_ReadWriteModule.hxx>
 #include <RWHeaderSection_RWFileDescription.hxx>
+#include <RWHeaderSection_RWFileName.hxx>
 #include <RWHeaderSection_RWFileSchema.hxx>
+#include <Standard_Transient.hxx>
+#include <Standard_Type.hxx>
+#include <StepData_StepReaderData.hxx>
+#include <StepData_StepWriter.hxx>
+#include <StepData_UndefinedEntity.hxx>
+#include <StepData_WriterLib.hxx>
+#include <TCollection_AsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(RWHeaderSection_ReadWriteModule,StepData_ReadWriteModule)
 
 // -- General Declarations (Recognize, StepType) ---
-
 static TCollection_AsciiString PasReco("");    // neutralise StartEntity de SW
 static TCollection_AsciiString Reco_FileName ("FILE_NAME");
 static TCollection_AsciiString Reco_FileDescription ("FILE_DESCRIPTION");
@@ -63,7 +66,7 @@ Standard_Integer RWHeaderSection_ReadWriteModule::CaseStep (const TColStd_Sequen
 {
   Standard_Integer NbComp = types.Length();
   if (NbComp < 2) {
-    cout << "Plex Instance illegal " << endl;
+    std::cout << "Plex Instance illegal " << std::endl;
   }
   return 0;
 }

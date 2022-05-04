@@ -14,57 +14,63 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <STEPConstruct_ValidationProps.ixx>
-#include <STEPConstruct_UnitContext.hxx>
 
-#include <Message.hxx>
-#include <Message_Messenger.hxx>
+#include <APIHeaderSection_MakeHeader.hxx>
+#include <gp_Pnt.hxx>
+#include <Interface_EntityIterator.hxx>
 #include <Interface_Macros.hxx>
 #include <Interface_Static.hxx>
-#include <Interface_EntityIterator.hxx>
-
+#include <Message.hxx>
+#include <Message_Messenger.hxx>
+#include <StepBasic_DerivedUnit.hxx>
+#include <StepBasic_DerivedUnitElement.hxx>
+#include <StepBasic_HArray1OfDerivedUnitElement.hxx>
+#include <StepBasic_MeasureValueMember.hxx>
+#include <StepBasic_MeasureWithUnit.hxx>
+#include <StepBasic_ProductDefinition.hxx>
+#include <StepBasic_SiUnitAndAreaUnit.hxx>
+#include <StepBasic_SiUnitAndLengthUnit.hxx>
+#include <StepBasic_Unit.hxx>
+#include <STEPConstruct.hxx>
+#include <STEPConstruct_UnitContext.hxx>
+#include <STEPConstruct_ValidationProps.hxx>
+#include <StepData_StepModel.hxx>
+#include <StepGeom_CartesianPoint.hxx>
+#include <StepGeom_GeometricRepresentationContextAndGlobalUnitAssignedContext.hxx>
+#include <StepGeom_GeometricRepresentationItem.hxx>
+#include <StepGeom_GeomRepContextAndGlobUnitAssCtxAndGlobUncertaintyAssCtx.hxx>
+#include <StepRepr_CharacterizedDefinition.hxx>
+#include <StepRepr_GlobalUnitAssignedContext.hxx>
+#include <StepRepr_HArray1OfRepresentationItem.hxx>
+#include <StepRepr_MeasureRepresentationItem.hxx>
+#include <StepRepr_NextAssemblyUsageOccurrence.hxx>
+#include <StepRepr_ProductDefinitionShape.hxx>
+#include <StepRepr_PropertyDefinition.hxx>
+#include <StepRepr_PropertyDefinitionRepresentation.hxx>
+#include <StepRepr_RepresentationContext.hxx>
+#include <StepRepr_RepresentationItem.hxx>
+#include <StepRepr_RepresentationRelationship.hxx>
+#include <StepRepr_ShapeAspect.hxx>
+#include <StepRepr_ShapeRepresentationRelationship.hxx>
+#include <StepShape_ContextDependentShapeRepresentation.hxx>
+#include <StepShape_ShapeDefinitionRepresentation.hxx>
+#include <StepShape_ShapeRepresentation.hxx>
+#include <TCollection_HAsciiString.hxx>
+#include <TopLoc_Location.hxx>
+#include <TopoDS_Iterator.hxx>
+#include <TopoDS_Shape.hxx>
 #include <Transfer_Binder.hxx>
 #include <Transfer_SimpleBinderOfTransient.hxx>
 #include <TransferBRep.hxx>
 #include <TransferBRep_ShapeMapper.hxx>
-
-#include <XSControl_TransferWriter.hxx>
 #include <XSControl_TransferReader.hxx>
-
-#include <TopLoc_Location.hxx>
-#include <TopoDS_Iterator.hxx>
-#include <TCollection_HAsciiString.hxx>
-
-#include <APIHeaderSection_MakeHeader.hxx>
-#include <StepGeom_CartesianPoint.hxx>
-#include <StepGeom_GeometricRepresentationItem.hxx>
-#include <StepGeom_GeomRepContextAndGlobUnitAssCtxAndGlobUncertaintyAssCtx.hxx>
-#include <StepGeom_GeometricRepresentationContextAndGlobalUnitAssignedContext.hxx>
-#include <StepRepr_ShapeAspect.hxx>
-#include <StepRepr_CharacterizedDefinition.hxx>
-#include <StepRepr_PropertyDefinition.hxx>
-#include <StepRepr_HArray1OfRepresentationItem.hxx>
-#include <StepRepr_MeasureRepresentationItem.hxx>
-#include <StepRepr_GlobalUnitAssignedContext.hxx>
-#include <StepShape_ShapeRepresentation.hxx>
-#include <StepShape_ShapeDefinitionRepresentation.hxx>
-#include <StepBasic_MeasureValueMember.hxx>
-#include <StepBasic_SiUnitAndLengthUnit.hxx>
-#include <StepBasic_DerivedUnitElement.hxx>
-#include <StepBasic_HArray1OfDerivedUnitElement.hxx>
-#include <StepBasic_DerivedUnit.hxx>
-#include <StepBasic_MeasureWithUnit.hxx>
-#include <StepBasic_Unit.hxx>
-#include <StepBasic_SiUnitAndAreaUnit.hxx>
-#include <StepShape_ContextDependentShapeRepresentation.hxx>
-#include <StepRepr_ShapeRepresentationRelationship.hxx>
-#include <STEPConstruct.hxx>
+#include <XSControl_TransferWriter.hxx>
+#include <XSControl_WorkSession.hxx>
 
 //=======================================================================
 //function : STEPConstruct_ValidationProps
 //purpose  : 
 //=======================================================================
-
 STEPConstruct_ValidationProps::STEPConstruct_ValidationProps () 
 {
 }
@@ -143,11 +149,11 @@ Standard_Boolean STEPConstruct_ValidationProps::FindTarget (const TopoDS_Shape &
         Context = CDSR->RepresentationRelation()->Rep2()->ContextOfItems();
       }
 #ifdef OCCT_DEBUG
-      else cout << "INSTANCE: CDRS from NAUO NOT found" << endl;
+      else std::cout << "INSTANCE: CDRS from NAUO NOT found" << std::endl;
 #endif
     }
 #ifdef OCCT_DEBUG
-    else cout << "INSTANCE: NAUO NOT found" << endl;
+    else std::cout << "INSTANCE: NAUO NOT found" << std::endl;
 #endif
 */
   }
@@ -163,12 +169,12 @@ Standard_Boolean STEPConstruct_ValidationProps::FindTarget (const TopoDS_Shape &
       }
       target.SetValue ( PDS );
 #ifdef OCCT_DEBUG
-//      cout << "COMPOUND: SDR found: " << sdr->DynamicType()->Name() << endl;
+//      std::cout << "COMPOUND: SDR found: " << sdr->DynamicType()->Name() << std::endl;
 #endif
     }
     else {
 #ifdef OCCT_DEBUG
-      cout << "COMPOUND: ProdDef NOT found" << endl;
+      std::cout << "COMPOUND: ProdDef NOT found" << std::endl;
 #endif
       Handle(StepShape_ShapeRepresentation) SR;
       if(FinderProcess()->FindTypedTransient(mapper,STANDARD_TYPE(StepShape_ShapeRepresentation),SR)) {
@@ -214,14 +220,14 @@ Standard_Boolean STEPConstruct_ValidationProps::FindTarget (const TopoDS_Shape &
     Handle(StepGeom_GeometricRepresentationItem) item;
     if ( FinderProcess()->FindTypedTransient (mapper,STANDARD_TYPE(StepGeom_GeometricRepresentationItem), item) ) {
 #ifdef OCCT_DEBUG
-//      cout << Shape.TShape()->DynamicType()->Name() << ": GeomRepItem found: " << item->DynamicType()->Name() << endl;
+//      std::cout << Shape.TShape()->DynamicType()->Name() << ": GeomRepItem found: " << item->DynamicType()->Name() << std::endl;
 #endif
       // find PDS (GRI <- SR <- SDR -> PDS)
       Handle(StepRepr_ProductDefinitionShape) PDS;
       Interface_EntityIterator subs = Graph().Sharings(item);
       for (subs.Start(); PDS.IsNull() && subs.More(); subs.Next()) {
 #ifdef OCCT_DEBUG
-//	cout << "Parsing back refs: found " << subs.Value()->DynamicType()->Name() << endl;
+//	std::cout << "Parsing back refs: found " << subs.Value()->DynamicType()->Name() << std::endl;
 #endif
         if ( ! subs.Value()->IsKind(STANDARD_TYPE(StepShape_ShapeRepresentation)) ) continue;
         Handle(StepShape_ShapeRepresentation) sr = 
@@ -256,7 +262,7 @@ Standard_Boolean STEPConstruct_ValidationProps::FindTarget (const TopoDS_Shape &
 //	if ( ! FinderProcess()->FindTypedTransient (mapper,STANDARD_TYPE(StepRepr_ShapeAspect), aspect ) ||
 //	     aspect->OfShape() != PDS )
 #ifdef OCCT_DEBUG
-          cout << Shape.TShape()->DynamicType()->Name() << ": SHAPE_ASPECT NOT found, creating" << endl;
+          std::cout << Shape.TShape()->DynamicType()->Name() << ": SHAPE_ASPECT NOT found, creating" << std::endl;
 #endif
 	  // create aspect and all related data
           Handle(TCollection_HAsciiString) AspectName = new TCollection_HAsciiString ( "" );
@@ -293,7 +299,7 @@ Standard_Boolean STEPConstruct_ValidationProps::FindTarget (const TopoDS_Shape &
 	// SHAPE_ASPECT found, but we also need context: FIND IT !!!!
         else { 
 #ifdef OCCT_DEBUG
-          cout << Shape.TShape()->DynamicType()->Name() << ": SHAPE_ASPECT found" << endl;
+          std::cout << Shape.TShape()->DynamicType()->Name() << ": SHAPE_ASPECT found" << std::endl;
 #endif
           Handle(StepRepr_ProductDefinitionShape) aPDS = aspect->OfShape();
           Interface_EntityIterator asubs = Graph().Sharings(aPDS);
@@ -308,11 +314,11 @@ Standard_Boolean STEPConstruct_ValidationProps::FindTarget (const TopoDS_Shape &
         if ( ! aspect.IsNull() ) target.SetValue ( aspect );
       }
 #ifdef OCCT_DEBUG
-      else  cout << Shape.TShape()->DynamicType()->Name() << ": PDS NOT found, fail to create SHAPE_ASPECT" << endl;
+      else  std::cout << Shape.TShape()->DynamicType()->Name() << ": PDS NOT found, fail to create SHAPE_ASPECT" << std::endl;
 #endif
     }
 #ifdef OCCT_DEBUG
-    else cout << Shape.TShape()->DynamicType()->Name() << ": GeomRepItem NOT found" << endl;
+    else std::cout << Shape.TShape()->DynamicType()->Name() << ": GeomRepItem NOT found" << std::endl;
 #endif
   }
 
@@ -333,7 +339,7 @@ Standard_Boolean STEPConstruct_ValidationProps::AddProp (const StepRepr_Characte
 {
   // FINALLY, create a structure of 5 entities describing a link between a shape and its property
   Handle(TCollection_HAsciiString) PropDefName = 
-    new TCollection_HAsciiString ( "geometric_validation_property" );
+    new TCollection_HAsciiString ( "geometric validation property" );
   Handle(TCollection_HAsciiString) PropDefDescr = new TCollection_HAsciiString ( Descr );
   Handle(StepRepr_PropertyDefinition) propdef = new StepRepr_PropertyDefinition;
   propdef->Init ( PropDefName, Standard_True, PropDefDescr, target );
@@ -488,11 +494,20 @@ Standard_Boolean STEPConstruct_ValidationProps::LoadProps (TColStd_SequenceOfTra
     Handle(StepRepr_PropertyDefinitionRepresentation) PDR = 
       Handle(StepRepr_PropertyDefinitionRepresentation)::DownCast ( enti );
     
-    // check that PDR is for validation props
+    // Check that PDR is for validation props.
     Handle(StepRepr_PropertyDefinition) PD = PDR->Definition().PropertyDefinition();
-    if ( PD.IsNull() || PD->Name().IsNull() 
-         || PD->Name()->String() != "geometric_validation_property" ) 
-      continue;
+    if (!PD.IsNull() && !PD->Name().IsNull())
+    {
+      // Note: according to "Recommended Practices for Geometric and Assembly Validation Properties" Release 4.4
+      // as of Augist 17, 2016, item 4.6, the name of PropertyDefinition should be "geometric validation property"
+      // with words separated by spaces; however older versions of the same RP document used underscores.
+      // To be able to read files written using older convention, we convert all underscores to spaces for this check.
+      TCollection_AsciiString aName = PD->Name()->String();
+      aName.ChangeAll('_', ' ', Standard_False);
+      aName.LowerCase();
+      if (aName != "geometric validation property")
+        continue;
+    }
 
     seq.Append ( PDR );
   }
@@ -515,10 +530,10 @@ Handle(StepBasic_ProductDefinition) STEPConstruct_ValidationProps::GetPropPD (co
     Handle(StepRepr_ShapeAspect) SA = CD.ShapeAspect();
     if ( SA.IsNull() ) {
 #ifdef OCCT_DEBUG
-      Handle(Message_Messenger) sout = Message::DefaultMessenger();
+      Message_Messenger::StreamBuffer sout = Message::SendInfo();
       sout << "Error: Cannot find target entity (SA) for geometric_validation_property "; 
-      Model()->PrintLabel ( PD, sout ); 
-      sout << endl;
+      Model()->PrintLabel (PD, sout);
+      sout << std::endl;
 #endif
       return ProdDef;
     }
@@ -540,10 +555,10 @@ Handle(StepBasic_ProductDefinition) STEPConstruct_ValidationProps::GetPropPD (co
   }
 #ifdef OCCT_DEBUG
   if ( ProdDef.IsNull() ) {
-    Handle(Message_Messenger) sout = Message::DefaultMessenger();
+    Message_Messenger::StreamBuffer sout = Message::SendInfo();
     sout << "Error: Cannot find target entity (SDR) for geometric_validation_property "; 
-    Model()->PrintLabel ( PD, sout ); 
-    sout << endl;
+    Model()->PrintLabel (PD, sout);
+    sout << std::endl;
   }
 #endif
   return ProdDef;
@@ -593,10 +608,10 @@ TopoDS_Shape STEPConstruct_ValidationProps::GetPropShape (const Handle(StepBasic
   //}
 #ifdef OCCT_DEBUG
   if ( S.IsNull() ) {
-    Handle(Message_Messenger) sout = Message::DefaultMessenger();
+    Message_Messenger::StreamBuffer sout = Message::SendInfo();
     sout << "Warning: Entity "; 
-    Model()->PrintLabel ( ProdDef, sout ); 
-    sout << " is not mapped to shape" << endl;
+    Model()->PrintLabel (ProdDef, sout);
+    sout << " is not mapped to shape" << std::endl;
   }
 #endif
   return S;
@@ -667,7 +682,7 @@ Standard_Boolean STEPConstruct_ValidationProps::GetPropReal (const Handle(StepRe
   else if ( Name == "VOLUME_MEASURE" ) isArea = Standard_False; 
   else {
 #ifdef OCCT_DEBUG
-    cout << "Warning: Measure " << (const void*) Model()->StringLabel ( M ) << " is neither area not volume" << endl;
+    std::cout << "Warning: Measure " << Model()->StringLabel ( M )->String() << " is neither area not volume" << std::endl;
 #endif
     return Standard_False;
   }
@@ -690,9 +705,9 @@ Standard_Boolean STEPConstruct_ValidationProps::GetPropPnt (const Handle(StepRep
   Handle(StepGeom_CartesianPoint) P = Handle(StepGeom_CartesianPoint)::DownCast ( item );
   if ( P.IsNull() || P->NbCoordinates() != 3 ) {
 #ifdef OCCT_DEBUG
-    cout << "Warning: Point " << (const void*) Model()->StringLabel ( P ) << " is not valid for centroid" << endl;
+    std::cout << "Warning: Point " << Model()->StringLabel ( P )->String() << " is not valid for centroid" << std::endl;
 #endif
-    return Standard_False;;
+    return Standard_False;
   }
 
   gp_Pnt pos ( P->CoordinatesValue(1), P->CoordinatesValue(2), P->CoordinatesValue(3) );

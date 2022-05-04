@@ -11,23 +11,22 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <RWStepGeom_RWBSplineCurveWithKnots.ixx>
+
+#include <Interface_Check.hxx>
+#include <Interface_EntityIterator.hxx>
+#include <Interface_ShareTool.hxx>
+#include <RWStepGeom_RWBSplineCurveWithKnots.hxx>
+#include <StepData_Logical.hxx>
+#include <StepData_StepReaderData.hxx>
+#include <StepData_StepWriter.hxx>
+#include <StepGeom_BSplineCurveForm.hxx>
+#include <StepGeom_BSplineCurveWithKnots.hxx>
+#include <StepGeom_CartesianPoint.hxx>
+#include <StepGeom_HArray1OfCartesianPoint.hxx>
+#include <StepGeom_KnotType.hxx>
+#include <TCollection_AsciiString.hxx>
 #include <TColStd_HArray1OfInteger.hxx>
 #include <TColStd_HArray1OfReal.hxx>
-#include <StepGeom_KnotType.hxx>
-#include <StepGeom_HArray1OfCartesianPoint.hxx>
-#include <StepGeom_CartesianPoint.hxx>
-#include <StepGeom_BSplineCurveForm.hxx>
-#include <StepData_Logical.hxx>
-
-
-#include <Interface_EntityIterator.hxx>
-
-
-#include <StepGeom_BSplineCurveWithKnots.hxx>
-
-#include <TCollection_AsciiString.hxx>
-
 
 // --- Enum : KnotType ---
 static TCollection_AsciiString ktUniformKnots(".UNIFORM_KNOTS.");
@@ -77,13 +76,18 @@ void RWStepGeom_RWBSplineCurveWithKnots::ReadStep
 	Standard_Integer nsub3;
 	if (data->ReadSubList (num,3,"control_points_list",ach,nsub3)) {
 	  Standard_Integer nb3 = data->NbParams(nsub3);
-	  aControlPointsList = new StepGeom_HArray1OfCartesianPoint (1, nb3);
-	  for (Standard_Integer i3 = 1; i3 <= nb3; i3 ++) {
-	    //szv#4:S4163:12Mar99 `Standard_Boolean stat3 =` not needed
-	    if (data->ReadEntity (nsub3, i3,"cartesian_point", ach,
-				  STANDARD_TYPE(StepGeom_CartesianPoint), anent3))
-	      aControlPointsList->SetValue(i3, anent3);
-	  }
+    if(nb3 <1)
+      ach->AddFail("Number of control points of the b_spline_curve_form is equal to 0");
+    else
+    {
+      aControlPointsList = new StepGeom_HArray1OfCartesianPoint (1, nb3);
+      for (Standard_Integer i3 = 1; i3 <= nb3; i3 ++) {
+        //szv#4:S4163:12Mar99 `Standard_Boolean stat3 =` not needed
+        if (data->ReadEntity (nsub3, i3,"cartesian_point", ach,
+          STANDARD_TYPE(StepGeom_CartesianPoint), anent3))
+          aControlPointsList->SetValue(i3, anent3);
+      }
+    }
 	}
 
 	// --- inherited field : curveForm ---
@@ -250,8 +254,8 @@ void RWStepGeom_RWBSplineCurveWithKnots::Check
   Standard_Integer nbMult = ent->NbKnotMultiplicities();
   Standard_Integer nbKno  = ent->NbKnots();
   Standard_Integer sumMult = 0;
-//  cout << "BSplineCurveWithKnots: nbMult=" << nbMult << " nbKno= " << 
-//    nbKno << " nbCPL= " << nbCPL << " degree= " << dgBSC << endl;
+//  std::cout << "BSplineCurveWithKnots: nbMult=" << nbMult << " nbKno= " << 
+//    nbKno << " nbCPL= " << nbCPL << " degree= " << dgBSC << std::endl;
   if(nbMult != nbKno) {
     ach->AddFail("ERROR: No.of KnotMultiplicities not equal No.of Knots");
   }
@@ -262,8 +266,8 @@ void RWStepGeom_RWBSplineCurveWithKnots::Check
   Standard_Integer sumNonP = nbCPL + dgBSC + 1;
   Standard_Integer mult1 = ent->KnotMultiplicitiesValue(1);
   Standard_Integer multN = ent->KnotMultiplicitiesValue(nbMult);
-//  cout << "BSplineCurveWithKnots: mult1=" << mult1 << " multN= " <<
-//    multN << " sumMult= " << sumMult << endl;
+//  std::cout << "BSplineCurveWithKnots: mult1=" << mult1 << " multN= " <<
+//    multN << " sumMult= " << sumMult << std::endl;
   if((sumMult + multN) == sumNonP) {
   }
   else if((sumMult == nbCPL) && (mult1 == multN)) {

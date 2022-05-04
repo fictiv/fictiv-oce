@@ -11,8 +11,11 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepGeom_BezierCurve.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepGeom_BezierCurve.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepGeom_BezierCurve,StepGeom_BSplineCurve)
 
 StepGeom_BezierCurve::StepGeom_BezierCurve ()  {}
 

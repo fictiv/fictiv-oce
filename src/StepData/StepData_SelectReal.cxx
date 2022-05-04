@@ -11,7 +11,11 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepData_SelectReal.ixx>
+
+#include <Standard_Type.hxx>
+#include <StepData_SelectReal.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepData_SelectReal,StepData_SelectMember)
 
 //  Definitions : cf Field
 #define KindReal 5

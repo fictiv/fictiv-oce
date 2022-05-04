@@ -15,13 +15,15 @@
 
 // Generator:	ExpToCas (EXPRESS -> CASCADE/XSTEP Translator) V1.2
 
-#include <StepShape_PointRepresentation.ixx>
+#include <Standard_Type.hxx>
+#include <StepShape_PointRepresentation.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepShape_PointRepresentation,StepShape_ShapeRepresentation)
 
 //=======================================================================
 //function : StepShape_PointRepresentation
 //purpose  : 
 //=======================================================================
-
 StepShape_PointRepresentation::StepShape_PointRepresentation ()
 {
 }

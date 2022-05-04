@@ -11,8 +11,11 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepVisual_MechanicalDesignGeometricPresentationRepresentation.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepVisual_MechanicalDesignGeometricPresentationRepresentation.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepVisual_MechanicalDesignGeometricPresentationRepresentation,StepVisual_PresentationRepresentation)
 
 StepVisual_MechanicalDesignGeometricPresentationRepresentation::StepVisual_MechanicalDesignGeometricPresentationRepresentation ()  {}
 

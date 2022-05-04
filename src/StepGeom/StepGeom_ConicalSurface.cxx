@@ -11,18 +11,15 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepGeom_ConicalSurface.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepGeom_Axis2Placement3d.hxx>
+#include <StepGeom_ConicalSurface.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepGeom_ConicalSurface,StepGeom_ElementarySurface)
 
 StepGeom_ConicalSurface::StepGeom_ConicalSurface ()  {}
-
-void StepGeom_ConicalSurface::Init(
-	const Handle(TCollection_HAsciiString)& aName,
-	const Handle(StepGeom_Axis2Placement3d)& aPosition)
-{
-
-	StepGeom_ElementarySurface::Init(aName, aPosition);
-}
 
 void StepGeom_ConicalSurface::Init(
 	const Handle(TCollection_HAsciiString)& aName,

@@ -11,8 +11,14 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <RWStepShape_RWEdgeLoop.ixx>
 
+#include <Interface_Check.hxx>
+#include <Interface_EntityIterator.hxx>
+#include <Interface_ShareTool.hxx>
+#include <RWStepShape_RWEdgeLoop.hxx>
+#include <StepData_StepReaderData.hxx>
+#include <StepData_StepWriter.hxx>
+#include <StepShape_EdgeLoop.hxx>
 #include <StepShape_HArray1OfOrientedEdge.hxx>
 #include <StepShape_OrientedEdge.hxx>
 
@@ -96,7 +102,7 @@ void RWStepShape_RWEdgeLoop::Check
    const Interface_ShareTool& ,
    Handle(Interface_Check)& ach) const
 {
-//  cout << "------ calling CheckEdgeLoop ------" << endl;
+//  std::cout << "------ calling CheckEdgeLoop ------" << std::endl;
   Standard_Boolean headToTail = Standard_True;
   //Standard_Boolean noIdentVtx = Standard_True; //szv#4:S4163:12Mar99 unused
   Standard_Integer nbEdg = ent->NbEdgeList();

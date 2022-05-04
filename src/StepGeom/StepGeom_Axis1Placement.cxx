@@ -11,18 +11,16 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepGeom_Axis1Placement.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepGeom_Axis1Placement.hxx>
+#include <StepGeom_CartesianPoint.hxx>
+#include <StepGeom_Direction.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepGeom_Axis1Placement,StepGeom_Placement)
 
 StepGeom_Axis1Placement::StepGeom_Axis1Placement ()  {}
-
-void StepGeom_Axis1Placement::Init(
-	const Handle(TCollection_HAsciiString)& aName,
-	const Handle(StepGeom_CartesianPoint)& aLocation)
-{
-
-	StepGeom_Placement::Init(aName, aLocation);
-}
 
 void StepGeom_Axis1Placement::Init(
 	const Handle(TCollection_HAsciiString)& aName,

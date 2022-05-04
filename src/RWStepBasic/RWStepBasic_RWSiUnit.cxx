@@ -11,9 +11,14 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <RWStepBasic_RWSiUnit.ixx>
-#include <StepBasic_DimensionalExponents.hxx>
 
+#include <Interface_Check.hxx>
+#include <RWStepBasic_RWSiUnit.hxx>
+#include <StepBasic_DimensionalExponents.hxx>
+#include <StepBasic_SiUnit.hxx>
+#include <StepData_StepReaderData.hxx>
+#include <StepData_StepWriter.hxx>
+#include <TCollection_AsciiString.hxx>
 
 // --- Enum : SiPrefix ---
 static TCollection_AsciiString spExa(".EXA.");
@@ -100,8 +105,6 @@ void RWStepBasic_RWSiUnit::ReadStep(const Handle(StepData_StepReaderData)& data,
   }
   else
     ach->AddFail("Parameter #3 (name) is not an enumeration");
-
-  // @todo Apart the fail, nothing is done , and wrong enum values are used
 
   //--- Initialisation of the read entity ---
   ent->Init(hasAprefix, aPrefix, aName);

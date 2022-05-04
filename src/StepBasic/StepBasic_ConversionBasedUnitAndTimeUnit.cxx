@@ -11,20 +11,20 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepBasic_ConversionBasedUnitAndTimeUnit.ixx>
-#include <StepBasic_ConversionBasedUnit.hxx>
-#include <StepBasic_TimeUnit.hxx>
 
+#include <Standard_Type.hxx>
+#include <StepBasic_ConversionBasedUnit.hxx>
+#include <StepBasic_ConversionBasedUnitAndTimeUnit.hxx>
+#include <StepBasic_DimensionalExponents.hxx>
+#include <StepBasic_MeasureWithUnit.hxx>
+#include <StepBasic_TimeUnit.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepBasic_ConversionBasedUnitAndTimeUnit,StepBasic_ConversionBasedUnit)
 
 StepBasic_ConversionBasedUnitAndTimeUnit::StepBasic_ConversionBasedUnitAndTimeUnit ()
 {
 }
-
-void StepBasic_ConversionBasedUnitAndTimeUnit::Init(const Handle(StepBasic_DimensionalExponents)& aDimensions)
-{
-  StepBasic_NamedUnit::Init(aDimensions);
-}
-
 
 void StepBasic_ConversionBasedUnitAndTimeUnit::Init(const Handle(StepBasic_DimensionalExponents)& aDimensions,
 						    const Handle(TCollection_HAsciiString)& aName,

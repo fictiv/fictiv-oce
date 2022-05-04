@@ -11,16 +11,17 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <RWStepVisual_RWPresentationStyleAssignment.ixx>
-#include <StepVisual_HArray1OfPresentationStyleSelect.hxx>
-#include <StepVisual_PresentationStyleSelect.hxx>
 
-
+#include <Interface_Check.hxx>
 #include <Interface_EntityIterator.hxx>
-
-
+#include <RWStepVisual_RWPresentationStyleAssignment.hxx>
+#include <StepData_SelectMember.hxx>
+#include <StepData_StepReaderData.hxx>
+#include <StepData_StepWriter.hxx>
+#include <StepVisual_NullStyleMember.hxx>
+#include <StepVisual_HArray1OfPresentationStyleSelect.hxx>
 #include <StepVisual_PresentationStyleAssignment.hxx>
-
+#include <StepVisual_PresentationStyleSelect.hxx>
 
 RWStepVisual_RWPresentationStyleAssignment::RWStepVisual_RWPresentationStyleAssignment () {}
 
@@ -38,18 +39,31 @@ void RWStepVisual_RWPresentationStyleAssignment::ReadStep
 
 	// --- own field : styles ---
 
-	Handle(StepVisual_HArray1OfPresentationStyleSelect) aStyles;
-	StepVisual_PresentationStyleSelect aStylesItem;
-	Standard_Integer nsub1;
-	if (data->ReadSubList (num,1,"styles",ach,nsub1)) {
-	  Standard_Integer nb1 = data->NbParams(nsub1);
-	  aStyles = new StepVisual_HArray1OfPresentationStyleSelect (1, nb1);
-	  for (Standard_Integer i1 = 1; i1 <= nb1; i1 ++) {
-	    //szv#4:S4163:12Mar99 `Standard_Boolean stat1 =` not needed
-	    if (data->ReadEntity (nsub1,i1,"styles",ach,aStylesItem))
-	      aStyles->SetValue(i1,aStylesItem);
-	  }
-	}
+  Handle(StepVisual_HArray1OfPresentationStyleSelect) aStyles;
+  StepVisual_PresentationStyleSelect aStylesItem;
+  Standard_Integer nsub1;
+  if (data->ReadSubList (num,1,"styles",ach,nsub1)) {
+    Standard_Integer nb1 = data->NbParams(nsub1);
+    aStyles = new StepVisual_HArray1OfPresentationStyleSelect (1, nb1);
+    for (Standard_Integer i1 = 1; i1 <= nb1; i1 ++) {
+      Interface_ParamType aType = data->ParamType(nsub1, i1);
+      if (aType == Interface_ParamIdent) {
+        data->ReadEntity (nsub1,i1,"styles",ach,aStylesItem);
+      }
+      else {
+        Handle(StepData_SelectMember) aMember;
+        data->ReadMember(nsub1, i1, "null_style", ach, aMember);
+        Handle(StepVisual_NullStyleMember) aNullStyle = new StepVisual_NullStyleMember();
+        if(!aMember.IsNull())
+        {
+          Standard_CString anEnumText = aMember->EnumText();
+          aNullStyle->SetEnumText(0, anEnumText);
+        }
+        aStylesItem.SetValue(aNullStyle);
+      }
+      aStyles->SetValue(i1,aStylesItem);
+    }
+  }
 
 	//--- Initialisation of the read entity ---
 
@@ -66,9 +80,16 @@ void RWStepVisual_RWPresentationStyleAssignment::WriteStep
 	// --- own field : styles ---
 
 	SW.OpenSub();
-	for (Standard_Integer i1 = 1;  i1 <= ent->NbStyles();  i1 ++) {
-	  SW.Send(ent->StylesValue(i1).Value());
-	}
+  for (Standard_Integer i1 = 1;  i1 <= ent->NbStyles();  i1 ++) {
+    StepVisual_PresentationStyleSelect aStyle = ent->StylesValue(i1);
+    if (aStyle.Value()->IsKind(STANDARD_TYPE(StepVisual_NullStyleMember))) {
+      SW.OpenTypedSub("NULL_STYLE");
+      SW.SendEnum(".NULL.");
+      SW.CloseSub();
+    }
+    else
+      SW.Send(aStyle.Value());
+  }
 	SW.CloseSub();
 }
 

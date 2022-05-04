@@ -11,18 +11,16 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepShape_RevolvedAreaSolid.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepGeom_Axis1Placement.hxx>
+#include <StepGeom_CurveBoundedSurface.hxx>
+#include <StepShape_RevolvedAreaSolid.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepShape_RevolvedAreaSolid,StepShape_SweptAreaSolid)
 
 StepShape_RevolvedAreaSolid::StepShape_RevolvedAreaSolid ()  {}
-
-void StepShape_RevolvedAreaSolid::Init(
-	const Handle(TCollection_HAsciiString)& aName,
-	const Handle(StepGeom_CurveBoundedSurface)& aSweptArea)
-{
-
-	StepShape_SweptAreaSolid::Init(aName, aSweptArea);
-}
 
 void StepShape_RevolvedAreaSolid::Init(
 	const Handle(TCollection_HAsciiString)& aName,

@@ -11,8 +11,11 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepVisual_DraughtingPreDefinedCurveFont.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepVisual_DraughtingPreDefinedCurveFont.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepVisual_DraughtingPreDefinedCurveFont,StepVisual_PreDefinedCurveFont)
 
 StepVisual_DraughtingPreDefinedCurveFont::StepVisual_DraughtingPreDefinedCurveFont ()  {}
 

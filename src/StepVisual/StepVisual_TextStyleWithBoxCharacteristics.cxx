@@ -11,18 +11,16 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepVisual_TextStyleWithBoxCharacteristics.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepVisual_BoxCharacteristicSelect.hxx>
+#include <StepVisual_TextStyleForDefinedFont.hxx>
+#include <StepVisual_TextStyleWithBoxCharacteristics.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepVisual_TextStyleWithBoxCharacteristics,StepVisual_TextStyle)
 
 StepVisual_TextStyleWithBoxCharacteristics::StepVisual_TextStyleWithBoxCharacteristics ()  {}
-
-void StepVisual_TextStyleWithBoxCharacteristics::Init(
-	const Handle(TCollection_HAsciiString)& aName,
-	const Handle(StepVisual_TextStyleForDefinedFont)& aCharacterAppearance)
-{
-
-	StepVisual_TextStyle::Init(aName, aCharacterAppearance);
-}
 
 void StepVisual_TextStyleWithBoxCharacteristics::Init(
 	const Handle(TCollection_HAsciiString)& aName,

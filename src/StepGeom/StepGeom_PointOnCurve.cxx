@@ -11,17 +11,15 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepGeom_PointOnCurve.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepGeom_Curve.hxx>
+#include <StepGeom_PointOnCurve.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepGeom_PointOnCurve,StepGeom_Point)
 
 StepGeom_PointOnCurve::StepGeom_PointOnCurve ()  {}
-
-void StepGeom_PointOnCurve::Init(
-	const Handle(TCollection_HAsciiString)& aName)
-{
-
-	StepRepr_RepresentationItem::Init(aName);
-}
 
 void StepGeom_PointOnCurve::Init(
 	const Handle(TCollection_HAsciiString)& aName,

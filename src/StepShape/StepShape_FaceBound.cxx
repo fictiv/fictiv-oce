@@ -11,17 +11,15 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepShape_FaceBound.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepShape_FaceBound.hxx>
+#include <StepShape_Loop.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepShape_FaceBound,StepShape_TopologicalRepresentationItem)
 
 StepShape_FaceBound::StepShape_FaceBound ()  {}
-
-void StepShape_FaceBound::Init(
-	const Handle(TCollection_HAsciiString)& aName)
-{
-
-	StepRepr_RepresentationItem::Init(aName);
-}
 
 void StepShape_FaceBound::Init(
 	const Handle(TCollection_HAsciiString)& aName,

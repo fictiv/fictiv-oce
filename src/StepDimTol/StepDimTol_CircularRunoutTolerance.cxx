@@ -15,13 +15,15 @@
 
 // Generator:	ExpToCas (EXPRESS -> CASCADE/XSTEP Translator) V1.2
 
-#include <StepDimTol_CircularRunoutTolerance.ixx>
+#include <Standard_Type.hxx>
+#include <StepDimTol_CircularRunoutTolerance.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepDimTol_CircularRunoutTolerance,StepDimTol_GeometricToleranceWithDatumReference)
 
 //=======================================================================
 //function : StepDimTol_CircularRunoutTolerance
 //purpose  : 
 //=======================================================================
-
 StepDimTol_CircularRunoutTolerance::StepDimTol_CircularRunoutTolerance ()
 {
 }

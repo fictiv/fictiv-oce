@@ -16,25 +16,28 @@
 
 //:   gka 09.04.99: S4136: eliminate BRepAPI::Precision()
 
-#include <StepToTopoDS_TranslateVertexLoop.ixx>
-
 #include <BRep_Builder.hxx>
-//#include <BRepAPI.hxx>
-
+#include <StdFail_NotDone.hxx>
 #include <StepShape_Vertex.hxx>
+#include <StepShape_VertexLoop.hxx>
+#include <StepToTopoDS_NMTool.hxx>
+#include <StepToTopoDS_Tool.hxx>
 #include <StepToTopoDS_TranslateVertex.hxx>
+#include <StepToTopoDS_TranslateVertexLoop.hxx>
 #include <TopoDS.hxx>
-#include <TopoDS_Wire.hxx>
-#include <TopoDS_Vertex.hxx>
 #include <TopoDS_Edge.hxx>
+#include <TopoDS_Shape.hxx>
+#include <TopoDS_Vertex.hxx>
+#include <TopoDS_Wire.hxx>
 #include <Transfer_TransientProcess.hxx>
 
+//#include <BRepAPI.hxx>
 // ============================================================================
 // Method  : StepToTopoDS_TranslateVertexLoop::StepToTopoDS_TranslateVertexLoop
 // Purpose : Empty Constructor
 // ============================================================================
-
 StepToTopoDS_TranslateVertexLoop::StepToTopoDS_TranslateVertexLoop()
+: myError(StepToTopoDS_TranslateVertexLoopOther)
 {
 }
 
@@ -110,7 +113,7 @@ void StepToTopoDS_TranslateVertexLoop::Init(const Handle(StepShape_VertexLoop)& 
 
 const TopoDS_Shape& StepToTopoDS_TranslateVertexLoop::Value() const 
 {
-  StdFail_NotDone_Raise_if(!done,"");
+  StdFail_NotDone_Raise_if (!done, "StepToTopoDS_TranslateVertexLoop::Value() - no result");
   return myResult;
 }
 

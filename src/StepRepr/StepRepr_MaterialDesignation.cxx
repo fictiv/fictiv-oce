@@ -11,7 +11,13 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepRepr_MaterialDesignation.ixx>
+
+#include <Standard_Type.hxx>
+#include <StepRepr_CharacterizedDefinition.hxx>
+#include <StepRepr_MaterialDesignation.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepRepr_MaterialDesignation,Standard_Transient)
 
 StepRepr_MaterialDesignation::StepRepr_MaterialDesignation  ()    {  }
 

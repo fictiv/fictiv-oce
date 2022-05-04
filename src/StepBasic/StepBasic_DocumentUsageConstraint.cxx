@@ -11,7 +11,13 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepBasic_DocumentUsageConstraint.ixx>
+
+#include <Standard_Type.hxx>
+#include <StepBasic_Document.hxx>
+#include <StepBasic_DocumentUsageConstraint.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepBasic_DocumentUsageConstraint,Standard_Transient)
 
 StepBasic_DocumentUsageConstraint::StepBasic_DocumentUsageConstraint  ()    {  }
 

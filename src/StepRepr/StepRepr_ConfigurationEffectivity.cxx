@@ -16,13 +16,18 @@
 
 // Generator:	ExpToCas (EXPRESS -> CASCADE/XSTEP Translator) V1.0
 
-#include <StepRepr_ConfigurationEffectivity.ixx>
+#include <Standard_Type.hxx>
+#include <StepBasic_ProductDefinitionRelationship.hxx>
+#include <StepRepr_ConfigurationDesign.hxx>
+#include <StepRepr_ConfigurationEffectivity.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepRepr_ConfigurationEffectivity,StepBasic_ProductDefinitionEffectivity)
 
 //=======================================================================
 //function : StepRepr_ConfigurationEffectivity
 //purpose  : 
 //=======================================================================
-
 StepRepr_ConfigurationEffectivity::StepRepr_ConfigurationEffectivity ()
 {
 }

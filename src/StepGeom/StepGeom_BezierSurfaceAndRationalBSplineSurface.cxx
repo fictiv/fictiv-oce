@@ -11,28 +11,16 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepGeom_BezierSurfaceAndRationalBSplineSurface.ixx>
 
+#include <Standard_Type.hxx>
 #include <StepGeom_BezierSurface.hxx>
-
+#include <StepGeom_BezierSurfaceAndRationalBSplineSurface.hxx>
 #include <StepGeom_RationalBSplineSurface.hxx>
+#include <TCollection_HAsciiString.hxx>
 
+IMPLEMENT_STANDARD_RTTIEXT(StepGeom_BezierSurfaceAndRationalBSplineSurface,StepGeom_BSplineSurface)
 
 StepGeom_BezierSurfaceAndRationalBSplineSurface::StepGeom_BezierSurfaceAndRationalBSplineSurface ()  {}
-
-void StepGeom_BezierSurfaceAndRationalBSplineSurface::Init(
-	const Handle(TCollection_HAsciiString)& aName,
-	const Standard_Integer aUDegree,
-	const Standard_Integer aVDegree,
-	const Handle(StepGeom_HArray2OfCartesianPoint)& aControlPointsList,
-	const StepGeom_BSplineSurfaceForm aSurfaceForm,
-	const StepData_Logical aUClosed,
-	const StepData_Logical aVClosed,
-	const StepData_Logical aSelfIntersect)
-{
-
-	StepGeom_BSplineSurface::Init(aName, aUDegree, aVDegree, aControlPointsList, aSurfaceForm, aUClosed, aVClosed, aSelfIntersect);
-}
 
 void StepGeom_BezierSurfaceAndRationalBSplineSurface::Init(
 	const Handle(TCollection_HAsciiString)& aName,

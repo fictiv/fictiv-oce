@@ -11,29 +11,21 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepBasic_SiUnitAndThermodynamicTemperatureUnit.ixx>
+
+#include <Standard_Type.hxx>
+#include <StepBasic_DimensionalExponents.hxx>
 #include <StepBasic_SiUnit.hxx>
+#include <StepBasic_SiUnitAndThermodynamicTemperatureUnit.hxx>
 #include <StepBasic_ThermodynamicTemperatureUnit.hxx>
 
+IMPLEMENT_STANDARD_RTTIEXT(StepBasic_SiUnitAndThermodynamicTemperatureUnit,StepBasic_SiUnit)
 
 //=======================================================================
 //function : StepBasic_SiUnitAndThermodynamicTemperatureUnit
 //purpose  : 
 //=======================================================================
-
 StepBasic_SiUnitAndThermodynamicTemperatureUnit::StepBasic_SiUnitAndThermodynamicTemperatureUnit ()
 {
-}
-
-
-//=======================================================================
-//function : Init
-//purpose  : 
-//=======================================================================
-
-void StepBasic_SiUnitAndThermodynamicTemperatureUnit::Init(const Handle(StepBasic_DimensionalExponents)& aDimensions)
-{
-  StepBasic_NamedUnit::Init(aDimensions);
 }
 
 

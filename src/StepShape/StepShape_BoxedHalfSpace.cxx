@@ -11,19 +11,16 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepShape_BoxedHalfSpace.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepGeom_Surface.hxx>
+#include <StepShape_BoxDomain.hxx>
+#include <StepShape_BoxedHalfSpace.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepShape_BoxedHalfSpace,StepShape_HalfSpaceSolid)
 
 StepShape_BoxedHalfSpace::StepShape_BoxedHalfSpace ()  {}
-
-void StepShape_BoxedHalfSpace::Init(
-	const Handle(TCollection_HAsciiString)& aName,
-	const Handle(StepGeom_Surface)& aBaseSurface,
-	const Standard_Boolean aAgreementFlag)
-{
-
-	StepShape_HalfSpaceSolid::Init(aName, aBaseSurface, aAgreementFlag);
-}
 
 void StepShape_BoxedHalfSpace::Init(
 	const Handle(TCollection_HAsciiString)& aName,

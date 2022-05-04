@@ -11,8 +11,11 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepGeom_Curve.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepGeom_Curve.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepGeom_Curve,StepGeom_GeometricRepresentationItem)
 
 StepGeom_Curve::StepGeom_Curve ()  {}
 

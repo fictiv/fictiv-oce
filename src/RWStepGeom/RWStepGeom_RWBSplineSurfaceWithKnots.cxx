@@ -11,23 +11,22 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <RWStepGeom_RWBSplineSurfaceWithKnots.ixx>
+
+#include <Interface_Check.hxx>
+#include <Interface_EntityIterator.hxx>
+#include <Interface_ShareTool.hxx>
+#include <RWStepGeom_RWBSplineSurfaceWithKnots.hxx>
+#include <StepData_Logical.hxx>
+#include <StepData_StepReaderData.hxx>
+#include <StepData_StepWriter.hxx>
+#include <StepGeom_BSplineSurfaceForm.hxx>
+#include <StepGeom_BSplineSurfaceWithKnots.hxx>
+#include <StepGeom_CartesianPoint.hxx>
+#include <StepGeom_HArray2OfCartesianPoint.hxx>
+#include <StepGeom_KnotType.hxx>
+#include <TCollection_AsciiString.hxx>
 #include <TColStd_HArray1OfInteger.hxx>
 #include <TColStd_HArray1OfReal.hxx>
-#include <StepGeom_KnotType.hxx>
-#include <StepGeom_HArray2OfCartesianPoint.hxx>
-#include <StepGeom_CartesianPoint.hxx>
-#include <StepGeom_BSplineSurfaceForm.hxx>
-#include <StepData_Logical.hxx>
-
-
-#include <Interface_EntityIterator.hxx>
-
-
-#include <StepGeom_BSplineSurfaceWithKnots.hxx>
-
-#include <TCollection_AsciiString.hxx>
-
 
 // --- Enum : KnotType ---
 static TCollection_AsciiString ktUniformKnots(".UNIFORM_KNOTS.");
@@ -354,10 +353,10 @@ void RWStepGeom_RWBSplineSurfaceWithKnots::Check
   Standard_Integer sumMulU = 0;
   Standard_Integer sumMulV = 0;
   Standard_Integer i;
-//  cout << "BSplineSurfaceWithKnots: nbMulU=" << nbMulU << " nbKnoU= " << 
-//    nbKnoU << " nbCPLU= " << nbCPLU << " degreeU= " << dgBSSU << endl;
-//  cout << "                         nbMulV=" << nbMulV << " nbKnoV= " << 
-//    nbKnoV << " nbCPLV= " << nbCPLV << " degreeV= " << dgBSSV << endl;
+//  std::cout << "BSplineSurfaceWithKnots: nbMulU=" << nbMulU << " nbKnoU= " << 
+//    nbKnoU << " nbCPLU= " << nbCPLU << " degreeU= " << dgBSSU << std::endl;
+//  std::cout << "                         nbMulV=" << nbMulV << " nbKnoV= " << 
+//    nbKnoV << " nbCPLV= " << nbCPLV << " degreeV= " << dgBSSV << std::endl;
   if(nbMulU != nbKnoU) {
     ach->AddFail("ERROR: No.of KnotMultiplicities not equal No.of Knots in U");
   }
@@ -373,8 +372,8 @@ void RWStepGeom_RWBSplineSurfaceWithKnots::Check
   Standard_Integer sumNonPU = nbCPLU + dgBSSU + 1;
   Standard_Integer mult1U = ent->UMultiplicitiesValue(1);
   Standard_Integer multNU = ent->UMultiplicitiesValue(nbMulU);
-//  cout << "BSplineSurfaceWithKnots: mult1U=" << mult1U << " multNU= " <<
-//    multNU << " sumMulU= " << sumMulU << endl;
+//  std::cout << "BSplineSurfaceWithKnots: mult1U=" << mult1U << " multNU= " <<
+//    multNU << " sumMulU= " << sumMulU << std::endl;
   if((sumMulU + multNU) == sumNonPU) {
   }
   else if((sumMulU == nbCPLU) && (mult1U == multNU)) {
@@ -398,8 +397,8 @@ void RWStepGeom_RWBSplineSurfaceWithKnots::Check
   Standard_Integer sumNonPV = nbCPLV + dgBSSV + 1;
   Standard_Integer mult1V = ent->VMultiplicitiesValue(1);
   Standard_Integer multNV = ent->VMultiplicitiesValue(nbMulV);
-//  cout << "                       : mult1V=" << mult1V << " multNV= " <<
-//    multNV << " sumMulV= " << sumMulV << endl;
+//  std::cout << "                       : mult1V=" << mult1V << " multNV= " <<
+//    multNV << " sumMulV= " << sumMulV << std::endl;
   if((sumMulV + multNV) == sumNonPV) {
   }
   else if((sumMulV == nbCPLV) && (mult1V == multNV)) {

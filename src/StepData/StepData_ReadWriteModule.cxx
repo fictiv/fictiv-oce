@@ -11,11 +11,19 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepData_ReadWriteModule.ixx>
-#include <StepData_StepReaderData.hxx>
+
+#include <Interface_Check.hxx>
+#include <Interface_FileReaderData.hxx>
 #include <Interface_Macros.hxx>
+#include <Standard_DomainError.hxx>
+#include <Standard_Transient.hxx>
+#include <Standard_Type.hxx>
+#include <StepData_ReadWriteModule.hxx>
+#include <StepData_StepReaderData.hxx>
+#include <StepData_StepWriter.hxx>
+#include <TCollection_AsciiString.hxx>
 
-
+IMPLEMENT_STANDARD_RTTIEXT(StepData_ReadWriteModule,Interface_ReaderModule)
 
 Standard_Integer  StepData_ReadWriteModule::CaseNum
   (const Handle(Interface_FileReaderData)& data,

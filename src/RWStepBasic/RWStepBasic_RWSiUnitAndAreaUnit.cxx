@@ -14,11 +14,15 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <RWStepBasic_RWSiUnitAndAreaUnit.ixx>
-#include <StepBasic_SiUnit.hxx>
-#include <RWStepBasic_RWSiUnit.hxx>
-#include <StepBasic_DimensionalExponents.hxx>
 
+#include <Interface_Check.hxx>
+#include <RWStepBasic_RWSiUnit.hxx>
+#include <RWStepBasic_RWSiUnitAndAreaUnit.hxx>
+#include <StepBasic_DimensionalExponents.hxx>
+#include <StepBasic_SiUnit.hxx>
+#include <StepBasic_SiUnitAndAreaUnit.hxx>
+#include <StepData_StepReaderData.hxx>
+#include <StepData_StepWriter.hxx>
 
 RWStepBasic_RWSiUnitAndAreaUnit::RWStepBasic_RWSiUnitAndAreaUnit ()
 {
@@ -30,15 +34,15 @@ void RWStepBasic_RWSiUnitAndAreaUnit::ReadStep(const Handle(StepData_StepReaderD
 					       const Handle(StepBasic_SiUnitAndAreaUnit)& ent) const
 {
   Standard_Integer num = 0;
-  data->NamedForComplex("AREA_UNIT",num0,num,ach);
+  data->NamedForComplex("AREA_UNIT","ARUNT",num0,num,ach);
   if (!data->CheckNbParams(num,0,ach,"area_unit")) return;
 
-  data->NamedForComplex("NAMED_UNIT NMDUNT",num0,num,ach);
+  data->NamedForComplex("NAMED_UNIT", "NMDUNT",num0,num,ach);
   if (!data->CheckNbParams(num,1,ach,"named_unit")) return;
   Handle(StepBasic_DimensionalExponents) aDimensions;
   data->ReadEntity(num, 1,"dimensions", ach, STANDARD_TYPE(StepBasic_DimensionalExponents), aDimensions);
   
-  data->NamedForComplex("SI_UNIT SUNT",num0,num,ach);
+  data->NamedForComplex("SI_UNIT", "SUNT",num0,num,ach);
   if (!data->CheckNbParams(num,2,ach,"si_unit")) return;
   
   RWStepBasic_RWSiUnit reader;
@@ -59,7 +63,7 @@ void RWStepBasic_RWSiUnitAndAreaUnit::ReadStep(const Handle(StepData_StepReaderD
     }
   }
      
-  StepBasic_SiUnitName aName = StepBasic_sunMetre; // 0
+  StepBasic_SiUnitName aName;
   if (data->ParamType(num,2) == Interface_ParamEnum) {
     Standard_CString text = data->ParamCValue(num,2);
     if(!reader.DecodeName(aName,text)){
@@ -72,8 +76,6 @@ void RWStepBasic_RWSiUnitAndAreaUnit::ReadStep(const Handle(StepData_StepReaderD
     return;
   }
   
-  // @todo Apart the fail, nothing is done , and wrong enum values are used
- 
   ent->Init(hasAprefix,aPrefix,aName);
   ent->SetDimensions(aDimensions);
 }

@@ -15,13 +15,17 @@
 
 // Generator:	ExpToCas (EXPRESS -> CASCADE/XSTEP Translator) V1.1
 
-#include <StepAP214_RepItemGroup.ixx>
+#include <Standard_Type.hxx>
+#include <StepAP214_RepItemGroup.hxx>
+#include <StepRepr_RepresentationItem.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepAP214_RepItemGroup,StepBasic_Group)
 
 //=======================================================================
 //function : StepAP214_RepItemGroup
 //purpose  : 
 //=======================================================================
-
 StepAP214_RepItemGroup::StepAP214_RepItemGroup ()
 {
 }

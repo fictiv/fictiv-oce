@@ -16,13 +16,15 @@
 
 // Generator:	ExpToCas (EXPRESS -> CASCADE/XSTEP Translator) V1.0
 
-#include <StepAP203_ClassifiedItem.ixx>
+#include <Standard_Transient.hxx>
+#include <StepAP203_ClassifiedItem.hxx>
+#include <StepBasic_ProductDefinitionFormation.hxx>
+#include <StepRepr_AssemblyComponentUsage.hxx>
 
 //=======================================================================
 //function : StepAP203_ClassifiedItem
 //purpose  : 
 //=======================================================================
-
 StepAP203_ClassifiedItem::StepAP203_ClassifiedItem ()
 {
 }

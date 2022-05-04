@@ -11,20 +11,19 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <RWStepGeom_RWRationalBSplineCurve.ixx>
-#include <TColStd_HArray1OfReal.hxx>
-#include <StepGeom_HArray1OfCartesianPoint.hxx>
-#include <StepGeom_CartesianPoint.hxx>
-#include <StepGeom_BSplineCurveForm.hxx>
-#include <StepData_Logical.hxx>
 
-
+#include <Interface_Check.hxx>
 #include <Interface_EntityIterator.hxx>
-
-
+#include <Interface_ShareTool.hxx>
+#include <RWStepGeom_RWRationalBSplineCurve.hxx>
+#include <StepData_Logical.hxx>
+#include <StepData_StepReaderData.hxx>
+#include <StepData_StepWriter.hxx>
+#include <StepGeom_BSplineCurveForm.hxx>
+#include <StepGeom_CartesianPoint.hxx>
+#include <StepGeom_HArray1OfCartesianPoint.hxx>
 #include <StepGeom_RationalBSplineCurve.hxx>
-
-
+#include <TColStd_HArray1OfReal.hxx>
 
 // --- Enum : BSplineCurveForm ---
 static TCollection_AsciiString bscfEllipticArc(".ELLIPTIC_ARC.");
@@ -194,8 +193,8 @@ void RWStepGeom_RWRationalBSplineCurve::Check
 {
   Standard_Integer nbWght = ent->NbWeightsData();
   Standard_Integer nbCPL  = ent->NbControlPointsList();
-//  cout << "RationalBSplineCurve: nbWght=" << nbWght << " nbCPL: " << 
-//    nbCPL << endl;
+//  std::cout << "RationalBSplineCurve: nbWght=" << nbWght << " nbCPL: " << 
+//    nbCPL << std::endl;
   if(nbWght != nbCPL) {
     ach->AddFail("ERROR: No.of ControlPoints not equal No.of Weights");
   }

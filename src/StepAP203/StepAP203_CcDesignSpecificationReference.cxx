@@ -16,13 +16,17 @@
 
 // Generator:	ExpToCas (EXPRESS -> CASCADE/XSTEP Translator) V1.0
 
-#include <StepAP203_CcDesignSpecificationReference.ixx>
+#include <Standard_Type.hxx>
+#include <StepAP203_CcDesignSpecificationReference.hxx>
+#include <StepBasic_Document.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepAP203_CcDesignSpecificationReference,StepBasic_DocumentReference)
 
 //=======================================================================
 //function : StepAP203_CcDesignSpecificationReference
 //purpose  : 
 //=======================================================================
-
 StepAP203_CcDesignSpecificationReference::StepAP203_CcDesignSpecificationReference ()
 {
 }

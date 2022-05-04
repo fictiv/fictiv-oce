@@ -11,8 +11,13 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepVisual_PresentationLayerAssignment.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepVisual_LayeredItem.hxx>
+#include <StepVisual_PresentationLayerAssignment.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepVisual_PresentationLayerAssignment,Standard_Transient)
 
 StepVisual_PresentationLayerAssignment::StepVisual_PresentationLayerAssignment ()  {}
 
@@ -65,5 +70,5 @@ StepVisual_LayeredItem StepVisual_PresentationLayerAssignment::AssignedItemsValu
 
 Standard_Integer StepVisual_PresentationLayerAssignment::NbAssignedItems () const
 {
-	return assignedItems->Length();
+	return assignedItems.IsNull()? 0 : assignedItems->Length();
 }

@@ -15,13 +15,15 @@
 
 // Generator:	ExpToCas (EXPRESS -> CASCADE/XSTEP Translator) V1.1
 
-#include <StepShape_CompoundShapeRepresentation.ixx>
+#include <Standard_Type.hxx>
+#include <StepShape_CompoundShapeRepresentation.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepShape_CompoundShapeRepresentation,StepShape_ShapeRepresentation)
 
 //=======================================================================
 //function : StepShape_CompoundShapeRepresentation
 //purpose  : 
 //=======================================================================
-
 StepShape_CompoundShapeRepresentation::StepShape_CompoundShapeRepresentation ()
 {
 }

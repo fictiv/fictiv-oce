@@ -15,13 +15,15 @@
 
 // Generator:	ExpToCas (EXPRESS -> CASCADE/XSTEP Translator) V1.1
 
-#include <StepShape_EdgeBasedWireframeShapeRepresentation.ixx>
+#include <Standard_Type.hxx>
+#include <StepShape_EdgeBasedWireframeShapeRepresentation.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepShape_EdgeBasedWireframeShapeRepresentation,StepShape_ShapeRepresentation)
 
 //=======================================================================
 //function : StepShape_EdgeBasedWireframeShapeRepresentation
 //purpose  : 
 //=======================================================================
-
 StepShape_EdgeBasedWireframeShapeRepresentation::StepShape_EdgeBasedWireframeShapeRepresentation ()
 {
 }

@@ -16,13 +16,17 @@
 
 // Generator:	ExpToCas (EXPRESS -> CASCADE/XSTEP Translator) V1.0
 
-#include <StepBasic_ProductConceptContext.ixx>
+#include <Standard_Type.hxx>
+#include <StepBasic_ApplicationContext.hxx>
+#include <StepBasic_ProductConceptContext.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepBasic_ProductConceptContext,StepBasic_ApplicationContextElement)
 
 //=======================================================================
 //function : StepBasic_ProductConceptContext
 //purpose  : 
 //=======================================================================
-
 StepBasic_ProductConceptContext::StepBasic_ProductConceptContext ()
 {
 }

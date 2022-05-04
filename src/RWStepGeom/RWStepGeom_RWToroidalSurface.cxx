@@ -11,15 +11,15 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <RWStepGeom_RWToroidalSurface.ixx>
-#include <StepGeom_Axis2Placement3d.hxx>
 
-
+#include <Interface_Check.hxx>
 #include <Interface_EntityIterator.hxx>
-
-
+#include <Interface_ShareTool.hxx>
+#include <RWStepGeom_RWToroidalSurface.hxx>
+#include <StepData_StepReaderData.hxx>
+#include <StepData_StepWriter.hxx>
+#include <StepGeom_Axis2Placement3d.hxx>
 #include <StepGeom_ToroidalSurface.hxx>
-
 
 RWStepGeom_RWToroidalSurface::RWStepGeom_RWToroidalSurface () {}
 
@@ -102,7 +102,7 @@ void RWStepGeom_RWToroidalSurface::Check
    const Interface_ShareTool& ,
    Handle(Interface_Check)& ach) const
 {
-//  cout << "------ calling CheckToroidalSurface ------" << endl;
+//  std::cout << "------ calling CheckToroidalSurface ------" << std::endl;
   if (ent->MajorRadius() < 0.0)
     ach->AddFail("ERROR: ToroidalSurface: MajorRadius < 0.0");
   if (ent->MinorRadius() < 0.0)

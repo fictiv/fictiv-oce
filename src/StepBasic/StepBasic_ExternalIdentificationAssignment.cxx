@@ -15,13 +15,18 @@
 
 // Generator:	ExpToCas (EXPRESS -> CASCADE/XSTEP Translator) V1.1
 
-#include <StepBasic_ExternalIdentificationAssignment.ixx>
+#include <Standard_Type.hxx>
+#include <StepBasic_ExternalIdentificationAssignment.hxx>
+#include <StepBasic_ExternalSource.hxx>
+#include <StepBasic_IdentificationRole.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepBasic_ExternalIdentificationAssignment,StepBasic_IdentificationAssignment)
 
 //=======================================================================
 //function : StepBasic_ExternalIdentificationAssignment
 //purpose  : 
 //=======================================================================
-
 StepBasic_ExternalIdentificationAssignment::StepBasic_ExternalIdentificationAssignment ()
 {
 }

@@ -15,13 +15,16 @@
 
 // Generator:	ExpToCas (EXPRESS -> CASCADE/XSTEP Translator) V1.2
 
-#include <StepElement_ElementMaterial.ixx>
+#include <Standard_Type.hxx>
+#include <StepElement_ElementMaterial.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepElement_ElementMaterial,Standard_Transient)
 
 //=======================================================================
 //function : StepElement_ElementMaterial
 //purpose  : 
 //=======================================================================
-
 StepElement_ElementMaterial::StepElement_ElementMaterial ()
 {
 }

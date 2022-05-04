@@ -11,17 +11,15 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepAP214_AutoDesignApprovalAssignment.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepAP214_AutoDesignApprovalAssignment.hxx>
+#include <StepAP214_AutoDesignGeneralOrgItem.hxx>
+#include <StepBasic_Approval.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepAP214_AutoDesignApprovalAssignment,StepBasic_ApprovalAssignment)
 
 StepAP214_AutoDesignApprovalAssignment::StepAP214_AutoDesignApprovalAssignment ()  {}
-
-void StepAP214_AutoDesignApprovalAssignment::Init(
-	const Handle(StepBasic_Approval)& aAssignedApproval)
-{
-
-	StepBasic_ApprovalAssignment::Init(aAssignedApproval);
-}
 
 void StepAP214_AutoDesignApprovalAssignment::Init(
 	const Handle(StepBasic_Approval)& aAssignedApproval,
@@ -32,7 +30,6 @@ void StepAP214_AutoDesignApprovalAssignment::Init(
 	// --- classe inherited fields ---
 	StepBasic_ApprovalAssignment::Init(aAssignedApproval);
 }
-
 
 void StepAP214_AutoDesignApprovalAssignment::SetItems(const Handle(StepAP214_HArray1OfAutoDesignGeneralOrgItem)& aItems)
 {

@@ -11,20 +11,22 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <RWStepShape_RWEdgeCurve.ixx>
-#include <StepGeom_Curve.hxx>
-#include <StepShape_Vertex.hxx>
-#include <StepShape_OrientedEdge.hxx>
-#include <StepShape_FaceBound.hxx>
-#include <StepShape_VertexPoint.hxx>
-#include <StepGeom_CartesianPoint.hxx>
 
+#include <Interface_Check.hxx>
 #include <Interface_EntityIterator.hxx>
+#include <Interface_ShareTool.hxx>
+#include <Precision.hxx>
+#include <RWStepShape_RWEdgeCurve.hxx>
+#include <StepData_StepReaderData.hxx>
+#include <StepData_StepWriter.hxx>
+#include <StepGeom_CartesianPoint.hxx>
+#include <StepGeom_Curve.hxx>
 #include <StepShape_EdgeCurve.hxx>
 #include <StepShape_EdgeLoop.hxx>
-
-#include <Precision.hxx>
-
+#include <StepShape_FaceBound.hxx>
+#include <StepShape_OrientedEdge.hxx>
+#include <StepShape_Vertex.hxx>
+#include <StepShape_VertexPoint.hxx>
 
 RWStepShape_RWEdgeCurve::RWStepShape_RWEdgeCurve () {}
 
@@ -118,7 +120,7 @@ void RWStepShape_RWEdgeCurve::Check
    const Interface_ShareTool& aShto,
    Handle(Interface_Check)& ach) const
 {
-//  cout << "------ calling CheckEdgeCurve ------" << endl;
+//  std::cout << "------ calling CheckEdgeCurve ------" << std::endl;
   
   Handle(StepShape_OrientedEdge) theOE1, theOE2;
   Handle(StepShape_FaceBound)    theFOB1, theFOB2;
@@ -188,7 +190,7 @@ void RWStepShape_RWEdgeCurve::Check
       Standard_Boolean sharOE1 = aShto.IsShared(theOE1);
       if(!sharOE1){
 #ifdef OCCT_DEBUG
-	cout << "OrientedEdge1 not shared" <<endl;
+	std::cout << "OrientedEdge1 not shared" <<std::endl;
 #endif
       }
       else {
@@ -202,7 +204,7 @@ void RWStepShape_RWEdgeCurve::Check
 	  Standard_Boolean sharEL1 = aShto.IsShared(theEL1);
 	  if(!sharEL1) {
 #ifdef OCCT_DEBUG
-	    cout << "EdgeLoop1 not shared" <<endl;
+	    std::cout << "EdgeLoop1 not shared" <<std::endl;
 #endif
 	  }
 	  else {
@@ -219,7 +221,7 @@ void RWStepShape_RWEdgeCurve::Check
 	    }
 	    else {
 #ifdef OCCT_DEBUG
-	      cout << "EdgeLoop not referenced by FaceBound" << endl;
+	      std::cout << "EdgeLoop not referenced by FaceBound" << std::endl;
 #endif
 	    }
 	  }
@@ -227,14 +229,14 @@ void RWStepShape_RWEdgeCurve::Check
 	else {
 	  if (nbRef == 0) {
 #ifdef OCCT_DEBUG
-	    cout << "OrientedEdge not referenced" << endl;
+	    std::cout << "OrientedEdge not referenced" << std::endl;
 #endif
           }
 	  else {
 	    if (aShto.NbTypedSharings(theOE1,
 				      STANDARD_TYPE(StepShape_EdgeLoop)) > 1) {
 #ifdef OCCT_DEBUG
-	      cout << "OrientedEdge referenced more than once" << endl;
+	      std::cout << "OrientedEdge referenced more than once" << std::endl;
 #endif
             }
           }
@@ -246,7 +248,7 @@ void RWStepShape_RWEdgeCurve::Check
       Standard_Boolean sharOE2 = aShto.IsShared(theOE2);
       if(!sharOE2){
 #ifdef OCCT_DEBUG
-	cout << "OrientedEdge2 not shared" <<endl;
+	std::cout << "OrientedEdge2 not shared" <<std::endl;
 #endif
       }
       else {
@@ -261,7 +263,7 @@ void RWStepShape_RWEdgeCurve::Check
 	Standard_Boolean sharEL2 = aShto.IsShared(theEL2);
 	if(!sharEL2){
 #ifdef OCCT_DEBUG
-	  cout << "EdgeLoop2 not shared" <<endl;
+	  std::cout << "EdgeLoop2 not shared" <<std::endl;
 #endif
 	}
 	else {
@@ -274,7 +276,7 @@ void RWStepShape_RWEdgeCurve::Check
 	  }
 	  else {
 #ifdef OCCT_DEBUG
-	    cout << "EdgeLoop not referenced by FaceBound" << endl;
+	    std::cout << "EdgeLoop not referenced by FaceBound" << std::endl;
 #endif
 	  }
 	}

@@ -15,13 +15,19 @@
 
 // Generator:	ExpToCas (EXPRESS -> CASCADE/XSTEP Translator) V1.2
 
-#include <RWStepDimTol_RWPositionTolerance.ixx>
+#include <Interface_Check.hxx>
+#include <Interface_EntityIterator.hxx>
+#include <RWStepDimTol_RWPositionTolerance.hxx>
+#include <StepBasic_MeasureWithUnit.hxx>
+#include <StepData_StepReaderData.hxx>
+#include <StepData_StepWriter.hxx>
+#include <StepDimTol_GeometricToleranceTarget.hxx>
+#include <StepDimTol_PositionTolerance.hxx>
 
 //=======================================================================
 //function : RWStepDimTol_RWPositionTolerance
 //purpose  : 
 //=======================================================================
-
 RWStepDimTol_RWPositionTolerance::RWStepDimTol_RWPositionTolerance ()
 {
 }
@@ -50,8 +56,8 @@ void RWStepDimTol_RWPositionTolerance::ReadStep (const Handle(StepData_StepReade
   Handle(StepBasic_MeasureWithUnit) aGeometricTolerance_Magnitude;
   data->ReadEntity (num, 3, "geometric_tolerance.magnitude", ach, STANDARD_TYPE(StepBasic_MeasureWithUnit), aGeometricTolerance_Magnitude);
 
-  Handle(StepRepr_ShapeAspect) aGeometricTolerance_TolerancedShapeAspect;
-  data->ReadEntity (num, 4, "geometric_tolerance.toleranced_shape_aspect", ach, STANDARD_TYPE(StepRepr_ShapeAspect), aGeometricTolerance_TolerancedShapeAspect);
+  StepDimTol_GeometricToleranceTarget aGeometricTolerance_TolerancedShapeAspect;
+  data->ReadEntity (num, 4, "geometric_tolerance.toleranced_shape_aspect", ach, aGeometricTolerance_TolerancedShapeAspect);
 
   // Initialize entity
   ent->Init(aGeometricTolerance_Name,
@@ -77,7 +83,7 @@ void RWStepDimTol_RWPositionTolerance::WriteStep (StepData_StepWriter& SW,
 
   SW.Send (ent->StepDimTol_GeometricTolerance::Magnitude());
 
-  SW.Send (ent->StepDimTol_GeometricTolerance::TolerancedShapeAspect());
+  SW.Send (ent->StepDimTol_GeometricTolerance::TolerancedShapeAspect().Value());
 }
 
 //=======================================================================
@@ -93,5 +99,5 @@ void RWStepDimTol_RWPositionTolerance::Share (const Handle(StepDimTol_PositionTo
 
   iter.AddItem (ent->StepDimTol_GeometricTolerance::Magnitude());
 
-  iter.AddItem (ent->StepDimTol_GeometricTolerance::TolerancedShapeAspect());
+  iter.AddItem (ent->StepDimTol_GeometricTolerance::TolerancedShapeAspect().Value());
 }

@@ -11,17 +11,13 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepBasic_CalendarDate.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepBasic_CalendarDate.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepBasic_CalendarDate,StepBasic_Date)
 
 StepBasic_CalendarDate::StepBasic_CalendarDate ()  {}
-
-void StepBasic_CalendarDate::Init(
-	const Standard_Integer aYearComponent)
-{
-
-	StepBasic_Date::Init(aYearComponent);
-}
 
 void StepBasic_CalendarDate::Init(
 	const Standard_Integer aYearComponent,

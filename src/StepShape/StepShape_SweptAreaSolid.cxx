@@ -11,17 +11,15 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepShape_SweptAreaSolid.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepGeom_CurveBoundedSurface.hxx>
+#include <StepShape_SweptAreaSolid.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepShape_SweptAreaSolid,StepShape_SolidModel)
 
 StepShape_SweptAreaSolid::StepShape_SweptAreaSolid ()  {}
-
-void StepShape_SweptAreaSolid::Init(
-	const Handle(TCollection_HAsciiString)& aName)
-{
-
-	StepRepr_RepresentationItem::Init(aName);
-}
 
 void StepShape_SweptAreaSolid::Init(
 	const Handle(TCollection_HAsciiString)& aName,

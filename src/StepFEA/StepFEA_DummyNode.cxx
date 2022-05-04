@@ -15,13 +15,15 @@
 
 // Generator:	ExpToCas (EXPRESS -> CASCADE/XSTEP Translator) V1.2
 
-#include <StepFEA_DummyNode.ixx>
+#include <Standard_Type.hxx>
+#include <StepFEA_DummyNode.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepFEA_DummyNode,StepFEA_NodeRepresentation)
 
 //=======================================================================
 //function : StepFEA_DummyNode
 //purpose  : 
 //=======================================================================
-
 StepFEA_DummyNode::StepFEA_DummyNode ()
 {
 }

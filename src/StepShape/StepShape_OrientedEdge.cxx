@@ -11,8 +11,14 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepShape_OrientedEdge.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepShape_Edge.hxx>
+#include <StepShape_OrientedEdge.hxx>
+#include <StepShape_Vertex.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepShape_OrientedEdge,StepShape_Edge)
 
 StepShape_OrientedEdge::StepShape_OrientedEdge ()  {}
 
@@ -58,7 +64,7 @@ void StepShape_OrientedEdge::SetEdgeStart(const Handle(StepShape_Vertex)& /*aEdg
 {
 	// WARNING : the field is redefined.
 	// field set up forbidden.
-	cout << "Field is redefined, SetUp Forbidden" << endl;
+	std::cout << "Field is redefined, SetUp Forbidden" << std::endl;
 }
 
 Handle(StepShape_Vertex) StepShape_OrientedEdge::EdgeStart() const
@@ -79,7 +85,7 @@ void StepShape_OrientedEdge::SetEdgeEnd(const Handle(StepShape_Vertex)& /*aEdgeE
 {
 	// WARNING : the field is redefined.
 	// field set up forbidden.
-	cout << "Field is redefined, SetUp Forbidden" << endl;
+	std::cout << "Field is redefined, SetUp Forbidden" << std::endl;
 }
 
 Handle(StepShape_Vertex) StepShape_OrientedEdge::EdgeEnd() const

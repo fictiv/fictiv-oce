@@ -11,7 +11,11 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepBasic_SizeMember.ixx>
+
+#include <Standard_Type.hxx>
+#include <StepBasic_SizeMember.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepBasic_SizeMember,StepData_SelectReal)
 
 StepBasic_SizeMember::StepBasic_SizeMember  ()    {  }
 

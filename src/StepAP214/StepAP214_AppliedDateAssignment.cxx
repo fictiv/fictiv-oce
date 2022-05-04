@@ -11,18 +11,16 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepAP214_AppliedDateAssignment.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepAP214_AppliedDateAssignment.hxx>
+#include <StepAP214_DateItem.hxx>
+#include <StepBasic_Date.hxx>
+#include <StepBasic_DateRole.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepAP214_AppliedDateAssignment,StepBasic_DateAssignment)
 
 StepAP214_AppliedDateAssignment::StepAP214_AppliedDateAssignment ()  {}
-
-void StepAP214_AppliedDateAssignment::Init(
-	const Handle(StepBasic_Date)& aAssignedDate,
-	const Handle(StepBasic_DateRole)& aRole)
-{
-
-  StepBasic_DateAssignment::Init(aAssignedDate, aRole);
-}
 
 void StepAP214_AppliedDateAssignment::Init(
 	const Handle(StepBasic_Date)& aAssignedDate,

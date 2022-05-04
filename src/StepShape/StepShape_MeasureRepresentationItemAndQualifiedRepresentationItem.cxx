@@ -11,7 +11,16 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepShape_MeasureRepresentationItemAndQualifiedRepresentationItem.ixx>
+
+#include <Standard_Type.hxx>
+#include <StepBasic_MeasureValueMember.hxx>
+#include <StepBasic_MeasureWithUnit.hxx>
+#include <StepBasic_Unit.hxx>
+#include <StepShape_MeasureRepresentationItemAndQualifiedRepresentationItem.hxx>
+#include <StepShape_ValueQualifier.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepShape_MeasureRepresentationItemAndQualifiedRepresentationItem,StepRepr_RepresentationItem)
 
 StepShape_MeasureRepresentationItemAndQualifiedRepresentationItem::StepShape_MeasureRepresentationItemAndQualifiedRepresentationItem  ()
 {

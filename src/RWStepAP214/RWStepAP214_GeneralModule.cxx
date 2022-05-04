@@ -14,877 +14,14 @@
 //:k4 abv 30.11.98: TR9: warnings for BWV
 //:n5 abv 15 Feb 99: S4132 complex type bounded_curve + surface_curve
 //:j4 gka 16.03.99 S4134
-#include <RWStepAP214_GeneralModule.ixx>
 
-#include <Interface_Macros.hxx>
-//#define DeclareAndCast(atype,result,start) \  NON car Name
-// Handle(atype) result = *((Handle(atype)*) &start)
-
-#include <Interface_GeneralLib.hxx>
 #include <Interface_Category.hxx>
-
+#include <Interface_Check.hxx>
+#include <Interface_CopyTool.hxx>
 #include <Interface_EntityIterator.hxx>
-
-#include <StepAP214.hxx>
-
-#include <RWStepAP214.hxx>
-
-#include <StepBasic_Address.hxx>
-#include <StepShape_AdvancedBrepShapeRepresentation.hxx>
-#include <StepShape_AdvancedFace.hxx>
-// Removed from Rev2 to Rev4 :  <StepVisual_AnnotationCurveOccurrence.hxx>
-// Removed from Rev2 to Rev4 :  <StepVisual_AnnotationFillArea.hxx>
-// Removed from Rev2 to Rev4 :  <StepVisual_AnnotationFillAreaOccurrence.hxx>
-// Removed from CC1-Rev2 to CC1-Rev4, re-added CC2-Rev4 :
-#include <StepVisual_AnnotationOccurrence.hxx>
-// Removed from Rev2 to Rev4 :  <StepVisual_AnnotationSubfigureOccurrence.hxx>
-// Removed from Rev2 to Rev4 :  <StepVisual_AnnotationSymbol.hxx>
-// Removed from Rev2 to Rev4 :  <StepVisual_AnnotationSymbolOccurrence.hxx>
-// Removed from CC1-Rev2 to CC1-Rev4, re-added CC2-Rev4 :
-#include <StepVisual_AnnotationText.hxx>
-#include <StepVisual_AnnotationTextOccurrence.hxx>
-
-#include <StepBasic_ApplicationContext.hxx>
-#include <StepBasic_ApplicationContextElement.hxx>
-#include <StepBasic_ApplicationProtocolDefinition.hxx>
-#include <StepBasic_Approval.hxx>
-#include <StepBasic_ApprovalPersonOrganization.hxx>
-#include <StepBasic_ApprovalRelationship.hxx>
-#include <StepBasic_ApprovalRole.hxx>
-#include <StepBasic_ApprovalStatus.hxx>
-#include <StepVisual_AreaInSet.hxx>
-#include <StepAP214_AutoDesignActualDateAndTimeAssignment.hxx>
-#include <StepAP214_AutoDesignActualDateAssignment.hxx>
-#include <StepAP214_AutoDesignApprovalAssignment.hxx>
-#include <StepAP214_AutoDesignDateAndPersonAssignment.hxx>
-#include <StepAP214_AutoDesignGroupAssignment.hxx>
-#include <StepAP214_AutoDesignNominalDateAndTimeAssignment.hxx>
-#include <StepAP214_AutoDesignNominalDateAssignment.hxx>
-#include <StepAP214_AutoDesignOrganizationAssignment.hxx>
-#include <StepAP214_AutoDesignPersonAndOrganizationAssignment.hxx>
-#include <StepAP214_AutoDesignPresentedItem.hxx>
-#include <StepAP214_AutoDesignSecurityClassificationAssignment.hxx>
-// Removed from Rev2 to Rev4 :  <StepAP214_AutoDesignViewArea.hxx>
-#include <StepGeom_Axis1Placement.hxx>
-#include <StepGeom_Axis2Placement2d.hxx>
-#include <StepGeom_Axis2Placement3d.hxx>
-#include <StepGeom_BSplineCurve.hxx>
-#include <StepGeom_BSplineCurveWithKnots.hxx>
-#include <StepGeom_BSplineSurface.hxx>
-#include <StepGeom_BSplineSurfaceWithKnots.hxx>
-#include <StepVisual_BackgroundColour.hxx>
-#include <StepGeom_BezierCurve.hxx>
-#include <StepGeom_BezierSurface.hxx>
-#include <StepShape_Block.hxx>
-#include <StepShape_BooleanResult.hxx>
-#include <StepGeom_BoundaryCurve.hxx>
-#include <StepGeom_BoundedCurve.hxx>
-#include <StepGeom_BoundedSurface.hxx>
-#include <StepShape_BoxDomain.hxx>
-#include <StepShape_BoxedHalfSpace.hxx>
-#include <StepShape_BrepWithVoids.hxx>
-#include <StepBasic_CalendarDate.hxx>
-#include <StepVisual_CameraImage.hxx>
-#include <StepVisual_CameraModel.hxx>
-#include <StepVisual_CameraModelD2.hxx>
-#include <StepVisual_CameraModelD3.hxx>
-#include <StepVisual_CameraUsage.hxx>
-#include <StepGeom_CartesianPoint.hxx>
-#include <StepGeom_CartesianTransformationOperator.hxx>
-#include <StepGeom_CartesianTransformationOperator3d.hxx>
-#include <StepGeom_Circle.hxx>
-#include <StepShape_ClosedShell.hxx>
-#include <StepVisual_Colour.hxx>
-#include <StepVisual_ColourRgb.hxx>
-#include <StepVisual_ColourSpecification.hxx>
-#include <StepGeom_CompositeCurve.hxx>
-#include <StepGeom_CompositeCurveOnSurface.hxx>
-#include <StepGeom_CompositeCurveSegment.hxx>
-// Removed from CC1-Rev2 to CC1-Rev4, re-added CC2-Rev4 :
-#include <StepVisual_CompositeText.hxx>
-// Removed from Rev2 to Rev4 :  <StepVisual_CompositeTextWithAssociatedCurves.hxx>
-// Removed from Rev2 to Rev4 :  <StepVisual_CompositeTextWithBlankingBox.hxx>
-// Removed from CC1-Rev2 to CC1-Rev4, re-added CC2-Rev4 :
-#include <StepVisual_CompositeTextWithExtent.hxx>
-
-#include <StepGeom_Conic.hxx>
-#include <StepGeom_ConicalSurface.hxx>
-#include <StepShape_ConnectedFaceSet.hxx>
-#include <StepVisual_ContextDependentInvisibility.hxx>
-#include <StepVisual_ContextDependentOverRidingStyledItem.hxx>
-#include <StepBasic_ConversionBasedUnit.hxx>
-#include <StepBasic_CoordinatedUniversalTimeOffset.hxx>
-// Removed from Rev2 to Rev4 :  <StepShape_CsgRepresentation.hxx>
-#include <StepShape_CsgShapeRepresentation.hxx>
-#include <StepShape_CsgSolid.hxx>
-#include <StepGeom_Curve.hxx>
-#include <StepGeom_CurveBoundedSurface.hxx>
-#include <StepGeom_CurveReplica.hxx>
-#include <StepVisual_CurveStyle.hxx>
-#include <StepVisual_CurveStyleFont.hxx>
-#include <StepVisual_CurveStyleFontPattern.hxx>
-#include <StepGeom_CylindricalSurface.hxx>
-#include <StepBasic_Date.hxx>
-#include <StepBasic_DateAndTime.hxx>
-#include <StepBasic_DateRole.hxx>
-#include <StepBasic_DateTimeRole.hxx>
-// Removed from Rev2 to Rev4 :  <StepVisual_DefinedSymbol.hxx>
-#include <StepRepr_DefinitionalRepresentation.hxx>
-#include <StepGeom_DegeneratePcurve.hxx>
-#include <StepGeom_DegenerateToroidalSurface.hxx>
-#include <StepRepr_DescriptiveRepresentationItem.hxx>
-// Removed from Rev2 to Rev4 :  <StepVisual_DimensionCurve.hxx>
-// Removed from Rev2 to Rev4 :  <StepVisual_DimensionCurveTerminator.hxx>
-#include <StepBasic_DimensionalExponents.hxx>
-#include <StepGeom_Direction.hxx>
-// Removed from CC1-Rev2 to CC1-Rev4, re-added CC2-Rev4 :
-#include <StepVisual_DraughtingAnnotationOccurrence.hxx>
-// Removed from Rev2 to Rev4 :  <StepVisual_DraughtingCallout.hxx>
-#include <StepVisual_DraughtingPreDefinedColour.hxx>
-#include <StepVisual_DraughtingPreDefinedCurveFont.hxx>
-// Removed from Rev2 to Rev4 :  <StepVisual_DraughtingSubfigureRepresentation.hxx>
-// Removed from Rev2 to Rev4 :  <StepVisual_DraughtingSymbolRepresentation.hxx>
-// Removed from Rev2 to Rev4 :  <StepVisual_DraughtingTextLiteralWithDelineation.hxx>
-// Removed from Rev2 to Rev4 :  <StepVisual_DrawingDefinition.hxx>
-// Removed from Rev2 to Rev4 :  <StepVisual_DrawingRevision.hxx>
-#include <StepShape_Edge.hxx>
-#include <StepShape_EdgeCurve.hxx>
-#include <StepShape_EdgeLoop.hxx>
-#include <StepGeom_ElementarySurface.hxx>
-#include <StepGeom_Ellipse.hxx>
-#include <StepGeom_EvaluatedDegeneratePcurve.hxx>
-#include <StepBasic_ExternalSource.hxx>
-#include <StepVisual_ExternallyDefinedCurveFont.hxx>
-// Removed from Rev2 to Rev4 :  <StepVisual_ExternallyDefinedHatchStyle.hxx>
-#include <StepBasic_ExternallyDefinedItem.hxx>
-// Removed from Rev2 to Rev4 :  <StepVisual_ExternallyDefinedSymbol.hxx>
-// Removed from CC1-Rev2 to CC1-Rev4, re-added CC2-Rev4 :
-#include <StepVisual_ExternallyDefinedTextFont.hxx>
-// Removed from Rev2 to Rev4 :  <StepVisual_ExternallyDefinedTileStyle.hxx>
-#include <StepShape_ExtrudedAreaSolid.hxx>
-#include <StepShape_Face.hxx>
-// Removed from Rev2 to Rev4 :  <StepShape_FaceBasedSurfaceModel.hxx>
-#include <StepShape_FaceBound.hxx>
-#include <StepShape_FaceOuterBound.hxx>
-#include <StepShape_FaceSurface.hxx>
-#include <StepShape_FacetedBrep.hxx>
-#include <StepShape_FacetedBrepShapeRepresentation.hxx>
-#include <StepVisual_FillAreaStyle.hxx>
-#include <StepVisual_FillAreaStyleColour.hxx>
-// Removed from Rev2 to Rev4 :  <StepVisual_FillAreaStyleHatching.hxx>
-// Removed from Rev2 to Rev4 :  <StepVisual_FillAreaStyleTileSymbolWithStyle.hxx>
-// Removed from Rev2 to Rev4 :  <StepVisual_FillAreaStyleTiles.hxx>
-#include <StepRepr_FunctionallyDefinedTransformation.hxx>
-#include <StepShape_GeometricCurveSet.hxx>
-#include <StepGeom_GeometricRepresentationContext.hxx>
-#include <StepGeom_GeometricRepresentationItem.hxx>
-#include <StepShape_GeometricSet.hxx>
-#include <StepShape_GeometricallyBoundedSurfaceShapeRepresentation.hxx>
-#include <StepShape_GeometricallyBoundedWireframeShapeRepresentation.hxx>
-#include <StepRepr_GlobalUncertaintyAssignedContext.hxx>
-#include <StepRepr_GlobalUnitAssignedContext.hxx>
-#include <StepBasic_Group.hxx>
-#include <StepBasic_GroupRelationship.hxx>
-#include <StepShape_HalfSpaceSolid.hxx>
-#include <StepGeom_Hyperbola.hxx>
-#include <StepGeom_IntersectionCurve.hxx>
-#include <StepVisual_Invisibility.hxx>
-#include <StepBasic_LengthMeasureWithUnit.hxx>
-#include <StepBasic_LengthUnit.hxx>
-#include <StepGeom_Line.hxx>
-#include <StepBasic_LocalTime.hxx>
-#include <StepShape_Loop.hxx>
-#include <StepShape_ManifoldSolidBrep.hxx>
-#include <StepShape_ManifoldSurfaceShapeRepresentation.hxx>
-#include <StepRepr_MappedItem.hxx>
-#include <StepBasic_MeasureWithUnit.hxx>
-#include <StepVisual_MechanicalDesignGeometricPresentationArea.hxx>
-#include <StepVisual_MechanicalDesignGeometricPresentationRepresentation.hxx>
-// Removed from Rev2 to Rev4 :  <StepVisual_MechanicalDesignPresentationArea.hxx>
-#include <StepBasic_NamedUnit.hxx>
-// Removed from Rev2 to Rev4 :  <StepShape_NonManifoldSurfaceShapeRepresentation.hxx>
-#include <StepGeom_OffsetCurve3d.hxx>
-#include <StepGeom_OffsetSurface.hxx>
-// Removed from Rev2 to Rev4 :  <StepAP214_OneDirectionRepeatFactor.hxx>
-#include <StepShape_OpenShell.hxx>
-#include <StepBasic_OrdinalDate.hxx>
-#include <StepBasic_Organization.hxx>
-#include <StepBasic_OrganizationRole.hxx>
-#include <StepBasic_OrganizationalAddress.hxx>
-#include <StepShape_OrientedClosedShell.hxx>
-#include <StepShape_OrientedEdge.hxx>
-#include <StepShape_OrientedFace.hxx>
-#include <StepShape_OrientedOpenShell.hxx>
-#include <StepShape_OrientedPath.hxx>
-#include <StepGeom_OuterBoundaryCurve.hxx>
-#include <StepVisual_OverRidingStyledItem.hxx>
-#include <StepGeom_Parabola.hxx>
-#include <StepRepr_ParametricRepresentationContext.hxx>
-#include <StepShape_Path.hxx>
-#include <StepGeom_Pcurve.hxx>
-#include <StepBasic_Person.hxx>
-#include <StepBasic_PersonAndOrganization.hxx>
-#include <StepBasic_PersonAndOrganizationRole.hxx>
-#include <StepBasic_PersonalAddress.hxx>
-#include <StepGeom_Placement.hxx>
-#include <StepVisual_PlanarBox.hxx>
-#include <StepVisual_PlanarExtent.hxx>
-#include <StepGeom_Plane.hxx>
-#include <StepBasic_PlaneAngleMeasureWithUnit.hxx>
-#include <StepBasic_PlaneAngleUnit.hxx>
-#include <StepGeom_Point.hxx>
-#include <StepGeom_PointOnCurve.hxx>
-#include <StepGeom_PointOnSurface.hxx>
-#include <StepGeom_PointReplica.hxx>
-#include <StepVisual_PointStyle.hxx>
-#include <StepShape_PolyLoop.hxx>
-#include <StepGeom_Polyline.hxx>
-#include <StepVisual_PreDefinedColour.hxx>
-#include <StepVisual_PreDefinedCurveFont.hxx>
-#include <StepVisual_PreDefinedItem.hxx>
-// Removed from Rev2 to Rev4 :  <StepVisual_PreDefinedSymbol.hxx>
-// Removed from CC1-Rev2 to CC1-Rev4, re-added CC2-Rev4 :
-#include <StepVisual_PreDefinedTextFont.hxx>
-
-#include <StepVisual_PresentationArea.hxx>
-#include <StepVisual_PresentationLayerAssignment.hxx>
-#include <StepVisual_PresentationRepresentation.hxx>
-#include <StepVisual_PresentationSet.hxx>
-#include <StepVisual_PresentationSize.hxx>
-#include <StepVisual_PresentationStyleAssignment.hxx>
-#include <StepVisual_PresentationStyleByContext.hxx>
-#include <StepVisual_PresentationView.hxx>
-#include <StepBasic_Product.hxx>
-#include <StepBasic_ProductCategory.hxx>
-#include <StepBasic_ProductContext.hxx>
-// Removed from Rev2 to Rev4 :  <StepVisual_ProductDataRepresentationView.hxx>
-#include <StepBasic_ProductDefinition.hxx>
-#include <StepBasic_ProductDefinitionContext.hxx>
-#include <StepBasic_ProductDefinitionFormation.hxx>
-#include <StepBasic_ProductDefinitionFormationWithSpecifiedSource.hxx>
-#include <StepRepr_ProductDefinitionShape.hxx>
-#include <StepBasic_ProductRelatedProductCategory.hxx>
-#include <StepBasic_ProductType.hxx>
-#include <StepRepr_PropertyDefinition.hxx>
-#include <StepRepr_PropertyDefinitionRepresentation.hxx>
-#include <StepGeom_QuasiUniformCurve.hxx>
-#include <StepGeom_QuasiUniformSurface.hxx>
-#include <StepBasic_RatioMeasureWithUnit.hxx>
-#include <StepGeom_RationalBSplineCurve.hxx>
-#include <StepGeom_RationalBSplineSurface.hxx>
-#include <StepGeom_RectangularCompositeSurface.hxx>
-#include <StepGeom_RectangularTrimmedSurface.hxx>
-#include <StepAP214_RepItemGroup.hxx>
-#include <StepGeom_ReparametrisedCompositeCurveSegment.hxx>
-#include <StepRepr_Representation.hxx>
-#include <StepRepr_RepresentationContext.hxx>
-#include <StepRepr_RepresentationItem.hxx>
-#include <StepRepr_RepresentationMap.hxx>
-#include <StepRepr_RepresentationRelationship.hxx>
-#include <StepShape_RevolvedAreaSolid.hxx>
-#include <StepShape_RightAngularWedge.hxx>
-#include <StepShape_RightCircularCone.hxx>
-#include <StepShape_RightCircularCylinder.hxx>
-#include <StepGeom_SeamCurve.hxx>
-#include <StepBasic_SecurityClassification.hxx>
-#include <StepBasic_SecurityClassificationLevel.hxx>
-#include <StepRepr_ShapeAspect.hxx>
-#include <StepRepr_ShapeAspectRelationship.hxx>
-#include <StepRepr_ShapeAspectTransition.hxx>
-#include <StepShape_ShapeDefinitionRepresentation.hxx>
-#include <StepShape_ShapeRepresentation.hxx>
-#include <StepShape_ShellBasedSurfaceModel.hxx>
-#include <StepBasic_SiUnit.hxx>
-#include <StepBasic_SolidAngleMeasureWithUnit.hxx>
-#include <StepShape_SolidModel.hxx>
-#include <StepShape_SolidReplica.hxx>
-#include <StepShape_Sphere.hxx>
-#include <StepGeom_SphericalSurface.hxx>
-#include <StepVisual_StyledItem.hxx>
-#include <StepGeom_Surface.hxx>
-#include <StepGeom_SurfaceCurve.hxx>
-#include <StepGeom_SurfaceOfLinearExtrusion.hxx>
-#include <StepGeom_SurfaceOfRevolution.hxx>
-#include <StepGeom_SurfaceCurveAndBoundedCurve.hxx>
-#include <StepGeom_SurfacePatch.hxx>
-#include <StepGeom_SurfaceReplica.hxx>
-#include <StepVisual_SurfaceSideStyle.hxx>
-#include <StepVisual_SurfaceStyleBoundary.hxx>
-#include <StepVisual_SurfaceStyleControlGrid.hxx>
-#include <StepVisual_SurfaceStyleFillArea.hxx>
-#include <StepVisual_SurfaceStyleParameterLine.hxx>
-#include <StepVisual_SurfaceStyleSegmentationCurve.hxx>
-#include <StepVisual_SurfaceStyleSilhouette.hxx>
-#include <StepVisual_SurfaceStyleUsage.hxx>
-#include <StepShape_SweptAreaSolid.hxx>
-#include <StepGeom_SweptSurface.hxx>
-// Removed from Rev2 to Rev4 :  <StepVisual_SymbolColour.hxx>
-// Removed from Rev2 to Rev4 :  <StepVisual_SymbolRepresentation.hxx>
-// Removed from Rev2 to Rev4 :  <StepVisual_SymbolRepresentationMap.hxx>
-// Removed from Rev2 to Rev4 :  <StepVisual_SymbolStyle.hxx>
-// Removed from Rev2 to Rev4 :  <StepVisual_SymbolTarget.hxx>
-#include <StepVisual_Template.hxx>
-#include <StepVisual_TemplateInstance.hxx>
-// Removed from Rev2 to Rev4 :  <StepVisual_TerminatorSymbol.hxx>
-// Removed from CC1-Rev2 to CC1-Rev4, re-added CC2-Rev4 :
-#include <StepVisual_TextLiteral.hxx>
-// Removed from Rev2 to Rev4 :  <StepVisual_TextLiteralWithAssociatedCurves.hxx>
-// Removed from Rev2 to Rev4 :  <StepVisual_TextLiteralWithBlankingBox.hxx>
-// Removed from Rev2 to Rev4 :  <StepVisual_TextLiteralWithDelineation.hxx>
-// Removed from Rev2 to Rev4 :  <StepVisual_TextLiteralWithExtent.hxx>
-// Removed from CC1-Rev2 to CC1-Rev4, re-added CC2-Rev4 :
-#include <StepVisual_TextStyle.hxx>
-#include <StepVisual_TextStyleForDefinedFont.hxx>
-#include <StepVisual_TextStyleWithBoxCharacteristics.hxx>
-// Removed from Rev2 to Rev4 :  <StepVisual_TextStyleWithMirror.hxx>
-#include <StepShape_TopologicalRepresentationItem.hxx>
-#include <StepGeom_ToroidalSurface.hxx>
-#include <StepShape_Torus.hxx>
-#include <StepShape_TransitionalShapeRepresentation.hxx>
-#include <StepGeom_TrimmedCurve.hxx>
-// Removed from Rev2 to Rev4 :  <StepAP214_TwoDirectionRepeatFactor.hxx>
-#include <StepBasic_UncertaintyMeasureWithUnit.hxx>
-#include <StepGeom_UniformCurve.hxx>
-#include <StepGeom_UniformSurface.hxx>
-#include <StepGeom_Vector.hxx>
-#include <StepShape_Vertex.hxx>
-#include <StepShape_VertexLoop.hxx>
-#include <StepShape_VertexPoint.hxx>
-#include <StepVisual_ViewVolume.hxx>
-#include <StepBasic_WeekOfYearAndDayDate.hxx>
-#include <StepGeom_UniformCurveAndRationalBSplineCurve.hxx>
-#include <StepGeom_BSplineCurveWithKnotsAndRationalBSplineCurve.hxx>
-#include <StepGeom_QuasiUniformCurveAndRationalBSplineCurve.hxx>
-#include <StepGeom_BezierCurveAndRationalBSplineCurve.hxx>
-#include <StepGeom_BSplineSurfaceWithKnotsAndRationalBSplineSurface.hxx>
-#include <StepGeom_UniformSurfaceAndRationalBSplineSurface.hxx>
-#include <StepGeom_QuasiUniformSurfaceAndRationalBSplineSurface.hxx>
-#include <StepGeom_BezierSurfaceAndRationalBSplineSurface.hxx>
-#include <StepBasic_SiUnitAndLengthUnit.hxx>
-#include <StepBasic_SiUnitAndPlaneAngleUnit.hxx>
-#include <StepBasic_ConversionBasedUnitAndLengthUnit.hxx>
-#include <StepBasic_ConversionBasedUnitAndPlaneAngleUnit.hxx>
-#include <StepGeom_GeometricRepresentationContextAndGlobalUnitAssignedContext.hxx>
-#include <StepShape_LoopAndPath.hxx>
-
-// Added by FMA
-#include <StepGeom_GeomRepContextAndGlobUnitAssCtxAndGlobUncertaintyAssCtx.hxx>
-#include <StepGeom_GeometricRepresentationContextAndParametricRepresentationContext.hxx>
-#include <StepBasic_ConversionBasedUnitAndSolidAngleUnit.hxx>
-#include <StepBasic_SiUnitAndSolidAngleUnit.hxx>
-#include <StepBasic_SolidAngleUnit.hxx>
-#include <StepShape_FacetedBrepAndBrepWithVoids.hxx>
-#include <StepBasic_MechanicalContext.hxx>
-// Added by CKY  for Rev4
-#include <StepBasic_DesignContext.hxx>
-
-// full Rev4
-#include <StepBasic_TimeMeasureWithUnit.hxx>
-#include <StepBasic_RatioUnit.hxx>
-#include <StepBasic_TimeUnit.hxx>
-#include <StepBasic_SiUnitAndRatioUnit.hxx>
-#include <StepBasic_SiUnitAndTimeUnit.hxx>
-#include <StepBasic_ConversionBasedUnitAndRatioUnit.hxx>
-#include <StepBasic_ConversionBasedUnitAndTimeUnit.hxx>
-#include <StepBasic_ApprovalDateTime.hxx>
-#include <StepVisual_CameraImage2dWithScale.hxx>
-#include <StepVisual_CameraImage3dWithScale.hxx>
-#include <StepGeom_CartesianTransformationOperator2d.hxx>
-#include <StepBasic_DerivedUnit.hxx>
-#include <StepBasic_DerivedUnitElement.hxx>
-#include <StepRepr_ItemDefinedTransformation.hxx>
-#include <StepVisual_PresentedItemRepresentation.hxx>
-#include <StepVisual_PresentationLayerUsage.hxx>
-
-//  Added by CKY (JUL-1998) for AP214 CC1 -> CC2
-
-#include <StepAP214_AutoDesignDocumentReference.hxx>
-#include <StepBasic_Document.hxx>
-#include <StepBasic_DigitalDocument.hxx>
-#include <StepBasic_DocumentRelationship.hxx>
-#include <StepBasic_DocumentType.hxx>
-#include <StepBasic_DocumentUsageConstraint.hxx>
-#include <StepBasic_Effectivity.hxx>
-#include <StepBasic_ProductDefinitionEffectivity.hxx>
-#include <StepBasic_ProductDefinitionRelationship.hxx>
-
-#include <StepBasic_ProductDefinitionWithAssociatedDocuments.hxx>
-#include <StepBasic_PhysicallyModeledProductDefinition.hxx>
-
-
-#include <StepRepr_ProductDefinitionUsage.hxx>
-#include <StepRepr_MakeFromUsageOption.hxx>
-#include <StepRepr_AssemblyComponentUsage.hxx>
-#include <StepRepr_NextAssemblyUsageOccurrence.hxx>
-#include <StepRepr_PromissoryUsageOccurrence.hxx>
-#include <StepRepr_QuantifiedAssemblyComponentUsage.hxx>
-#include <StepRepr_SpecifiedHigherUsageOccurrence.hxx>
-#include <StepRepr_AssemblyComponentUsageSubstitute.hxx>
-#include <StepRepr_SuppliedPartRelationship.hxx>
-#include <StepRepr_ExternallyDefinedRepresentation.hxx>
-#include <StepRepr_ShapeRepresentationRelationship.hxx>
-#include <StepRepr_RepresentationRelationshipWithTransformation.hxx>
-#include <StepRepr_ShapeRepresentationRelationshipWithTransformation.hxx>
-#include <StepRepr_MaterialDesignation.hxx>
-
-#include <StepShape_ContextDependentShapeRepresentation.hxx>
-
-
-#include <RWStepBasic_RWAddress.hxx>
-#include <RWStepShape_RWAdvancedBrepShapeRepresentation.hxx>
-#include <RWStepShape_RWAdvancedFace.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepVisual_RWAnnotationCurveOccurrence.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepVisual_RWAnnotationFillArea.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepVisual_RWAnnotationFillAreaOccurrence.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepVisual_RWAnnotationOccurrence.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepVisual_RWAnnotationSubfigureOccurrence.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepVisual_RWAnnotationSymbol.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepVisual_RWAnnotationSymbolOccurrence.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepVisual_RWAnnotationText.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepVisual_RWAnnotationTextOccurrence.hxx>
-#include <RWStepBasic_RWApplicationContext.hxx>
-#include <RWStepBasic_RWApplicationContextElement.hxx>
-#include <RWStepBasic_RWApplicationProtocolDefinition.hxx>
-#include <RWStepBasic_RWApproval.hxx>
-#include <RWStepBasic_RWApprovalPersonOrganization.hxx>
-#include <RWStepBasic_RWApprovalRelationship.hxx>
-#include <RWStepBasic_RWApprovalRole.hxx>
-#include <RWStepBasic_RWApprovalStatus.hxx>
-#include <RWStepVisual_RWAreaInSet.hxx>
-#include <RWStepAP214_RWAutoDesignActualDateAndTimeAssignment.hxx>
-#include <RWStepAP214_RWAutoDesignActualDateAssignment.hxx>
-#include <RWStepAP214_RWAutoDesignApprovalAssignment.hxx>
-#include <RWStepAP214_RWAutoDesignDateAndPersonAssignment.hxx>
-#include <RWStepAP214_RWAutoDesignGroupAssignment.hxx>
-#include <RWStepAP214_RWAutoDesignNominalDateAndTimeAssignment.hxx>
-#include <RWStepAP214_RWAutoDesignNominalDateAssignment.hxx>
-#include <RWStepAP214_RWAutoDesignOrganizationAssignment.hxx>
-#include <RWStepAP214_RWAutoDesignPersonAndOrganizationAssignment.hxx>
-#include <RWStepAP214_RWAutoDesignPresentedItem.hxx>
-#include <RWStepAP214_RWAutoDesignSecurityClassificationAssignment.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepAP214_RWAutoDesignViewArea.hxx>
-#include <RWStepGeom_RWAxis1Placement.hxx>
-#include <RWStepGeom_RWAxis2Placement2d.hxx>
-#include <RWStepGeom_RWAxis2Placement3d.hxx>
-#include <RWStepGeom_RWBSplineCurve.hxx>
-#include <RWStepGeom_RWBSplineCurveWithKnots.hxx>
-#include <RWStepGeom_RWBSplineSurface.hxx>
-#include <RWStepGeom_RWBSplineSurfaceWithKnots.hxx>
-#include <RWStepVisual_RWBackgroundColour.hxx>
-#include <RWStepGeom_RWBezierCurve.hxx>
-#include <RWStepGeom_RWBezierSurface.hxx>
-#include <RWStepShape_RWBlock.hxx>
-#include <RWStepShape_RWBooleanResult.hxx>
-#include <RWStepGeom_RWBoundaryCurve.hxx>
-#include <RWStepGeom_RWBoundedCurve.hxx>
-#include <RWStepGeom_RWBoundedSurface.hxx>
-#include <RWStepShape_RWBoxDomain.hxx>
-#include <RWStepShape_RWBoxedHalfSpace.hxx>
-#include <RWStepShape_RWBrepWithVoids.hxx>
-#include <RWStepBasic_RWCalendarDate.hxx>
-#include <RWStepVisual_RWCameraImage.hxx>
-#include <RWStepVisual_RWCameraModel.hxx>
-#include <RWStepVisual_RWCameraModelD2.hxx>
-#include <RWStepVisual_RWCameraModelD3.hxx>
-#include <RWStepVisual_RWCameraUsage.hxx>
-#include <RWStepGeom_RWCartesianPoint.hxx>
-#include <RWStepGeom_RWCartesianTransformationOperator.hxx>
-#include <RWStepGeom_RWCartesianTransformationOperator3d.hxx>
-#include <RWStepGeom_RWCircle.hxx>
-#include <RWStepShape_RWClosedShell.hxx>
-#include <RWStepVisual_RWColour.hxx>
-#include <RWStepVisual_RWColourRgb.hxx>
-#include <RWStepVisual_RWColourSpecification.hxx>
-#include <RWStepGeom_RWCompositeCurve.hxx>
-#include <RWStepGeom_RWCompositeCurveOnSurface.hxx>
-#include <RWStepGeom_RWCompositeCurveSegment.hxx>
-// Removed from CC1-Rev2 to CC1-Rev4, re-added CC2-Rev4 :
-#include <RWStepVisual_RWCompositeText.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepVisual_RWCompositeTextWithAssociatedCurves.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepVisual_RWCompositeTextWithBlankingBox.hxx>
-// Removed from CC1-Rev2 to CC1-Rev4, re-added CC2-Rev4 :
-#include <RWStepVisual_RWCompositeTextWithExtent.hxx>
-
-#include <RWStepGeom_RWConic.hxx>
-#include <RWStepGeom_RWConicalSurface.hxx>
-#include <RWStepShape_RWConnectedFaceSet.hxx>
-#include <RWStepVisual_RWContextDependentInvisibility.hxx>
-#include <RWStepVisual_RWContextDependentOverRidingStyledItem.hxx>
-#include <RWStepBasic_RWConversionBasedUnit.hxx>
-#include <RWStepBasic_RWCoordinatedUniversalTimeOffset.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepShape_RWCsgRepresentation.hxx>
-#include <RWStepShape_RWCsgShapeRepresentation.hxx>
-#include <RWStepShape_RWCsgSolid.hxx>
-#include <RWStepGeom_RWCurve.hxx>
-#include <RWStepGeom_RWCurveBoundedSurface.hxx>
-#include <RWStepGeom_RWCurveReplica.hxx>
-#include <RWStepVisual_RWCurveStyle.hxx>
-#include <RWStepVisual_RWCurveStyleFont.hxx>
-#include <RWStepVisual_RWCurveStyleFontPattern.hxx>
-#include <RWStepGeom_RWCylindricalSurface.hxx>
-#include <RWStepBasic_RWDate.hxx>
-#include <RWStepBasic_RWDateAndTime.hxx>
-#include <RWStepBasic_RWDateRole.hxx>
-#include <RWStepBasic_RWDateTimeRole.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepVisual_RWDefinedSymbol.hxx>
-#include <RWStepRepr_RWDefinitionalRepresentation.hxx>
-#include <RWStepGeom_RWDegeneratePcurve.hxx>
-#include <RWStepGeom_RWDegenerateToroidalSurface.hxx>
-#include <RWStepRepr_RWDescriptiveRepresentationItem.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepVisual_RWDimensionCurve.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepVisual_RWDimensionCurveTerminator.hxx>
-#include <RWStepBasic_RWDimensionalExponents.hxx>
-#include <RWStepGeom_RWDirection.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepVisual_RWDraughtingAnnotationOccurrence.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepVisual_RWDraughtingCallout.hxx>
-#include <RWStepVisual_RWDraughtingPreDefinedColour.hxx>
-#include <RWStepVisual_RWDraughtingPreDefinedCurveFont.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepVisual_RWDraughtingSubfigureRepresentation.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepVisual_RWDraughtingSymbolRepresentation.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepVisual_RWDraughtingTextLiteralWithDelineation.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepVisual_RWDrawingDefinition.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepVisual_RWDrawingRevision.hxx>
-#include <RWStepShape_RWEdge.hxx>
-#include <RWStepShape_RWEdgeCurve.hxx>
-#include <RWStepShape_RWEdgeLoop.hxx>
-#include <RWStepGeom_RWElementarySurface.hxx>
-#include <RWStepGeom_RWEllipse.hxx>
-#include <RWStepGeom_RWEvaluatedDegeneratePcurve.hxx>
-#include <RWStepBasic_RWExternalSource.hxx>
-#include <RWStepVisual_RWExternallyDefinedCurveFont.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepVisual_RWExternallyDefinedHatchStyle.hxx>
-#include <RWStepBasic_RWExternallyDefinedItem.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepVisual_RWExternallyDefinedSymbol.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepVisual_RWExternallyDefinedTextFont.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepVisual_RWExternallyDefinedTileStyle.hxx>
-#include <RWStepShape_RWExtrudedAreaSolid.hxx>
-#include <RWStepShape_RWFace.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepShape_RWFaceBasedSurfaceModel.hxx>
-#include <RWStepShape_RWFaceBound.hxx>
-#include <RWStepShape_RWFaceOuterBound.hxx>
-#include <RWStepShape_RWFaceSurface.hxx>
-#include <RWStepShape_RWFacetedBrep.hxx>
-#include <RWStepShape_RWFacetedBrepShapeRepresentation.hxx>
-#include <RWStepVisual_RWFillAreaStyle.hxx>
-#include <RWStepVisual_RWFillAreaStyleColour.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepVisual_RWFillAreaStyleHatching.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepVisual_RWFillAreaStyleTileSymbolWithStyle.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepVisual_RWFillAreaStyleTiles.hxx>
-#include <RWStepRepr_RWFunctionallyDefinedTransformation.hxx>
-#include <RWStepShape_RWGeometricCurveSet.hxx>
-#include <RWStepGeom_RWGeometricRepresentationContext.hxx>
-#include <RWStepGeom_RWGeometricRepresentationItem.hxx>
-#include <RWStepShape_RWGeometricSet.hxx>
-#include <RWStepShape_RWGeometricallyBoundedSurfaceShapeRepresentation.hxx>
-#include <RWStepShape_RWGeometricallyBoundedWireframeShapeRepresentation.hxx>
-#include <RWStepRepr_RWGlobalUncertaintyAssignedContext.hxx>
-#include <RWStepRepr_RWGlobalUnitAssignedContext.hxx>
-#include <RWStepBasic_RWGroup.hxx>
-#include <RWStepBasic_RWGroupRelationship.hxx>
-#include <RWStepShape_RWHalfSpaceSolid.hxx>
-#include <RWStepGeom_RWHyperbola.hxx>
-#include <RWStepGeom_RWIntersectionCurve.hxx>
-#include <RWStepVisual_RWInvisibility.hxx>
-#include <RWStepBasic_RWLengthMeasureWithUnit.hxx>
-#include <RWStepBasic_RWLengthUnit.hxx>
-#include <RWStepGeom_RWLine.hxx>
-#include <RWStepBasic_RWLocalTime.hxx>
-#include <RWStepShape_RWLoop.hxx>
-#include <RWStepShape_RWManifoldSolidBrep.hxx>
-#include <RWStepShape_RWManifoldSurfaceShapeRepresentation.hxx>
-#include <RWStepRepr_RWMappedItem.hxx>
-#include <RWStepBasic_RWMeasureWithUnit.hxx>
-#include <RWStepVisual_RWMechanicalDesignGeometricPresentationArea.hxx>
-#include <RWStepVisual_RWMechanicalDesignGeometricPresentationRepresentation.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepVisual_RWMechanicalDesignPresentationArea.hxx>
-#include <RWStepBasic_RWNamedUnit.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepShape_RWNonManifoldSurfaceShapeRepresentation.hxx>
-#include <RWStepGeom_RWOffsetCurve3d.hxx>
-#include <RWStepGeom_RWOffsetSurface.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepAP214_RWOneDirectionRepeatFactor.hxx>
-#include <RWStepShape_RWOpenShell.hxx>
-#include <RWStepBasic_RWOrdinalDate.hxx>
-#include <RWStepBasic_RWOrganization.hxx>
-#include <RWStepBasic_RWOrganizationRole.hxx>
-#include <RWStepBasic_RWOrganizationalAddress.hxx>
-#include <RWStepShape_RWOrientedClosedShell.hxx>
-#include <RWStepShape_RWOrientedEdge.hxx>
-#include <RWStepShape_RWOrientedFace.hxx>
-#include <RWStepShape_RWOrientedOpenShell.hxx>
-#include <RWStepShape_RWOrientedPath.hxx>
-#include <RWStepGeom_RWOuterBoundaryCurve.hxx>
-#include <RWStepVisual_RWOverRidingStyledItem.hxx>
-#include <RWStepGeom_RWParabola.hxx>
-#include <RWStepRepr_RWParametricRepresentationContext.hxx>
-#include <RWStepShape_RWPath.hxx>
-#include <RWStepGeom_RWPcurve.hxx>
-#include <RWStepBasic_RWPerson.hxx>
-#include <RWStepBasic_RWPersonAndOrganization.hxx>
-#include <RWStepBasic_RWPersonAndOrganizationRole.hxx>
-#include <RWStepBasic_RWPersonalAddress.hxx>
-#include <RWStepGeom_RWPlacement.hxx>
-#include <RWStepVisual_RWPlanarBox.hxx>
-#include <RWStepVisual_RWPlanarExtent.hxx>
-#include <RWStepGeom_RWPlane.hxx>
-#include <RWStepBasic_RWPlaneAngleMeasureWithUnit.hxx>
-#include <RWStepBasic_RWPlaneAngleUnit.hxx>
-#include <RWStepGeom_RWPoint.hxx>
-#include <RWStepGeom_RWPointOnCurve.hxx>
-#include <RWStepGeom_RWPointOnSurface.hxx>
-#include <RWStepGeom_RWPointReplica.hxx>
-#include <RWStepVisual_RWPointStyle.hxx>
-#include <RWStepShape_RWPolyLoop.hxx>
-#include <RWStepGeom_RWPolyline.hxx>
-#include <RWStepVisual_RWPreDefinedColour.hxx>
-#include <RWStepVisual_RWPreDefinedCurveFont.hxx>
-#include <RWStepVisual_RWPreDefinedItem.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepVisual_RWPreDefinedSymbol.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepVisual_RWPreDefinedTextFont.hxx>
-#include <RWStepVisual_RWPresentationArea.hxx>
-#include <RWStepVisual_RWPresentationLayerAssignment.hxx>
-#include <RWStepVisual_RWPresentationRepresentation.hxx>
-#include <RWStepVisual_RWPresentationSet.hxx>
-#include <RWStepVisual_RWPresentationSize.hxx>
-#include <RWStepVisual_RWPresentationStyleAssignment.hxx>
-#include <RWStepVisual_RWPresentationStyleByContext.hxx>
-#include <RWStepVisual_RWPresentationView.hxx>
-#include <RWStepBasic_RWProduct.hxx>
-#include <RWStepBasic_RWProductCategory.hxx>
-#include <RWStepBasic_RWProductContext.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepVisual_RWProductDataRepresentationView.hxx>
-#include <RWStepBasic_RWProductDefinition.hxx>
-#include <RWStepBasic_RWProductDefinitionContext.hxx>
-#include <RWStepBasic_RWProductDefinitionFormation.hxx>
-#include <RWStepBasic_RWProductDefinitionFormationWithSpecifiedSource.hxx>
-#include <RWStepRepr_RWProductDefinitionShape.hxx>
-#include <RWStepBasic_RWProductRelatedProductCategory.hxx>
-#include <RWStepBasic_RWProductType.hxx>
-#include <RWStepRepr_RWPropertyDefinition.hxx>
-#include <RWStepRepr_RWPropertyDefinitionRepresentation.hxx>
-#include <RWStepGeom_RWQuasiUniformCurve.hxx>
-#include <RWStepGeom_RWQuasiUniformSurface.hxx>
-#include <RWStepBasic_RWRatioMeasureWithUnit.hxx>
-#include <RWStepGeom_RWRationalBSplineCurve.hxx>
-#include <RWStepGeom_RWRationalBSplineSurface.hxx>
-#include <RWStepGeom_RWRectangularCompositeSurface.hxx>
-#include <RWStepGeom_RWRectangularTrimmedSurface.hxx>
-#include <RWStepAP214_RWRepItemGroup.hxx>
-#include <RWStepGeom_RWReparametrisedCompositeCurveSegment.hxx>
-#include <RWStepRepr_RWRepresentation.hxx>
-#include <RWStepRepr_RWRepresentationContext.hxx>
-#include <RWStepRepr_RWRepresentationItem.hxx>
-#include <RWStepRepr_RWRepresentationMap.hxx>
-#include <RWStepRepr_RWRepresentationRelationship.hxx>
-#include <RWStepShape_RWRevolvedAreaSolid.hxx>
-#include <RWStepShape_RWRightAngularWedge.hxx>
-#include <RWStepShape_RWRightCircularCone.hxx>
-#include <RWStepShape_RWRightCircularCylinder.hxx>
-#include <RWStepGeom_RWSeamCurve.hxx>
-#include <RWStepBasic_RWSecurityClassification.hxx>
-#include <RWStepBasic_RWSecurityClassificationLevel.hxx>
-#include <RWStepRepr_RWShapeAspect.hxx>
-#include <RWStepRepr_RWShapeAspectRelationship.hxx>
-#include <RWStepRepr_RWShapeAspectTransition.hxx>
-#include <RWStepShape_RWShapeDefinitionRepresentation.hxx>
-#include <RWStepShape_RWShapeRepresentation.hxx>
-#include <RWStepShape_RWShellBasedSurfaceModel.hxx>
-#include <RWStepBasic_RWSiUnit.hxx>
-#include <RWStepBasic_RWSolidAngleMeasureWithUnit.hxx>
-#include <RWStepShape_RWSolidModel.hxx>
-#include <RWStepShape_RWSolidReplica.hxx>
-#include <RWStepShape_RWSphere.hxx>
-#include <RWStepGeom_RWSphericalSurface.hxx>
-#include <RWStepVisual_RWStyledItem.hxx>
-#include <RWStepGeom_RWSurface.hxx>
-#include <RWStepGeom_RWSurfaceCurve.hxx>
-#include <RWStepGeom_RWSurfaceOfLinearExtrusion.hxx>
-#include <RWStepGeom_RWSurfaceOfRevolution.hxx>
-#include <RWStepGeom_RWSurfaceCurveAndBoundedCurve.hxx>
-#include <RWStepGeom_RWSurfacePatch.hxx>
-#include <RWStepGeom_RWSurfaceReplica.hxx>
-#include <RWStepVisual_RWSurfaceSideStyle.hxx>
-#include <RWStepVisual_RWSurfaceStyleBoundary.hxx>
-#include <RWStepVisual_RWSurfaceStyleControlGrid.hxx>
-#include <RWStepVisual_RWSurfaceStyleFillArea.hxx>
-#include <RWStepVisual_RWSurfaceStyleParameterLine.hxx>
-#include <RWStepVisual_RWSurfaceStyleSegmentationCurve.hxx>
-#include <RWStepVisual_RWSurfaceStyleSilhouette.hxx>
-#include <RWStepVisual_RWSurfaceStyleUsage.hxx>
-#include <RWStepShape_RWSweptAreaSolid.hxx>
-#include <RWStepGeom_RWSweptSurface.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepVisual_RWSymbolColour.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepVisual_RWSymbolRepresentation.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepVisual_RWSymbolRepresentationMap.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepVisual_RWSymbolStyle.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepVisual_RWSymbolTarget.hxx>
-#include <RWStepVisual_RWTemplate.hxx>
-#include <RWStepVisual_RWTemplateInstance.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepVisual_RWTerminatorSymbol.hxx>
-// Removed from CC1-Rev2 to CC1-Rev4, re-added CC2-Rev4 :
-#include <RWStepVisual_RWTextLiteral.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepVisual_RWTextLiteralWithAssociatedCurves.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepVisual_RWTextLiteralWithBlankingBox.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepVisual_RWTextLiteralWithDelineation.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepVisual_RWTextLiteralWithExtent.hxx>
-// Removed from CC1-Rev2 to CC1-Rev4, re-added CC2-Rev4 :
-#include <RWStepVisual_RWTextStyle.hxx>
-#include <RWStepVisual_RWTextStyleForDefinedFont.hxx>
-#include <RWStepVisual_RWTextStyleWithBoxCharacteristics.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepVisual_RWTextStyleWithMirror.hxx>
-#include <RWStepShape_RWTopologicalRepresentationItem.hxx>
-#include <RWStepGeom_RWToroidalSurface.hxx>
-#include <RWStepShape_RWTorus.hxx>
-#include <RWStepShape_RWTransitionalShapeRepresentation.hxx>
-#include <RWStepGeom_RWTrimmedCurve.hxx>
-// Removed from Rev2 to Rev4 :  <RWStepAP214_RWTwoDirectionRepeatFactor.hxx>
-#include <RWStepBasic_RWUncertaintyMeasureWithUnit.hxx>
-#include <RWStepGeom_RWUniformCurve.hxx>
-#include <RWStepGeom_RWUniformSurface.hxx>
-#include <RWStepGeom_RWVector.hxx>
-#include <RWStepShape_RWVertex.hxx>
-#include <RWStepShape_RWVertexLoop.hxx>
-#include <RWStepShape_RWVertexPoint.hxx>
-#include <RWStepVisual_RWViewVolume.hxx>
-#include <RWStepBasic_RWWeekOfYearAndDayDate.hxx>
-#include <RWStepGeom_RWUniformCurveAndRationalBSplineCurve.hxx>
-#include <RWStepGeom_RWBSplineCurveWithKnotsAndRationalBSplineCurve.hxx>
-#include <RWStepGeom_RWQuasiUniformCurveAndRationalBSplineCurve.hxx>
-#include <RWStepGeom_RWBezierCurveAndRationalBSplineCurve.hxx>
-#include <RWStepGeom_RWBSplineSurfaceWithKnotsAndRationalBSplineSurface.hxx>
-#include <RWStepGeom_RWUniformSurfaceAndRationalBSplineSurface.hxx>
-#include <RWStepGeom_RWQuasiUniformSurfaceAndRationalBSplineSurface.hxx>
-#include <RWStepGeom_RWBezierSurfaceAndRationalBSplineSurface.hxx>
-#include <RWStepBasic_RWSiUnitAndLengthUnit.hxx>
-#include <RWStepBasic_RWSiUnitAndPlaneAngleUnit.hxx>
-#include <RWStepBasic_RWConversionBasedUnitAndLengthUnit.hxx>
-#include <RWStepBasic_RWConversionBasedUnitAndPlaneAngleUnit.hxx>
-#include <RWStepGeom_RWGeometricRepresentationContextAndGlobalUnitAssignedContext.hxx>
-#include <RWStepShape_RWLoopAndPath.hxx>
-
-// Added by FMA  for Rev4
-#include <RWStepGeom_RWGeomRepContextAndGlobUnitAssCtxAndGlobUncertaintyAssCtx.hxx>
-#include <RWStepGeom_RWGeometricRepresentationContextAndParametricRepresentationContext.hxx>
-#include <RWStepBasic_RWConversionBasedUnitAndSolidAngleUnit.hxx>
-#include <RWStepBasic_RWSiUnitAndSolidAngleUnit.hxx>
-#include <RWStepBasic_RWSolidAngleUnit.hxx>
-#include <RWStepShape_RWFacetedBrepAndBrepWithVoids.hxx>
-#include <RWStepBasic_RWMechanicalContext.hxx>
-
-// full Rev4
-#include <RWStepBasic_RWSiUnitAndRatioUnit.hxx>
-#include <RWStepBasic_RWSiUnitAndTimeUnit.hxx>
-#include <RWStepBasic_RWConversionBasedUnitAndRatioUnit.hxx>
-#include <RWStepBasic_RWConversionBasedUnitAndTimeUnit.hxx>
-
-#include <RWStepBasic_RWApprovalDateTime.hxx>
-#include <RWStepBasic_RWDerivedUnit.hxx>
-#include <RWStepBasic_RWDerivedUnitElement.hxx>
-#include <RWStepRepr_RWItemDefinedTransformation.hxx>
-#include <RWStepVisual_RWPresentedItemRepresentation.hxx>
-#include <RWStepVisual_RWPresentationLayerUsage.hxx>
-
-
-//  Added by CKY (JUL-1998) for AP214 CC1 -> CC2
-
-#include <RWStepAP214_RWAutoDesignDocumentReference.hxx>
-#include <RWStepBasic_RWDocument.hxx>
-#include <RWStepBasic_RWDocumentRelationship.hxx>
-#include <RWStepBasic_RWDocumentType.hxx>
-#include <RWStepBasic_RWDocumentUsageConstraint.hxx>
-#include <RWStepBasic_RWEffectivity.hxx>
-#include <RWStepBasic_RWProductDefinitionEffectivity.hxx>
-#include <RWStepBasic_RWProductDefinitionRelationship.hxx>
-
-#include <RWStepBasic_RWProductDefinitionWithAssociatedDocuments.hxx>
-
-
-#include <RWStepRepr_RWMakeFromUsageOption.hxx>
-#include <RWStepRepr_RWAssemblyComponentUsage.hxx>
-#include <RWStepRepr_RWQuantifiedAssemblyComponentUsage.hxx>
-#include <RWStepRepr_RWSpecifiedHigherUsageOccurrence.hxx>
-#include <RWStepRepr_RWAssemblyComponentUsageSubstitute.hxx>
-#include <RWStepRepr_RWRepresentationRelationshipWithTransformation.hxx>
-#include <RWStepRepr_RWShapeRepresentationRelationshipWithTransformation.hxx>
-#include <RWStepRepr_RWMaterialDesignation.hxx>
-
-#include <RWStepShape_RWContextDependentShapeRepresentation.hxx>
-//Added from CC2 to DIS :j4
-
-#include <StepAP214_AppliedDateAndTimeAssignment.hxx>
-#include <StepAP214_AppliedDateAssignment.hxx>
-#include <StepAP214_AppliedApprovalAssignment.hxx>
-#include <StepAP214_AppliedDocumentReference.hxx>
-#include <StepAP214_AppliedGroupAssignment.hxx>
-#include <StepAP214_AppliedOrganizationAssignment.hxx>
-#include <StepAP214_AppliedPersonAndOrganizationAssignment.hxx>
-#include <StepAP214_AppliedPresentedItem.hxx>
-#include <StepAP214_AppliedSecurityClassificationAssignment.hxx>
-#include <StepBasic_DocumentFile.hxx>
-#include <StepBasic_CharacterizedObject.hxx>  
-#include <StepShape_ExtrudedFaceSolid.hxx>
-#include <StepShape_RevolvedFaceSolid.hxx>  
-#include <StepShape_SweptFaceSolid.hxx>  
-
-#include <RWStepAP214_RWAppliedDateAndTimeAssignment.hxx>
-#include <RWStepAP214_RWAppliedDateAssignment.hxx>
-#include <RWStepAP214_RWAppliedApprovalAssignment.hxx>
-#include <RWStepAP214_RWAppliedDocumentReference.hxx>
-#include <RWStepAP214_RWAppliedGroupAssignment.hxx>
-#include <RWStepAP214_RWAppliedOrganizationAssignment.hxx>
-#include <RWStepAP214_RWAppliedPersonAndOrganizationAssignment.hxx>
-#include <RWStepAP214_RWAppliedPresentedItem.hxx>
-#include <RWStepAP214_RWAppliedSecurityClassificationAssignment.hxx>
-#include <RWStepBasic_RWDocumentFile.hxx>
-#include <RWStepBasic_RWCharacterizedObject.hxx>  
-#include <RWStepShape_RWExtrudedFaceSolid.hxx>
-#include <RWStepShape_RWRevolvedFaceSolid.hxx>  
-#include <RWStepShape_RWSweptFaceSolid.hxx> 
-
-// Added by ABV 08.09.99 for CAX TRJ 2 (validation properties)
-#include <StepRepr_MeasureRepresentationItem.hxx>
-#include <RWStepRepr_RWMeasureRepresentationItem.hxx>
-#include <StepBasic_AreaUnit.hxx>
-#include <StepBasic_VolumeUnit.hxx>
-#include <StepBasic_SiUnitAndAreaUnit.hxx>
-#include <StepBasic_SiUnitAndVolumeUnit.hxx>
-#include <StepBasic_ConversionBasedUnitAndAreaUnit.hxx>
-#include <StepBasic_ConversionBasedUnitAndVolumeUnit.hxx>
-#include <RWStepBasic_RWConversionBasedUnitAndVolumeUnit.hxx>
-#include <RWStepBasic_RWConversionBasedUnitAndAreaUnit.hxx>
-
-// Added by ABV 10.11.99 for AP203
-#include <StepBasic_Action.hxx>
-#include <StepBasic_ActionAssignment.hxx>
-#include <StepBasic_ActionMethod.hxx>
-#include <StepBasic_ActionRequestAssignment.hxx>
-#include <StepAP203_CcDesignApproval.hxx>
-#include <StepAP203_CcDesignCertification.hxx>
-#include <StepAP203_CcDesignContract.hxx>
-#include <StepAP203_CcDesignDateAndTimeAssignment.hxx>
-#include <StepAP203_CcDesignPersonAndOrganizationAssignment.hxx>
-#include <StepAP203_CcDesignSecurityClassification.hxx>
-#include <StepAP203_CcDesignSpecificationReference.hxx>
-#include <StepBasic_Certification.hxx>
-#include <StepBasic_CertificationAssignment.hxx>
-#include <StepBasic_CertificationType.hxx>
-#include <StepAP203_Change.hxx>
-#include <StepAP203_ChangeRequest.hxx>
-#include <StepRepr_ConfigurationDesign.hxx>
-#include <StepRepr_ConfigurationEffectivity.hxx>
-#include <StepBasic_Contract.hxx>
-#include <StepBasic_ContractAssignment.hxx>
-#include <StepBasic_ContractType.hxx>
-#include <StepRepr_ProductConcept.hxx>
-#include <StepBasic_ProductConceptContext.hxx>
-#include <StepAP203_StartRequest.hxx>
-#include <StepAP203_StartWork.hxx>
-#include <StepBasic_VersionedActionRequest.hxx>
-#include <StepBasic_ProductCategoryRelationship.hxx>
-#include <StepBasic_ActionRequestSolution.hxx>
-#include <RWStepBasic_RWAction.hxx>
-#include <RWStepBasic_RWActionAssignment.hxx>
-#include <RWStepBasic_RWActionMethod.hxx>
-#include <RWStepBasic_RWActionRequestAssignment.hxx>
+#include <Interface_GeneralLib.hxx>
+#include <Interface_Macros.hxx>
+#include <Interface_ShareTool.hxx>
 #include <RWStepAP203_RWCcDesignApproval.hxx>
 #include <RWStepAP203_RWCcDesignCertification.hxx>
 #include <RWStepAP203_RWCcDesignContract.hxx>
@@ -892,210 +29,176 @@
 #include <RWStepAP203_RWCcDesignPersonAndOrganizationAssignment.hxx>
 #include <RWStepAP203_RWCcDesignSecurityClassification.hxx>
 #include <RWStepAP203_RWCcDesignSpecificationReference.hxx>
-#include <RWStepBasic_RWCertification.hxx>
-#include <RWStepBasic_RWCertificationAssignment.hxx>
-#include <RWStepBasic_RWCertificationType.hxx>
 #include <RWStepAP203_RWChange.hxx>
 #include <RWStepAP203_RWChangeRequest.hxx>
-#include <RWStepRepr_RWConfigurationDesign.hxx>
-#include <RWStepRepr_RWConfigurationEffectivity.hxx>
-#include <RWStepBasic_RWContract.hxx>
-#include <RWStepBasic_RWContractAssignment.hxx>
-#include <RWStepBasic_RWContractType.hxx>
-#include <RWStepRepr_RWProductConcept.hxx>
-#include <RWStepBasic_RWProductConceptContext.hxx>
 #include <RWStepAP203_RWStartRequest.hxx>
 #include <RWStepAP203_RWStartWork.hxx>
-#include <RWStepBasic_RWVersionedActionRequest.hxx>
-#include <RWStepBasic_RWProductCategoryRelationship.hxx>
-#include <RWStepBasic_RWActionRequestSolution.hxx>
-
-// Added by ABV 13.01.00 for CAX-IF TRJ3
-#include <StepVisual_DraughtingModel.hxx>
-#include <RWStepVisual_RWDraughtingModel.hxx>
-
-// Added by ABV 18.04.00 for CAX-IF TRJ4 (dimensions)
-#include <StepShape_AngularLocation.hxx>
-#include <StepShape_AngularSize.hxx>
-#include <StepShape_DimensionalCharacteristicRepresentation.hxx>
-#include <StepShape_DimensionalLocation.hxx>
-#include <StepShape_DimensionalLocationWithPath.hxx>
-#include <StepShape_DimensionalSize.hxx>
-#include <StepShape_DimensionalSizeWithPath.hxx>
-#include <StepShape_ShapeDimensionRepresentation.hxx>
-#include <RWStepShape_RWAngularLocation.hxx>
-#include <RWStepShape_RWAngularSize.hxx>
-#include <RWStepShape_RWDimensionalCharacteristicRepresentation.hxx>
-#include <RWStepShape_RWDimensionalLocation.hxx>
-#include <RWStepShape_RWDimensionalLocationWithPath.hxx>
-#include <RWStepShape_RWDimensionalSize.hxx>
-#include <RWStepShape_RWDimensionalSizeWithPath.hxx>
-#include <RWStepShape_RWShapeDimensionRepresentation.hxx>
-
-// Added by ABV 10.05.00 for CAX-IF TRJ4 (external references)
-#include <StepBasic_DocumentRepresentationType.hxx>
-#include <StepBasic_ObjectRole.hxx>
-#include <StepBasic_RoleAssociation.hxx>
-#include <StepBasic_IdentificationRole.hxx>
-#include <StepBasic_IdentificationAssignment.hxx>
-#include <StepBasic_ExternalIdentificationAssignment.hxx>
-#include <StepBasic_EffectivityAssignment.hxx>
-#include <StepBasic_NameAssignment.hxx>
-#include <StepBasic_GeneralProperty.hxx>
-#include <StepAP214_Class.hxx>
-#include <StepAP214_ExternallyDefinedClass.hxx>
-#include <StepAP214_ExternallyDefinedGeneralProperty.hxx>
-#include <StepAP214_AppliedExternalIdentificationAssignment.hxx>
-#include <RWStepBasic_RWDocumentRepresentationType.hxx>
-#include <RWStepBasic_RWObjectRole.hxx>
-#include <RWStepBasic_RWRoleAssociation.hxx>
-#include <RWStepBasic_RWIdentificationRole.hxx>
-#include <RWStepBasic_RWIdentificationAssignment.hxx>
-#include <RWStepBasic_RWExternalIdentificationAssignment.hxx>
-#include <RWStepBasic_RWEffectivityAssignment.hxx>
-#include <RWStepBasic_RWNameAssignment.hxx>
-#include <RWStepBasic_RWGeneralProperty.hxx>
+#include <RWStepAP214.hxx>
+#include <RWStepAP214_GeneralModule.hxx>
+#include <RWStepAP214_RWAppliedApprovalAssignment.hxx>
+#include <RWStepAP214_RWAppliedDateAndTimeAssignment.hxx>
+#include <RWStepAP214_RWAppliedDateAssignment.hxx>
+#include <RWStepAP214_RWAppliedDocumentReference.hxx>
+#include <RWStepAP214_RWAppliedExternalIdentificationAssignment.hxx>
+#include <RWStepAP214_RWAppliedGroupAssignment.hxx>
+#include <RWStepAP214_RWAppliedOrganizationAssignment.hxx>
+#include <RWStepAP214_RWAppliedPersonAndOrganizationAssignment.hxx>
+#include <RWStepAP214_RWAppliedPresentedItem.hxx>
+#include <RWStepAP214_RWAppliedSecurityClassificationAssignment.hxx>
+#include <RWStepAP214_RWAutoDesignActualDateAndTimeAssignment.hxx>
+#include <RWStepAP214_RWAutoDesignActualDateAssignment.hxx>
+#include <RWStepAP214_RWAutoDesignApprovalAssignment.hxx>
+#include <RWStepAP214_RWAutoDesignDateAndPersonAssignment.hxx>
+#include <RWStepAP214_RWAutoDesignDocumentReference.hxx>
+#include <RWStepAP214_RWAutoDesignGroupAssignment.hxx>
+#include <RWStepAP214_RWAutoDesignNominalDateAndTimeAssignment.hxx>
+#include <RWStepAP214_RWAutoDesignNominalDateAssignment.hxx>
+#include <RWStepAP214_RWAutoDesignOrganizationAssignment.hxx>
+#include <RWStepAP214_RWAutoDesignPersonAndOrganizationAssignment.hxx>
+#include <RWStepAP214_RWAutoDesignPresentedItem.hxx>
+#include <RWStepAP214_RWAutoDesignSecurityClassificationAssignment.hxx>
 #include <RWStepAP214_RWClass.hxx>
 #include <RWStepAP214_RWExternallyDefinedClass.hxx>
 #include <RWStepAP214_RWExternallyDefinedGeneralProperty.hxx>
-#include <RWStepAP214_RWAppliedExternalIdentificationAssignment.hxx>
-#include <StepShape_DefinitionalRepresentationAndShapeRepresentation.hxx>
-#include <RWStepShape_RWDefinitionalRepresentationAndShapeRepresentation.hxx>
-
-// Added by CKY , 25 APR 2001 for Dimensional Tolerances (CAX-IF TRJ7)
-#include <StepRepr_CompositeShapeAspect.hxx>
-#include <StepRepr_DerivedShapeAspect.hxx>
-#include <StepRepr_Extension.hxx>
-#include <StepShape_DirectedDimensionalLocation.hxx>
-#include <StepShape_LimitsAndFits.hxx>
-#include <StepShape_ToleranceValue.hxx>
-#include <StepShape_MeasureQualification.hxx>
-#include <StepShape_PlusMinusTolerance.hxx>
-#include <StepShape_PrecisionQualifier.hxx>
-#include <StepShape_TypeQualifier.hxx>
-#include <StepShape_QualifiedRepresentationItem.hxx>
-#include <StepShape_MeasureRepresentationItemAndQualifiedRepresentationItem.hxx>
-#include <StepRepr_CompoundRepresentationItem.hxx>
-#include <StepRepr_ValueRange.hxx>
-#include <StepRepr_ShapeAspectDerivingRelationship.hxx>
-#include <RWStepShape_RWLimitsAndFits.hxx>
-#include <RWStepShape_RWToleranceValue.hxx>
-#include <RWStepShape_RWMeasureQualification.hxx>
-#include <RWStepShape_RWPlusMinusTolerance.hxx>
-#include <RWStepShape_RWPrecisionQualifier.hxx>
-#include <RWStepShape_RWTypeQualifier.hxx>
-#include <RWStepShape_RWQualifiedRepresentationItem.hxx>
-#include <RWStepShape_RWMeasureRepresentationItemAndQualifiedRepresentationItem.hxx>
-#include <RWStepRepr_RWCompoundRepresentationItem.hxx>
-
-// abv 28.12.01: CAX-IF TRJ9: edge_based_wireframe
-#include <StepShape_CompoundShapeRepresentation.hxx>
-#include <StepShape_ConnectedEdgeSet.hxx>
-#include <StepShape_ConnectedFaceShapeRepresentation.hxx>
-#include <StepShape_EdgeBasedWireframeModel.hxx>
-#include <StepShape_EdgeBasedWireframeShapeRepresentation.hxx>
-#include <StepShape_FaceBasedSurfaceModel.hxx>
-#include <StepShape_NonManifoldSurfaceShapeRepresentation.hxx>
-#include <RWStepShape_RWCompoundShapeRepresentation.hxx>
-#include <RWStepShape_RWConnectedEdgeSet.hxx>
-#include <RWStepShape_RWConnectedFaceShapeRepresentation.hxx>
-#include <RWStepShape_RWEdgeBasedWireframeModel.hxx>
-#include <RWStepShape_RWEdgeBasedWireframeShapeRepresentation.hxx>
-#include <RWStepShape_RWFaceBasedSurfaceModel.hxx>
-#include <RWStepShape_RWNonManifoldSurfaceShapeRepresentation.hxx>
-#include <StepGeom_OrientedSurface.hxx>
-#include <StepShape_Subface.hxx>
-#include <StepShape_Subedge.hxx>
-#include <StepShape_SeamEdge.hxx>
-#include <StepShape_ConnectedFaceSubSet.hxx>
-#include <RWStepGeom_RWOrientedSurface.hxx>
-#include <RWStepShape_RWSubface.hxx>
-#include <RWStepShape_RWSubedge.hxx>
-#include <RWStepShape_RWSeamEdge.hxx>
-#include <RWStepShape_RWConnectedFaceSubSet.hxx>
-#include <RWStepShape_RWConnectedFaceSubSet.hxx>
-#include <RWStepShape_RWConnectedFaceSubSet.hxx>
-//Addef for AP209
-#include <StepBasic_EulerAngles.hxx>
-#include <StepBasic_MassUnit.hxx>
-#include <StepBasic_ThermodynamicTemperatureUnit.hxx>
-#include <StepElement_AnalysisItemWithinRepresentation.hxx>
-#include <StepElement_Curve3dElementDescriptor.hxx>
-#include <StepElement_CurveElementEndReleasePacket.hxx>
-#include <StepElement_CurveElementSectionDefinition.hxx>
-#include <StepElement_CurveElementSectionDerivedDefinitions.hxx>
-#include <StepElement_ElementDescriptor.hxx>
-#include <StepElement_ElementMaterial.hxx>
-#include <StepElement_Surface3dElementDescriptor.hxx>
-#include <StepElement_SurfaceElementProperty.hxx>
-#include <StepElement_SurfaceSection.hxx>
-#include <StepElement_SurfaceSectionField.hxx>
-#include <StepElement_SurfaceSectionFieldConstant.hxx>
-#include <StepElement_SurfaceSectionFieldVarying.hxx>
-#include <StepElement_UniformSurfaceSection.hxx>
-#include <StepElement_Volume3dElementDescriptor.hxx>
-#include <StepFEA_AlignedCurve3dElementCoordinateSystem.hxx>
-#include <StepFEA_ArbitraryVolume3dElementCoordinateSystem.hxx>
-#include <StepFEA_Curve3dElementProperty.hxx>
-#include <StepFEA_Curve3dElementRepresentation.hxx>
-#include <StepFEA_Node.hxx>
-#include <StepFEA_CurveElementEndCoordinateSystem.hxx>
-#include <StepFEA_CurveElementEndOffset.hxx>
-#include <StepFEA_CurveElementEndRelease.hxx>
-#include <StepFEA_CurveElementInterval.hxx>
-#include <StepFEA_CurveElementIntervalConstant.hxx>
-#include <StepFEA_DummyNode.hxx>
-#include <StepFEA_CurveElementLocation.hxx>
-#include <StepFEA_ElementGeometricRelationship.hxx>
-#include <StepFEA_ElementGroup.hxx>
-#include <StepFEA_ElementRepresentation.hxx>
-#include <StepFEA_FeaAreaDensity.hxx>
-#include <StepFEA_FeaAxis2Placement3d.hxx>
-#include <StepFEA_FeaGroup.hxx>
-#include <StepFEA_FeaLinearElasticity.hxx>
-#include <StepFEA_FeaMassDensity.hxx>
-#include <StepFEA_FeaMaterialPropertyRepresentation.hxx>
-#include <StepFEA_FeaMaterialPropertyRepresentationItem.hxx>
-#include <StepFEA_FeaModel.hxx>
-#include <StepFEA_FeaModel3d.hxx>
-#include <StepFEA_FeaMoistureAbsorption.hxx>
-#include <StepFEA_FeaParametricPoint.hxx>
-#include <StepFEA_FeaRepresentationItem.hxx>
-#include <StepFEA_FeaSecantCoefficientOfLinearThermalExpansion.hxx>
-#include <StepFEA_FeaShellBendingStiffness.hxx>
-#include <StepFEA_FeaShellMembraneBendingCouplingStiffness.hxx>
-#include <StepFEA_FeaShellMembraneStiffness.hxx>
-#include <StepFEA_FeaShellShearStiffness.hxx>
-#include <StepFEA_GeometricNode.hxx>
-#include <StepFEA_FeaTangentialCoefficientOfLinearThermalExpansion.hxx>
-#include <StepFEA_NodeGroup.hxx>
-#include <StepFEA_NodeRepresentation.hxx>
-#include <StepFEA_NodeSet.hxx>
-#include <StepFEA_NodeWithSolutionCoordinateSystem.hxx>
-#include <StepFEA_NodeWithVector.hxx>
-#include <StepFEA_ParametricCurve3dElementCoordinateDirection.hxx>
-#include <StepFEA_ParametricCurve3dElementCoordinateSystem.hxx>
-#include <StepFEA_ParametricSurface3dElementCoordinateSystem.hxx>
-#include <StepFEA_Surface3dElementRepresentation.hxx>
-#include <StepFEA_SymmetricTensor22d.hxx>
-#include <StepFEA_SymmetricTensor42d.hxx>
-#include <StepFEA_SymmetricTensor43d.hxx>
-#include <StepFEA_Volume3dElementRepresentation.hxx>
-#include <StepRepr_DataEnvironment.hxx>
-#include <StepRepr_MaterialPropertyRepresentation.hxx>
-#include <StepRepr_PropertyDefinitionRelationship.hxx>
-#include <StepShape_PointRepresentation.hxx>
-#include <StepRepr_MaterialProperty.hxx>
-#include <StepFEA_FeaModelDefinition.hxx>
-#include <StepFEA_FreedomAndCoefficient.hxx>
-#include <StepFEA_FreedomsList.hxx>
-#include <StepBasic_ProductDefinitionFormationRelationship.hxx>
-#include <StepFEA_NodeDefinition.hxx>
-#include <StepRepr_StructuralResponseProperty.hxx>
-#include <StepRepr_StructuralResponsePropertyDefinitionRepresentation.hxx>
+#include <RWStepAP214_RWRepItemGroup.hxx>
+#include <RWStepBasic_RWAction.hxx>
+#include <RWStepBasic_RWActionAssignment.hxx>
+#include <RWStepBasic_RWActionMethod.hxx>
+#include <RWStepBasic_RWActionRequestAssignment.hxx>
+#include <RWStepBasic_RWActionRequestSolution.hxx>
+#include <RWStepBasic_RWAddress.hxx>
+#include <RWStepBasic_RWApplicationContext.hxx>
+#include <RWStepBasic_RWApplicationContextElement.hxx>
+#include <RWStepBasic_RWApplicationProtocolDefinition.hxx>
+#include <RWStepBasic_RWApproval.hxx>
+#include <RWStepBasic_RWApprovalDateTime.hxx>
+#include <RWStepBasic_RWApprovalPersonOrganization.hxx>
+#include <RWStepBasic_RWApprovalRelationship.hxx>
+#include <RWStepBasic_RWApprovalRole.hxx>
+#include <RWStepBasic_RWApprovalStatus.hxx>
+#include <RWStepBasic_RWCalendarDate.hxx>
+#include <RWStepBasic_RWCertification.hxx>
+#include <RWStepBasic_RWCertificationAssignment.hxx>
+#include <RWStepBasic_RWCertificationType.hxx>
+#include <RWStepBasic_RWCharacterizedObject.hxx>
+#include <RWStepBasic_RWContract.hxx>
+#include <RWStepBasic_RWContractAssignment.hxx>
+#include <RWStepBasic_RWContractType.hxx>
+#include <RWStepBasic_RWConversionBasedUnit.hxx>
+#include <RWStepBasic_RWConversionBasedUnitAndAreaUnit.hxx>
+#include <RWStepBasic_RWConversionBasedUnitAndLengthUnit.hxx>
+#include <RWStepBasic_RWConversionBasedUnitAndMassUnit.hxx>
+#include <RWStepBasic_RWConversionBasedUnitAndPlaneAngleUnit.hxx>
+#include <RWStepBasic_RWConversionBasedUnitAndRatioUnit.hxx>
+#include <RWStepBasic_RWConversionBasedUnitAndSolidAngleUnit.hxx>
+#include <RWStepBasic_RWConversionBasedUnitAndTimeUnit.hxx>
+#include <RWStepBasic_RWConversionBasedUnitAndVolumeUnit.hxx>
+#include <RWStepBasic_RWCoordinatedUniversalTimeOffset.hxx>
+#include <RWStepBasic_RWDate.hxx>
+#include <RWStepBasic_RWDateAndTime.hxx>
+#include <RWStepBasic_RWDateRole.hxx>
+#include <RWStepBasic_RWDateTimeRole.hxx>
+#include <RWStepBasic_RWDerivedUnit.hxx>
+#include <RWStepBasic_RWDerivedUnitElement.hxx>
+#include <RWStepBasic_RWDimensionalExponents.hxx>
+#include <RWStepBasic_RWDocument.hxx>
+#include <RWStepBasic_RWDocumentFile.hxx>
+#include <RWStepBasic_RWDocumentProductAssociation.hxx>
+#include <RWStepBasic_RWDocumentProductEquivalence.hxx>
+#include <RWStepBasic_RWDocumentRelationship.hxx>
+#include <RWStepBasic_RWDocumentRepresentationType.hxx>
+#include <RWStepBasic_RWDocumentType.hxx>
+#include <RWStepBasic_RWDocumentUsageConstraint.hxx>
+#include <RWStepBasic_RWEffectivity.hxx>
+#include <RWStepBasic_RWEffectivityAssignment.hxx>
 #include <RWStepBasic_RWEulerAngles.hxx>
+#include <RWStepBasic_RWExternalIdentificationAssignment.hxx>
+#include <RWStepBasic_RWExternallyDefinedItem.hxx>
+#include <RWStepBasic_RWExternalSource.hxx>
+#include <RWStepBasic_RWGeneralProperty.hxx>
+#include <RWStepBasic_RWGroup.hxx>
+#include <RWStepBasic_RWGroupRelationship.hxx>
+#include <RWStepBasic_RWIdentificationAssignment.hxx>
+#include <RWStepBasic_RWIdentificationRole.hxx>
+#include <RWStepBasic_RWLengthMeasureWithUnit.hxx>
+#include <RWStepBasic_RWLengthUnit.hxx>
+#include <RWStepBasic_RWLocalTime.hxx>
+#include <RWStepBasic_RWMassMeasureWithUnit.hxx>
 #include <RWStepBasic_RWMassUnit.hxx>
+#include <RWStepBasic_RWMeasureWithUnit.hxx>
+#include <RWStepBasic_RWMechanicalContext.hxx>
+#include <RWStepBasic_RWNameAssignment.hxx>
+#include <RWStepBasic_RWNamedUnit.hxx>
+#include <RWStepBasic_RWObjectRole.hxx>
+#include <RWStepBasic_RWOrdinalDate.hxx>
+#include <RWStepBasic_RWOrganization.hxx>
+#include <RWStepBasic_RWOrganizationalAddress.hxx>
+#include <RWStepBasic_RWOrganizationRole.hxx>
+#include <RWStepBasic_RWPerson.hxx>
+#include <RWStepBasic_RWPersonalAddress.hxx>
+#include <RWStepBasic_RWPersonAndOrganization.hxx>
+#include <RWStepBasic_RWPersonAndOrganizationRole.hxx>
+#include <RWStepBasic_RWPlaneAngleMeasureWithUnit.hxx>
+#include <RWStepBasic_RWPlaneAngleUnit.hxx>
+#include <RWStepBasic_RWProduct.hxx>
+#include <RWStepBasic_RWProductCategory.hxx>
+#include <RWStepBasic_RWProductCategoryRelationship.hxx>
+#include <RWStepBasic_RWProductConceptContext.hxx>
+#include <RWStepBasic_RWProductContext.hxx>
+#include <RWStepBasic_RWProductDefinition.hxx>
+#include <RWStepBasic_RWProductDefinitionContext.hxx>
+#include <RWStepBasic_RWProductDefinitionEffectivity.hxx>
+#include <RWStepBasic_RWProductDefinitionFormation.hxx>
+#include <RWStepBasic_RWProductDefinitionFormationRelationship.hxx>
+#include <RWStepBasic_RWProductDefinitionFormationWithSpecifiedSource.hxx>
+#include <RWStepBasic_RWProductDefinitionRelationship.hxx>
+#include <RWStepBasic_RWProductDefinitionWithAssociatedDocuments.hxx>
+#include <RWStepBasic_RWProductRelatedProductCategory.hxx>
+#include <RWStepBasic_RWProductType.hxx>
+#include <RWStepBasic_RWRatioMeasureWithUnit.hxx>
+#include <RWStepBasic_RWRoleAssociation.hxx>
+#include <RWStepBasic_RWSecurityClassification.hxx>
+#include <RWStepBasic_RWSecurityClassificationLevel.hxx>
+#include <RWStepBasic_RWSiUnit.hxx>
+#include <RWStepBasic_RWSiUnitAndLengthUnit.hxx>
+#include <RWStepBasic_RWSiUnitAndMassUnit.hxx>
+#include <RWStepBasic_RWSiUnitAndPlaneAngleUnit.hxx>
+#include <RWStepBasic_RWSiUnitAndRatioUnit.hxx>
+#include <RWStepBasic_RWSiUnitAndSolidAngleUnit.hxx>
+#include <RWStepBasic_RWSiUnitAndThermodynamicTemperatureUnit.hxx>
+#include <RWStepBasic_RWSiUnitAndTimeUnit.hxx>
+#include <RWStepBasic_RWSolidAngleMeasureWithUnit.hxx>
+#include <RWStepBasic_RWSolidAngleUnit.hxx>
 #include <RWStepBasic_RWThermodynamicTemperatureUnit.hxx>
+#include <RWStepBasic_RWUncertaintyMeasureWithUnit.hxx>
+#include <RWStepBasic_RWVersionedActionRequest.hxx>
+#include <RWStepBasic_RWWeekOfYearAndDayDate.hxx>
+#include <RWStepDimTol_RWAngularityTolerance.hxx>
+#include <RWStepDimTol_RWCircularRunoutTolerance.hxx>
+#include <RWStepDimTol_RWCoaxialityTolerance.hxx>
+#include <RWStepDimTol_RWCommonDatum.hxx>
+#include <RWStepDimTol_RWConcentricityTolerance.hxx>
+#include <RWStepDimTol_RWCylindricityTolerance.hxx>
+#include <RWStepDimTol_RWDatum.hxx>
+#include <RWStepDimTol_RWDatumFeature.hxx>
+#include <RWStepDimTol_RWDatumReference.hxx>
+#include <RWStepDimTol_RWDatumTarget.hxx>
+#include <RWStepDimTol_RWFlatnessTolerance.hxx>
+#include <RWStepDimTol_RWGeometricTolerance.hxx>
+#include <RWStepDimTol_RWGeometricToleranceRelationship.hxx>
+#include <RWStepDimTol_RWGeometricToleranceWithDatumReference.hxx>
+#include <RWStepDimTol_RWGeoTolAndGeoTolWthDatRefAndModGeoTolAndPosTol.hxx>
+#include <RWStepDimTol_RWLineProfileTolerance.hxx>
+#include <RWStepDimTol_RWModifiedGeometricTolerance.hxx>
+#include <RWStepDimTol_RWParallelismTolerance.hxx>
+#include <RWStepDimTol_RWPerpendicularityTolerance.hxx>
+#include <RWStepDimTol_RWPlacedDatumTargetFeature.hxx>
+#include <RWStepDimTol_RWPositionTolerance.hxx>
+#include <RWStepDimTol_RWRoundnessTolerance.hxx>
+#include <RWStepDimTol_RWStraightnessTolerance.hxx>
+#include <RWStepDimTol_RWSurfaceProfileTolerance.hxx>
+#include <RWStepDimTol_RWSymmetryTolerance.hxx>
+#include <RWStepDimTol_RWTotalRunoutTolerance.hxx>
 #include <RWStepElement_RWAnalysisItemWithinRepresentation.hxx>
 #include <RWStepElement_RWCurve3dElementDescriptor.hxx>
 #include <RWStepElement_RWCurveElementEndReleasePacket.hxx>
@@ -1112,21 +215,24 @@
 #include <RWStepElement_RWUniformSurfaceSection.hxx>
 #include <RWStepElement_RWVolume3dElementDescriptor.hxx>
 #include <RWStepFEA_RWAlignedCurve3dElementCoordinateSystem.hxx>
+#include <RWStepFEA_RWAlignedSurface3dElementCoordinateSystem.hxx>
 #include <RWStepFEA_RWArbitraryVolume3dElementCoordinateSystem.hxx>
+#include <RWStepFEA_RWConstantSurface3dElementCoordinateSystem.hxx>
 #include <RWStepFEA_RWCurve3dElementProperty.hxx>
 #include <RWStepFEA_RWCurve3dElementRepresentation.hxx>
-#include <RWStepFEA_RWNode.hxx>
 #include <RWStepFEA_RWCurveElementEndOffset.hxx>
 #include <RWStepFEA_RWCurveElementEndRelease.hxx>
 #include <RWStepFEA_RWCurveElementInterval.hxx>
 #include <RWStepFEA_RWCurveElementIntervalConstant.hxx>
-#include <RWStepFEA_RWDummyNode.hxx>
+#include <RWStepFEA_RWCurveElementIntervalLinearlyVarying.hxx>
 #include <RWStepFEA_RWCurveElementLocation.hxx>
+#include <RWStepFEA_RWDummyNode.hxx>
 #include <RWStepFEA_RWElementGeometricRelationship.hxx>
 #include <RWStepFEA_RWElementGroup.hxx>
 #include <RWStepFEA_RWElementRepresentation.hxx>
 #include <RWStepFEA_RWFeaAreaDensity.hxx>
 #include <RWStepFEA_RWFeaAxis2Placement3d.hxx>
+#include <RWStepFEA_RWFeaCurveSectionGeometricRelationship.hxx>
 #include <RWStepFEA_RWFeaGroup.hxx>
 #include <RWStepFEA_RWFeaLinearElasticity.hxx>
 #include <RWStepFEA_RWFeaMassDensity.hxx>
@@ -1134,6 +240,7 @@
 #include <RWStepFEA_RWFeaMaterialPropertyRepresentationItem.hxx>
 #include <RWStepFEA_RWFeaModel.hxx>
 #include <RWStepFEA_RWFeaModel3d.hxx>
+#include <RWStepFEA_RWFeaModelDefinition.hxx>
 #include <RWStepFEA_RWFeaMoistureAbsorption.hxx>
 #include <RWStepFEA_RWFeaParametricPoint.hxx>
 #include <RWStepFEA_RWFeaRepresentationItem.hxx>
@@ -1142,8 +249,13 @@
 #include <RWStepFEA_RWFeaShellMembraneBendingCouplingStiffness.hxx>
 #include <RWStepFEA_RWFeaShellMembraneStiffness.hxx>
 #include <RWStepFEA_RWFeaShellShearStiffness.hxx>
-#include <RWStepFEA_RWGeometricNode.hxx>
+#include <RWStepFEA_RWFeaSurfaceSectionGeometricRelationship.hxx>
 #include <RWStepFEA_RWFeaTangentialCoefficientOfLinearThermalExpansion.hxx>
+#include <RWStepFEA_RWFreedomAndCoefficient.hxx>
+#include <RWStepFEA_RWFreedomsList.hxx>
+#include <RWStepFEA_RWGeometricNode.hxx>
+#include <RWStepFEA_RWNode.hxx>
+#include <RWStepFEA_RWNodeDefinition.hxx>
 #include <RWStepFEA_RWNodeGroup.hxx>
 #include <RWStepFEA_RWNodeRepresentation.hxx>
 #include <RWStepFEA_RWNodeSet.hxx>
@@ -1154,113 +266,1105 @@
 #include <RWStepFEA_RWParametricSurface3dElementCoordinateSystem.hxx>
 #include <RWStepFEA_RWSurface3dElementRepresentation.hxx>
 #include <RWStepFEA_RWVolume3dElementRepresentation.hxx>
+#include <RWStepGeom_RWAxis1Placement.hxx>
+#include <RWStepGeom_RWAxis2Placement2d.hxx>
+#include <RWStepGeom_RWAxis2Placement3d.hxx>
+#include <RWStepGeom_RWBezierCurve.hxx>
+#include <RWStepGeom_RWBezierCurveAndRationalBSplineCurve.hxx>
+#include <RWStepGeom_RWBezierSurface.hxx>
+#include <RWStepGeom_RWBezierSurfaceAndRationalBSplineSurface.hxx>
+#include <RWStepGeom_RWBoundaryCurve.hxx>
+#include <RWStepGeom_RWBoundedCurve.hxx>
+#include <RWStepGeom_RWBoundedSurface.hxx>
+#include <RWStepGeom_RWBSplineCurve.hxx>
+#include <RWStepGeom_RWBSplineCurveWithKnots.hxx>
+#include <RWStepGeom_RWBSplineCurveWithKnotsAndRationalBSplineCurve.hxx>
+#include <RWStepGeom_RWBSplineSurface.hxx>
+#include <RWStepGeom_RWBSplineSurfaceWithKnots.hxx>
+#include <RWStepGeom_RWBSplineSurfaceWithKnotsAndRationalBSplineSurface.hxx>
+#include <RWStepGeom_RWCartesianPoint.hxx>
+#include <RWStepGeom_RWCartesianTransformationOperator.hxx>
+#include <RWStepGeom_RWCartesianTransformationOperator3d.hxx>
+#include <RWStepGeom_RWCircle.hxx>
+#include <RWStepGeom_RWCompositeCurve.hxx>
+#include <RWStepGeom_RWCompositeCurveOnSurface.hxx>
+#include <RWStepGeom_RWCompositeCurveSegment.hxx>
+#include <RWStepGeom_RWConic.hxx>
+#include <RWStepGeom_RWConicalSurface.hxx>
+#include <RWStepGeom_RWCurve.hxx>
+#include <RWStepGeom_RWCurveBoundedSurface.hxx>
+#include <RWStepGeom_RWCurveReplica.hxx>
+#include <RWStepGeom_RWCylindricalSurface.hxx>
+#include <RWStepGeom_RWDegeneratePcurve.hxx>
+#include <RWStepGeom_RWDegenerateToroidalSurface.hxx>
+#include <RWStepGeom_RWDirection.hxx>
+#include <RWStepGeom_RWElementarySurface.hxx>
+#include <RWStepGeom_RWEllipse.hxx>
+#include <RWStepGeom_RWEvaluatedDegeneratePcurve.hxx>
+#include <RWStepGeom_RWGeometricRepresentationContext.hxx>
+#include <RWStepGeom_RWGeometricRepresentationContextAndGlobalUnitAssignedContext.hxx>
+#include <RWStepGeom_RWGeometricRepresentationContextAndParametricRepresentationContext.hxx>
+#include <RWStepGeom_RWGeometricRepresentationItem.hxx>
+#include <RWStepGeom_RWGeomRepContextAndGlobUnitAssCtxAndGlobUncertaintyAssCtx.hxx>
+#include <RWStepGeom_RWHyperbola.hxx>
+#include <RWStepGeom_RWIntersectionCurve.hxx>
+#include <RWStepGeom_RWLine.hxx>
+#include <RWStepGeom_RWOffsetCurve3d.hxx>
+#include <RWStepGeom_RWOffsetSurface.hxx>
+#include <RWStepGeom_RWOrientedSurface.hxx>
+#include <RWStepGeom_RWOuterBoundaryCurve.hxx>
+#include <RWStepGeom_RWParabola.hxx>
+#include <RWStepGeom_RWPcurve.hxx>
+#include <RWStepGeom_RWPlacement.hxx>
+#include <RWStepGeom_RWPlane.hxx>
+#include <RWStepGeom_RWPoint.hxx>
+#include <RWStepGeom_RWPointOnCurve.hxx>
+#include <RWStepGeom_RWPointOnSurface.hxx>
+#include <RWStepGeom_RWPointReplica.hxx>
+#include <RWStepGeom_RWPolyline.hxx>
+#include <RWStepGeom_RWQuasiUniformCurve.hxx>
+#include <RWStepGeom_RWQuasiUniformCurveAndRationalBSplineCurve.hxx>
+#include <RWStepGeom_RWQuasiUniformSurface.hxx>
+#include <RWStepGeom_RWQuasiUniformSurfaceAndRationalBSplineSurface.hxx>
+#include <RWStepGeom_RWRationalBSplineCurve.hxx>
+#include <RWStepGeom_RWRationalBSplineSurface.hxx>
+#include <RWStepGeom_RWRectangularCompositeSurface.hxx>
+#include <RWStepGeom_RWRectangularTrimmedSurface.hxx>
+#include <RWStepGeom_RWReparametrisedCompositeCurveSegment.hxx>
+#include <RWStepGeom_RWSeamCurve.hxx>
+#include <RWStepGeom_RWSphericalSurface.hxx>
+#include <RWStepGeom_RWSurface.hxx>
+#include <RWStepGeom_RWSurfaceCurve.hxx>
+#include <RWStepGeom_RWSurfaceCurveAndBoundedCurve.hxx>
+#include <RWStepGeom_RWSurfaceOfLinearExtrusion.hxx>
+#include <RWStepGeom_RWSurfaceOfRevolution.hxx>
+#include <RWStepGeom_RWSurfacePatch.hxx>
+#include <RWStepGeom_RWSurfaceReplica.hxx>
+#include <RWStepGeom_RWSweptSurface.hxx>
+#include <RWStepGeom_RWToroidalSurface.hxx>
+#include <RWStepGeom_RWTrimmedCurve.hxx>
+#include <RWStepGeom_RWUniformCurve.hxx>
+#include <RWStepGeom_RWUniformCurveAndRationalBSplineCurve.hxx>
+#include <RWStepGeom_RWUniformSurface.hxx>
+#include <RWStepGeom_RWUniformSurfaceAndRationalBSplineSurface.hxx>
+#include <RWStepGeom_RWVector.hxx>
+#include <RWStepRepr_RWAssemblyComponentUsage.hxx>
+#include <RWStepRepr_RWAssemblyComponentUsageSubstitute.hxx>
+#include <RWStepRepr_RWCompositeShapeAspect.hxx>
+#include <RWStepRepr_RWCompoundRepresentationItem.hxx>
+#include <RWStepRepr_RWConfigurationDesign.hxx>
+#include <RWStepRepr_RWConfigurationEffectivity.hxx>
+#include <RWStepRepr_RWConstructiveGeometryRepresentation.hxx>
+#include <RWStepRepr_RWConstructiveGeometryRepresentationRelationship.hxx>
 #include <RWStepRepr_RWDataEnvironment.hxx>
-#include <RWStepRepr_RWMaterialPropertyRepresentation.hxx>
-#include <RWStepRepr_RWPropertyDefinitionRelationship.hxx>
-#include <RWStepShape_RWPointRepresentation.hxx>
+#include <RWStepRepr_RWDefinitionalRepresentation.hxx>
+#include <RWStepRepr_RWDerivedShapeAspect.hxx>
+#include <RWStepRepr_RWDescriptiveRepresentationItem.hxx>
+#include <RWStepRepr_RWExtension.hxx>
+#include <RWStepRepr_RWFunctionallyDefinedTransformation.hxx>
+#include <RWStepRepr_RWGlobalUncertaintyAssignedContext.hxx>
+#include <RWStepRepr_RWGlobalUnitAssignedContext.hxx>
+#include <RWStepRepr_RWItemDefinedTransformation.hxx>
+#include <RWStepRepr_RWMakeFromUsageOption.hxx>
+#include <RWStepRepr_RWMappedItem.hxx>
+#include <RWStepRepr_RWMaterialDesignation.hxx>
 #include <RWStepRepr_RWMaterialProperty.hxx>
-#include <RWStepFEA_RWFeaModelDefinition.hxx>
-#include <RWStepFEA_RWFreedomAndCoefficient.hxx>
-#include <RWStepFEA_RWFreedomsList.hxx>
-#include <RWStepBasic_RWProductDefinitionFormationRelationship.hxx>
-#include <RWStepFEA_RWNodeDefinition.hxx>
+#include <RWStepRepr_RWMaterialPropertyRepresentation.hxx>
+#include <RWStepRepr_RWMeasureRepresentationItem.hxx>
+#include <RWStepRepr_RWParametricRepresentationContext.hxx>
+#include <RWStepRepr_RWProductConcept.hxx>
+#include <RWStepRepr_RWProductDefinitionShape.hxx>
+#include <RWStepRepr_RWPropertyDefinition.hxx>
+#include <RWStepRepr_RWPropertyDefinitionRelationship.hxx>
+#include <RWStepRepr_RWPropertyDefinitionRepresentation.hxx>
+#include <RWStepRepr_RWQuantifiedAssemblyComponentUsage.hxx>
+#include <RWStepRepr_RWRepresentation.hxx>
+#include <RWStepRepr_RWRepresentationContext.hxx>
+#include <RWStepRepr_RWRepresentationItem.hxx>
+#include <RWStepRepr_RWRepresentationMap.hxx>
+#include <RWStepRepr_RWRepresentationRelationship.hxx>
+#include <RWStepRepr_RWRepresentationRelationshipWithTransformation.hxx>
+#include <RWStepRepr_RWReprItemAndLengthMeasureWithUnit.hxx>
+#include <RWStepRepr_RWShapeAspect.hxx>
+#include <RWStepRepr_RWShapeAspectRelationship.hxx>
+#include <RWStepRepr_RWFeatureForDatumTargetRelationship.hxx>
+#include <RWStepRepr_RWShapeAspectTransition.hxx>
+#include <RWStepRepr_RWShapeRepresentationRelationshipWithTransformation.hxx>
+#include <RWStepRepr_RWSpecifiedHigherUsageOccurrence.hxx>
 #include <RWStepRepr_RWStructuralResponseProperty.hxx>
 #include <RWStepRepr_RWStructuralResponsePropertyDefinitionRepresentation.hxx>
-
-#include <StepBasic_SiUnitAndMassUnit.hxx>
-#include <StepBasic_SiUnitAndThermodynamicTemperatureUnit.hxx>
-#include <RWStepBasic_RWSiUnitAndMassUnit.hxx>
-#include <RWStepBasic_RWSiUnitAndThermodynamicTemperatureUnit.hxx>
-
-#include <StepFEA_AlignedSurface3dElementCoordinateSystem.hxx>
-#include <StepFEA_ConstantSurface3dElementCoordinateSystem.hxx>
-#include <RWStepFEA_RWAlignedSurface3dElementCoordinateSystem.hxx>
-#include <RWStepFEA_RWConstantSurface3dElementCoordinateSystem.hxx>
-
-// 23.01.2003
-#include <StepFEA_CurveElementIntervalLinearlyVarying.hxx>
-#include <StepFEA_FeaCurveSectionGeometricRelationship.hxx>
-#include <StepFEA_FeaSurfaceSectionGeometricRelationship.hxx>
-#include <RWStepFEA_RWCurveElementIntervalLinearlyVarying.hxx>
-#include <RWStepFEA_RWFeaCurveSectionGeometricRelationship.hxx>
-#include <RWStepFEA_RWFeaSurfaceSectionGeometricRelationship.hxx>
-
-// ptv 28.01.2003
+#include <RWStepShape_RWAdvancedBrepShapeRepresentation.hxx>
+#include <RWStepShape_RWAdvancedFace.hxx>
+#include <RWStepShape_RWAngularLocation.hxx>
+#include <RWStepShape_RWAngularSize.hxx>
+#include <RWStepShape_RWBlock.hxx>
+#include <RWStepShape_RWBooleanResult.hxx>
+#include <RWStepShape_RWBoxDomain.hxx>
+#include <RWStepShape_RWBoxedHalfSpace.hxx>
+#include <RWStepShape_RWBrepWithVoids.hxx>
+#include <RWStepShape_RWClosedShell.hxx>
+#include <RWStepShape_RWCompoundShapeRepresentation.hxx>
+#include <RWStepShape_RWConnectedEdgeSet.hxx>
+#include <RWStepShape_RWConnectedFaceSet.hxx>
+#include <RWStepShape_RWConnectedFaceShapeRepresentation.hxx>
+#include <RWStepShape_RWConnectedFaceSubSet.hxx>
+#include <RWStepShape_RWContextDependentShapeRepresentation.hxx>
+#include <RWStepShape_RWCsgShapeRepresentation.hxx>
+#include <RWStepShape_RWCsgSolid.hxx>
+#include <RWStepShape_RWDefinitionalRepresentationAndShapeRepresentation.hxx>
+#include <RWStepShape_RWDimensionalCharacteristicRepresentation.hxx>
+#include <RWStepShape_RWDimensionalLocation.hxx>
+#include <RWStepShape_RWDimensionalLocationWithPath.hxx>
+#include <RWStepShape_RWDimensionalSize.hxx>
+#include <RWStepShape_RWDimensionalSizeWithPath.hxx>
+#include <RWStepShape_RWEdge.hxx>
+#include <RWStepShape_RWEdgeBasedWireframeModel.hxx>
+#include <RWStepShape_RWEdgeBasedWireframeShapeRepresentation.hxx>
+#include <RWStepShape_RWEdgeCurve.hxx>
+#include <RWStepShape_RWEdgeLoop.hxx>
+#include <RWStepShape_RWExtrudedAreaSolid.hxx>
+#include <RWStepShape_RWExtrudedFaceSolid.hxx>
+#include <RWStepShape_RWFace.hxx>
+#include <RWStepShape_RWFaceBasedSurfaceModel.hxx>
+#include <RWStepShape_RWFaceBound.hxx>
+#include <RWStepShape_RWFaceOuterBound.hxx>
+#include <RWStepShape_RWFaceSurface.hxx>
+#include <RWStepShape_RWFacetedBrep.hxx>
+#include <RWStepShape_RWFacetedBrepAndBrepWithVoids.hxx>
+#include <RWStepShape_RWFacetedBrepShapeRepresentation.hxx>
+#include <RWStepShape_RWGeometricallyBoundedSurfaceShapeRepresentation.hxx>
+#include <RWStepShape_RWGeometricallyBoundedWireframeShapeRepresentation.hxx>
+#include <RWStepShape_RWGeometricCurveSet.hxx>
+#include <RWStepShape_RWGeometricSet.hxx>
+#include <RWStepShape_RWHalfSpaceSolid.hxx>
+#include <RWStepShape_RWLimitsAndFits.hxx>
+#include <RWStepShape_RWLoop.hxx>
+#include <RWStepShape_RWLoopAndPath.hxx>
+#include <RWStepShape_RWManifoldSolidBrep.hxx>
+#include <RWStepShape_RWManifoldSurfaceShapeRepresentation.hxx>
+#include <RWStepShape_RWMeasureQualification.hxx>
+#include <RWStepShape_RWMeasureRepresentationItemAndQualifiedRepresentationItem.hxx>
+#include <RWStepShape_RWNonManifoldSurfaceShapeRepresentation.hxx>
+#include <RWStepShape_RWOpenShell.hxx>
+#include <RWStepShape_RWOrientedClosedShell.hxx>
+#include <RWStepShape_RWOrientedEdge.hxx>
+#include <RWStepShape_RWOrientedFace.hxx>
+#include <RWStepShape_RWOrientedOpenShell.hxx>
+#include <RWStepShape_RWOrientedPath.hxx>
+#include <RWStepShape_RWPath.hxx>
+#include <RWStepShape_RWPlusMinusTolerance.hxx>
+#include <RWStepShape_RWPointRepresentation.hxx>
+#include <RWStepShape_RWPolyLoop.hxx>
+#include <RWStepShape_RWPrecisionQualifier.hxx>
+#include <RWStepShape_RWQualifiedRepresentationItem.hxx>
+#include <RWStepShape_RWRevolvedAreaSolid.hxx>
+#include <RWStepShape_RWRevolvedFaceSolid.hxx>
+#include <RWStepShape_RWRightAngularWedge.hxx>
+#include <RWStepShape_RWRightCircularCone.hxx>
+#include <RWStepShape_RWRightCircularCylinder.hxx>
+#include <RWStepShape_RWSeamEdge.hxx>
+#include <RWStepShape_RWShapeDefinitionRepresentation.hxx>
+#include <RWStepShape_RWShapeDimensionRepresentation.hxx>
+#include <RWStepShape_RWShapeRepresentation.hxx>
+#include <RWStepShape_RWShapeRepresentationWithParameters.hxx>
+#include <RWStepShape_RWShellBasedSurfaceModel.hxx>
+#include <RWStepShape_RWSolidModel.hxx>
+#include <RWStepShape_RWSolidReplica.hxx>
+#include <RWStepShape_RWSphere.hxx>
+#include <RWStepShape_RWSubedge.hxx>
+#include <RWStepShape_RWSubface.hxx>
+#include <RWStepShape_RWSweptAreaSolid.hxx>
+#include <RWStepShape_RWSweptFaceSolid.hxx>
+#include <RWStepShape_RWToleranceValue.hxx>
+#include <RWStepShape_RWTopologicalRepresentationItem.hxx>
+#include <RWStepShape_RWTorus.hxx>
+#include <RWStepShape_RWTransitionalShapeRepresentation.hxx>
+#include <RWStepShape_RWTypeQualifier.hxx>
+#include <RWStepShape_RWVertex.hxx>
+#include <RWStepShape_RWVertexLoop.hxx>
+#include <RWStepShape_RWVertexPoint.hxx>
+#include <RWStepVisual_RWAreaInSet.hxx>
+#include <RWStepVisual_RWBackgroundColour.hxx>
+#include <RWStepVisual_RWCameraImage.hxx>
+#include <RWStepVisual_RWCameraModel.hxx>
+#include <RWStepVisual_RWCameraModelD2.hxx>
+#include <RWStepVisual_RWCameraModelD3.hxx>
+#include <RWStepVisual_RWCameraUsage.hxx>
+#include <RWStepVisual_RWColour.hxx>
+#include <RWStepVisual_RWColourRgb.hxx>
+#include <RWStepVisual_RWColourSpecification.hxx>
+#include <RWStepVisual_RWCompositeText.hxx>
+#include <RWStepVisual_RWCompositeTextWithExtent.hxx>
+#include <RWStepVisual_RWContextDependentInvisibility.hxx>
+#include <RWStepVisual_RWContextDependentOverRidingStyledItem.hxx>
+#include <RWStepVisual_RWCurveStyle.hxx>
+#include <RWStepVisual_RWCurveStyleFont.hxx>
+#include <RWStepVisual_RWCurveStyleFontPattern.hxx>
+#include <RWStepVisual_RWDraughtingModel.hxx>
+#include <RWStepVisual_RWDraughtingPreDefinedColour.hxx>
+#include <RWStepVisual_RWDraughtingPreDefinedCurveFont.hxx>
+#include <RWStepVisual_RWExternallyDefinedCurveFont.hxx>
+#include <RWStepVisual_RWFillAreaStyle.hxx>
+#include <RWStepVisual_RWFillAreaStyleColour.hxx>
+#include <RWStepVisual_RWInvisibility.hxx>
+#include <RWStepVisual_RWMechanicalDesignGeometricPresentationArea.hxx>
+#include <RWStepVisual_RWMechanicalDesignGeometricPresentationRepresentation.hxx>
+#include <RWStepVisual_RWOverRidingStyledItem.hxx>
+#include <RWStepVisual_RWPlanarBox.hxx>
+#include <RWStepVisual_RWPlanarExtent.hxx>
+#include <RWStepVisual_RWPointStyle.hxx>
+#include <RWStepVisual_RWPreDefinedColour.hxx>
+#include <RWStepVisual_RWPreDefinedCurveFont.hxx>
+#include <RWStepVisual_RWPreDefinedItem.hxx>
+#include <RWStepVisual_RWPresentationArea.hxx>
+#include <RWStepVisual_RWPresentationLayerAssignment.hxx>
+#include <RWStepVisual_RWPresentationLayerUsage.hxx>
+#include <RWStepVisual_RWPresentationRepresentation.hxx>
+#include <RWStepVisual_RWPresentationSet.hxx>
+#include <RWStepVisual_RWPresentationSize.hxx>
+#include <RWStepVisual_RWPresentationStyleAssignment.hxx>
+#include <RWStepVisual_RWPresentationStyleByContext.hxx>
+#include <RWStepVisual_RWPresentationView.hxx>
+#include <RWStepVisual_RWPresentedItemRepresentation.hxx>
+#include <RWStepVisual_RWStyledItem.hxx>
+#include <RWStepVisual_RWSurfaceSideStyle.hxx>
+#include <RWStepVisual_RWSurfaceStyleBoundary.hxx>
+#include <RWStepVisual_RWSurfaceStyleControlGrid.hxx>
+#include <RWStepVisual_RWSurfaceStyleFillArea.hxx>
+#include <RWStepVisual_RWSurfaceStyleParameterLine.hxx>
+#include <RWStepVisual_RWSurfaceStyleReflectanceAmbient.hxx>
+#include <RWStepVisual_RWSurfaceStyleRendering.hxx>
+#include <RWStepVisual_RWSurfaceStyleRenderingWithProperties.hxx>
+#include <RWStepVisual_RWSurfaceStyleSegmentationCurve.hxx>
+#include <RWStepVisual_RWSurfaceStyleSilhouette.hxx>
+#include <RWStepVisual_RWSurfaceStyleTransparent.hxx>
+#include <RWStepVisual_RWSurfaceStyleUsage.hxx>
+#include <RWStepVisual_RWTemplate.hxx>
+#include <RWStepVisual_RWTemplateInstance.hxx>
+#include <RWStepVisual_RWTextLiteral.hxx>
+#include <RWStepVisual_RWTextStyle.hxx>
+#include <RWStepVisual_RWTextStyleForDefinedFont.hxx>
+#include <RWStepVisual_RWTextStyleWithBoxCharacteristics.hxx>
+#include <RWStepVisual_RWViewVolume.hxx>
+#include <Standard_Transient.hxx>
+#include <Standard_Type.hxx>
+#include <StepAP203_CcDesignApproval.hxx>
+#include <StepAP203_CcDesignCertification.hxx>
+#include <StepAP203_CcDesignContract.hxx>
+#include <StepAP203_CcDesignDateAndTimeAssignment.hxx>
+#include <StepAP203_CcDesignPersonAndOrganizationAssignment.hxx>
+#include <StepAP203_CcDesignSecurityClassification.hxx>
+#include <StepAP203_CcDesignSpecificationReference.hxx>
+#include <StepAP203_Change.hxx>
+#include <StepAP203_ChangeRequest.hxx>
+#include <StepAP203_StartRequest.hxx>
+#include <StepAP203_StartWork.hxx>
+#include <StepAP214_AppliedApprovalAssignment.hxx>
+#include <StepAP214_AppliedDateAndTimeAssignment.hxx>
+#include <StepAP214_AppliedDateAssignment.hxx>
+#include <StepAP214_AppliedDocumentReference.hxx>
+#include <StepAP214_AppliedExternalIdentificationAssignment.hxx>
+#include <StepAP214_AppliedGroupAssignment.hxx>
+#include <StepAP214_AppliedOrganizationAssignment.hxx>
+#include <StepAP214_AppliedPersonAndOrganizationAssignment.hxx>
+#include <StepAP214_AppliedPresentedItem.hxx>
+#include <StepAP214_AppliedSecurityClassificationAssignment.hxx>
+#include <StepAP214_AutoDesignActualDateAndTimeAssignment.hxx>
+#include <StepAP214_AutoDesignActualDateAssignment.hxx>
+#include <StepAP214_AutoDesignApprovalAssignment.hxx>
+#include <StepAP214_AutoDesignDateAndPersonAssignment.hxx>
+#include <StepAP214_AutoDesignDocumentReference.hxx>
+#include <StepAP214_AutoDesignGroupAssignment.hxx>
+#include <StepAP214_AutoDesignNominalDateAndTimeAssignment.hxx>
+#include <StepAP214_AutoDesignNominalDateAssignment.hxx>
+#include <StepAP214_AutoDesignOrganizationAssignment.hxx>
+#include <StepAP214_AutoDesignPersonAndOrganizationAssignment.hxx>
+#include <StepAP214_AutoDesignPresentedItem.hxx>
+#include <StepAP214_AutoDesignSecurityClassificationAssignment.hxx>
+#include <StepAP214_Class.hxx>
+#include <StepAP214_ExternallyDefinedClass.hxx>
+#include <StepAP214_ExternallyDefinedGeneralProperty.hxx>
+#include <StepAP214_RepItemGroup.hxx>
+#include <StepBasic_Action.hxx>
+#include <StepBasic_ActionAssignment.hxx>
+#include <StepBasic_ActionMethod.hxx>
+#include <StepBasic_ActionRequestAssignment.hxx>
+#include <StepBasic_ActionRequestSolution.hxx>
+#include <StepBasic_Address.hxx>
+#include <StepBasic_ApplicationContext.hxx>
+#include <StepBasic_ApplicationContextElement.hxx>
+#include <StepBasic_ApplicationProtocolDefinition.hxx>
+#include <StepBasic_Approval.hxx>
+#include <StepBasic_ApprovalDateTime.hxx>
+#include <StepBasic_ApprovalPersonOrganization.hxx>
+#include <StepBasic_ApprovalRelationship.hxx>
+#include <StepBasic_ApprovalRole.hxx>
+#include <StepBasic_ApprovalStatus.hxx>
+#include <StepBasic_AreaUnit.hxx>
+#include <StepBasic_CalendarDate.hxx>
+#include <StepBasic_Certification.hxx>
+#include <StepBasic_CertificationAssignment.hxx>
+#include <StepBasic_CertificationType.hxx>
+#include <StepBasic_CharacterizedObject.hxx>
+#include <StepBasic_Contract.hxx>
+#include <StepBasic_ContractAssignment.hxx>
+#include <StepBasic_ContractType.hxx>
+#include <StepBasic_ConversionBasedUnit.hxx>
+#include <StepBasic_ConversionBasedUnitAndAreaUnit.hxx>
+#include <StepBasic_ConversionBasedUnitAndLengthUnit.hxx>
+#include <StepBasic_ConversionBasedUnitAndMassUnit.hxx>
+#include <StepBasic_ConversionBasedUnitAndPlaneAngleUnit.hxx>
+#include <StepBasic_ConversionBasedUnitAndRatioUnit.hxx>
+#include <StepBasic_ConversionBasedUnitAndSolidAngleUnit.hxx>
+#include <StepBasic_ConversionBasedUnitAndTimeUnit.hxx>
+#include <StepBasic_ConversionBasedUnitAndVolumeUnit.hxx>
+#include <StepBasic_CoordinatedUniversalTimeOffset.hxx>
+#include <StepBasic_Date.hxx>
+#include <StepBasic_DateAndTime.hxx>
+#include <StepBasic_DateRole.hxx>
+#include <StepBasic_DateTimeRole.hxx>
+#include <StepBasic_DerivedUnit.hxx>
+#include <StepBasic_DerivedUnitElement.hxx>
+#include <StepBasic_DesignContext.hxx>
+#include <StepBasic_DigitalDocument.hxx>
+#include <StepBasic_DimensionalExponents.hxx>
+#include <StepBasic_Document.hxx>
+#include <StepBasic_DocumentFile.hxx>
 #include <StepBasic_DocumentProductAssociation.hxx>
 #include <StepBasic_DocumentProductEquivalence.hxx>
-#include <RWStepBasic_RWDocumentProductAssociation.hxx>
-#include <RWStepBasic_RWDocumentProductEquivalence.hxx>
-
-//  TR12J 04.06.2003 G&DT entities GKA 
-#include <StepShape_ShapeRepresentationWithParameters.hxx>
+#include <StepBasic_DocumentRelationship.hxx>
+#include <StepBasic_DocumentRepresentationType.hxx>
+#include <StepBasic_DocumentType.hxx>
+#include <StepBasic_DocumentUsageConstraint.hxx>
+#include <StepBasic_Effectivity.hxx>
+#include <StepBasic_EffectivityAssignment.hxx>
+#include <StepBasic_EulerAngles.hxx>
+#include <StepBasic_ExternalIdentificationAssignment.hxx>
+#include <StepBasic_ExternallyDefinedItem.hxx>
+#include <StepBasic_ExternalSource.hxx>
+#include <StepBasic_GeneralProperty.hxx>
+#include <StepBasic_Group.hxx>
+#include <StepBasic_GroupRelationship.hxx>
+#include <StepBasic_IdentificationAssignment.hxx>
+#include <StepBasic_IdentificationRole.hxx>
+#include <StepBasic_LengthMeasureWithUnit.hxx>
+#include <StepBasic_LengthUnit.hxx>
+#include <StepBasic_LocalTime.hxx>
+#include <StepBasic_MassMeasureWithUnit.hxx>
+#include <StepBasic_MassUnit.hxx>
+#include <StepBasic_MeasureWithUnit.hxx>
+#include <StepBasic_MechanicalContext.hxx>
+#include <StepBasic_NameAssignment.hxx>
+#include <StepBasic_NamedUnit.hxx>
+#include <StepBasic_ObjectRole.hxx>
+#include <StepBasic_OrdinalDate.hxx>
+#include <StepBasic_Organization.hxx>
+#include <StepBasic_OrganizationalAddress.hxx>
+#include <StepBasic_OrganizationRole.hxx>
+#include <StepBasic_Person.hxx>
+#include <StepBasic_PersonalAddress.hxx>
+#include <StepBasic_PersonAndOrganization.hxx>
+#include <StepBasic_PersonAndOrganizationRole.hxx>
+#include <StepBasic_PhysicallyModeledProductDefinition.hxx>
+#include <StepBasic_PlaneAngleMeasureWithUnit.hxx>
+#include <StepBasic_PlaneAngleUnit.hxx>
+#include <StepBasic_Product.hxx>
+#include <StepBasic_ProductCategory.hxx>
+#include <StepBasic_ProductCategoryRelationship.hxx>
+#include <StepBasic_ProductConceptContext.hxx>
+#include <StepBasic_ProductContext.hxx>
+#include <StepBasic_ProductDefinition.hxx>
+#include <StepBasic_ProductDefinitionContext.hxx>
+#include <StepBasic_ProductDefinitionEffectivity.hxx>
+#include <StepBasic_ProductDefinitionFormation.hxx>
+#include <StepBasic_ProductDefinitionFormationRelationship.hxx>
+#include <StepBasic_ProductDefinitionFormationWithSpecifiedSource.hxx>
+#include <StepBasic_ProductDefinitionRelationship.hxx>
+#include <StepBasic_ProductDefinitionWithAssociatedDocuments.hxx>
+#include <StepBasic_ProductRelatedProductCategory.hxx>
+#include <StepBasic_ProductType.hxx>
+#include <StepBasic_RatioMeasureWithUnit.hxx>
+#include <StepBasic_RatioUnit.hxx>
+#include <StepBasic_RoleAssociation.hxx>
+#include <StepBasic_SecurityClassification.hxx>
+#include <StepBasic_SecurityClassificationLevel.hxx>
+#include <StepBasic_SiUnit.hxx>
+#include <StepBasic_SiUnitAndAreaUnit.hxx>
+#include <StepBasic_SiUnitAndLengthUnit.hxx>
+#include <StepBasic_SiUnitAndMassUnit.hxx>
+#include <StepBasic_SiUnitAndPlaneAngleUnit.hxx>
+#include <StepBasic_SiUnitAndRatioUnit.hxx>
+#include <StepBasic_SiUnitAndSolidAngleUnit.hxx>
+#include <StepBasic_SiUnitAndThermodynamicTemperatureUnit.hxx>
+#include <StepBasic_SiUnitAndTimeUnit.hxx>
+#include <StepBasic_SiUnitAndVolumeUnit.hxx>
+#include <StepBasic_SolidAngleMeasureWithUnit.hxx>
+#include <StepBasic_SolidAngleUnit.hxx>
+#include <StepBasic_ThermodynamicTemperatureUnit.hxx>
+#include <StepBasic_TimeMeasureWithUnit.hxx>
+#include <StepBasic_TimeUnit.hxx>
+#include <StepBasic_UncertaintyMeasureWithUnit.hxx>
+#include <StepBasic_VersionedActionRequest.hxx>
+#include <StepBasic_VolumeUnit.hxx>
+#include <StepBasic_WeekOfYearAndDayDate.hxx>
 #include <StepDimTol_AngularityTolerance.hxx>
-#include <StepDimTol_ConcentricityTolerance.hxx>
 #include <StepDimTol_CircularRunoutTolerance.hxx>
 #include <StepDimTol_CoaxialityTolerance.hxx>
+#include <StepDimTol_CommonDatum.hxx>
+#include <StepDimTol_ConcentricityTolerance.hxx>
+#include <StepDimTol_CylindricityTolerance.hxx>
+#include <StepDimTol_Datum.hxx>
+#include <StepDimTol_DatumFeature.hxx>
+#include <StepDimTol_DatumReference.hxx>
+#include <StepDimTol_DatumTarget.hxx>
 #include <StepDimTol_FlatnessTolerance.hxx>
+#include <StepDimTol_GeometricTolerance.hxx>
+#include <StepDimTol_GeometricToleranceRelationship.hxx>
+#include <StepDimTol_GeometricToleranceWithDatumReference.hxx>
+#include <StepDimTol_GeoTolAndGeoTolWthDatRefAndModGeoTolAndPosTol.hxx>
 #include <StepDimTol_LineProfileTolerance.hxx>
+#include <StepDimTol_ModifiedGeometricTolerance.hxx>
 #include <StepDimTol_ParallelismTolerance.hxx>
 #include <StepDimTol_PerpendicularityTolerance.hxx>
+#include <StepDimTol_PlacedDatumTargetFeature.hxx>
 #include <StepDimTol_PositionTolerance.hxx>
 #include <StepDimTol_RoundnessTolerance.hxx>
 #include <StepDimTol_StraightnessTolerance.hxx>
 #include <StepDimTol_SurfaceProfileTolerance.hxx>
 #include <StepDimTol_SymmetryTolerance.hxx>
 #include <StepDimTol_TotalRunoutTolerance.hxx>
-#include <StepDimTol_GeometricTolerance.hxx>
-#include <StepDimTol_GeometricToleranceWithDatumReference.hxx>
-#include <StepDimTol_ModifiedGeometricTolerance.hxx>
-#include <StepDimTol_Datum.hxx>
-#include <StepDimTol_DatumFeature.hxx>
-#include <StepDimTol_DatumReference.hxx>
-#include <StepDimTol_CommonDatum.hxx>
-#include <StepDimTol_DatumTarget.hxx>
-#include <StepDimTol_PlacedDatumTargetFeature.hxx>
-#include <StepRepr_ValueRange.hxx>
+#include <StepElement_AnalysisItemWithinRepresentation.hxx>
+#include <StepElement_Curve3dElementDescriptor.hxx>
+#include <StepElement_CurveElementEndReleasePacket.hxx>
+#include <StepElement_CurveElementSectionDefinition.hxx>
+#include <StepElement_CurveElementSectionDerivedDefinitions.hxx>
+#include <StepElement_ElementDescriptor.hxx>
+#include <StepElement_ElementMaterial.hxx>
+#include <StepElement_Surface3dElementDescriptor.hxx>
+#include <StepElement_SurfaceElementProperty.hxx>
+#include <StepElement_SurfaceSection.hxx>
+#include <StepElement_SurfaceSectionField.hxx>
+#include <StepElement_SurfaceSectionFieldConstant.hxx>
+#include <StepElement_SurfaceSectionFieldVarying.hxx>
+#include <StepElement_UniformSurfaceSection.hxx>
+#include <StepElement_Volume3dElementDescriptor.hxx>
+#include <StepFEA_AlignedCurve3dElementCoordinateSystem.hxx>
+#include <StepFEA_AlignedSurface3dElementCoordinateSystem.hxx>
+#include <StepFEA_ArbitraryVolume3dElementCoordinateSystem.hxx>
+#include <StepFEA_ConstantSurface3dElementCoordinateSystem.hxx>
+#include <StepFEA_Curve3dElementProperty.hxx>
+#include <StepFEA_Curve3dElementRepresentation.hxx>
+#include <StepFEA_CurveElementEndCoordinateSystem.hxx>
+#include <StepFEA_CurveElementEndOffset.hxx>
+#include <StepFEA_CurveElementEndRelease.hxx>
+#include <StepFEA_CurveElementInterval.hxx>
+#include <StepFEA_CurveElementIntervalConstant.hxx>
+#include <StepFEA_CurveElementIntervalLinearlyVarying.hxx>
+#include <StepFEA_CurveElementLocation.hxx>
+#include <StepFEA_DummyNode.hxx>
+#include <StepFEA_ElementGeometricRelationship.hxx>
+#include <StepFEA_ElementGroup.hxx>
+#include <StepFEA_ElementRepresentation.hxx>
+#include <StepFEA_FeaAreaDensity.hxx>
+#include <StepFEA_FeaAxis2Placement3d.hxx>
+#include <StepFEA_FeaCurveSectionGeometricRelationship.hxx>
+#include <StepFEA_FeaGroup.hxx>
+#include <StepFEA_FeaLinearElasticity.hxx>
+#include <StepFEA_FeaMassDensity.hxx>
+#include <StepFEA_FeaMaterialPropertyRepresentation.hxx>
+#include <StepFEA_FeaMaterialPropertyRepresentationItem.hxx>
+#include <StepFEA_FeaModel.hxx>
+#include <StepFEA_FeaModel3d.hxx>
+#include <StepFEA_FeaModelDefinition.hxx>
+#include <StepFEA_FeaMoistureAbsorption.hxx>
+#include <StepFEA_FeaParametricPoint.hxx>
+#include <StepFEA_FeaRepresentationItem.hxx>
+#include <StepFEA_FeaSecantCoefficientOfLinearThermalExpansion.hxx>
+#include <StepFEA_FeaShellBendingStiffness.hxx>
+#include <StepFEA_FeaShellMembraneBendingCouplingStiffness.hxx>
+#include <StepFEA_FeaShellMembraneStiffness.hxx>
+#include <StepFEA_FeaShellShearStiffness.hxx>
+#include <StepFEA_FeaSurfaceSectionGeometricRelationship.hxx>
+#include <StepFEA_FeaTangentialCoefficientOfLinearThermalExpansion.hxx>
+#include <StepFEA_FreedomAndCoefficient.hxx>
+#include <StepFEA_FreedomsList.hxx>
+#include <StepFEA_GeometricNode.hxx>
+#include <StepFEA_Node.hxx>
+#include <StepFEA_NodeDefinition.hxx>
+#include <StepFEA_NodeGroup.hxx>
+#include <StepFEA_NodeRepresentation.hxx>
+#include <StepFEA_NodeSet.hxx>
+#include <StepFEA_NodeWithSolutionCoordinateSystem.hxx>
+#include <StepFEA_NodeWithVector.hxx>
+#include <StepFEA_ParametricCurve3dElementCoordinateDirection.hxx>
+#include <StepFEA_ParametricCurve3dElementCoordinateSystem.hxx>
+#include <StepFEA_ParametricSurface3dElementCoordinateSystem.hxx>
+#include <StepFEA_Surface3dElementRepresentation.hxx>
+#include <StepFEA_SymmetricTensor22d.hxx>
+#include <StepFEA_SymmetricTensor42d.hxx>
+#include <StepFEA_SymmetricTensor43d.hxx>
+#include <StepFEA_Volume3dElementRepresentation.hxx>
+#include <StepGeom_Axis1Placement.hxx>
+#include <StepGeom_Axis2Placement2d.hxx>
+#include <StepGeom_Axis2Placement3d.hxx>
+#include <StepGeom_BezierCurve.hxx>
+#include <StepGeom_BezierCurveAndRationalBSplineCurve.hxx>
+#include <StepGeom_BezierSurface.hxx>
+#include <StepGeom_BezierSurfaceAndRationalBSplineSurface.hxx>
+#include <StepGeom_BoundaryCurve.hxx>
+#include <StepGeom_BoundedCurve.hxx>
+#include <StepGeom_BoundedSurface.hxx>
+#include <StepGeom_BSplineCurve.hxx>
+#include <StepGeom_BSplineCurveWithKnots.hxx>
+#include <StepGeom_BSplineCurveWithKnotsAndRationalBSplineCurve.hxx>
+#include <StepGeom_BSplineSurface.hxx>
+#include <StepGeom_BSplineSurfaceWithKnots.hxx>
+#include <StepGeom_BSplineSurfaceWithKnotsAndRationalBSplineSurface.hxx>
+#include <StepGeom_CartesianPoint.hxx>
+#include <StepGeom_CartesianTransformationOperator.hxx>
+#include <StepGeom_CartesianTransformationOperator2d.hxx>
+#include <StepGeom_CartesianTransformationOperator3d.hxx>
+#include <StepGeom_Circle.hxx>
+#include <StepGeom_CompositeCurve.hxx>
+#include <StepGeom_CompositeCurveOnSurface.hxx>
+#include <StepGeom_CompositeCurveSegment.hxx>
+#include <StepGeom_Conic.hxx>
+#include <StepGeom_ConicalSurface.hxx>
+#include <StepGeom_Curve.hxx>
+#include <StepGeom_CurveBoundedSurface.hxx>
+#include <StepGeom_CurveReplica.hxx>
+#include <StepGeom_CylindricalSurface.hxx>
+#include <StepGeom_DegeneratePcurve.hxx>
+#include <StepGeom_DegenerateToroidalSurface.hxx>
+#include <StepGeom_Direction.hxx>
+#include <StepGeom_ElementarySurface.hxx>
+#include <StepGeom_Ellipse.hxx>
+#include <StepGeom_EvaluatedDegeneratePcurve.hxx>
+#include <StepGeom_GeometricRepresentationContext.hxx>
+#include <StepGeom_GeometricRepresentationContextAndGlobalUnitAssignedContext.hxx>
+#include <StepGeom_GeometricRepresentationContextAndParametricRepresentationContext.hxx>
+#include <StepGeom_GeometricRepresentationItem.hxx>
+#include <StepGeom_GeomRepContextAndGlobUnitAssCtxAndGlobUncertaintyAssCtx.hxx>
+#include <StepGeom_Hyperbola.hxx>
+#include <StepGeom_IntersectionCurve.hxx>
+#include <StepGeom_Line.hxx>
+#include <StepGeom_OffsetCurve3d.hxx>
+#include <StepGeom_OffsetSurface.hxx>
+#include <StepGeom_OrientedSurface.hxx>
+#include <StepGeom_OuterBoundaryCurve.hxx>
+#include <StepGeom_Parabola.hxx>
+#include <StepGeom_Pcurve.hxx>
+#include <StepGeom_Placement.hxx>
+#include <StepGeom_Plane.hxx>
+#include <StepGeom_Point.hxx>
+#include <StepGeom_PointOnCurve.hxx>
+#include <StepGeom_PointOnSurface.hxx>
+#include <StepGeom_PointReplica.hxx>
+#include <StepGeom_Polyline.hxx>
+#include <StepGeom_QuasiUniformCurve.hxx>
+#include <StepGeom_QuasiUniformCurveAndRationalBSplineCurve.hxx>
+#include <StepGeom_QuasiUniformSurface.hxx>
+#include <StepGeom_QuasiUniformSurfaceAndRationalBSplineSurface.hxx>
+#include <StepGeom_RationalBSplineCurve.hxx>
+#include <StepGeom_RationalBSplineSurface.hxx>
+#include <StepGeom_RectangularCompositeSurface.hxx>
+#include <StepGeom_RectangularTrimmedSurface.hxx>
+#include <StepGeom_ReparametrisedCompositeCurveSegment.hxx>
+#include <StepGeom_SeamCurve.hxx>
+#include <StepGeom_SphericalSurface.hxx>
+#include <StepGeom_Surface.hxx>
+#include <StepGeom_SurfaceCurve.hxx>
+#include <StepGeom_SurfaceCurveAndBoundedCurve.hxx>
+#include <StepGeom_SurfaceOfLinearExtrusion.hxx>
+#include <StepGeom_SurfaceOfRevolution.hxx>
+#include <StepGeom_SurfacePatch.hxx>
+#include <StepGeom_SurfaceReplica.hxx>
+#include <StepGeom_SweptSurface.hxx>
+#include <StepGeom_ToroidalSurface.hxx>
+#include <StepGeom_TrimmedCurve.hxx>
+#include <StepGeom_UniformCurve.hxx>
+#include <StepGeom_UniformCurveAndRationalBSplineCurve.hxx>
+#include <StepGeom_UniformSurface.hxx>
+#include <StepGeom_UniformSurfaceAndRationalBSplineSurface.hxx>
+#include <StepGeom_Vector.hxx>
+#include <StepRepr_AssemblyComponentUsage.hxx>
+#include <StepRepr_AssemblyComponentUsageSubstitute.hxx>
 #include <StepRepr_CompositeShapeAspect.hxx>
+#include <StepRepr_CompoundRepresentationItem.hxx>
+#include <StepRepr_ConfigurationDesign.hxx>
+#include <StepRepr_ConfigurationEffectivity.hxx>
+#include <StepRepr_ConstructiveGeometryRepresentation.hxx>
+#include <StepRepr_ConstructiveGeometryRepresentationRelationship.hxx>
+#include <StepRepr_DataEnvironment.hxx>
+#include <StepRepr_DefinitionalRepresentation.hxx>
 #include <StepRepr_DerivedShapeAspect.hxx>
+#include <StepRepr_DescriptiveRepresentationItem.hxx>
 #include <StepRepr_Extension.hxx>
-#include <RWStepRepr_RWCompositeShapeAspect.hxx>
-#include <RWStepRepr_RWDerivedShapeAspect.hxx>
-#include <RWStepRepr_RWExtension.hxx>
-#include <RWStepShape_RWShapeRepresentationWithParameters.hxx>
-#include <RWStepDimTol_RWAngularityTolerance.hxx>
-#include <RWStepDimTol_RWConcentricityTolerance.hxx>
-#include <RWStepDimTol_RWCircularRunoutTolerance.hxx>
-#include <RWStepDimTol_RWCoaxialityTolerance.hxx>
-#include <RWStepDimTol_RWFlatnessTolerance.hxx>
-#include <RWStepDimTol_RWLineProfileTolerance.hxx>
-#include <RWStepDimTol_RWParallelismTolerance.hxx>
-#include <RWStepDimTol_RWPerpendicularityTolerance.hxx>
-#include <RWStepDimTol_RWPositionTolerance.hxx>
-#include <RWStepDimTol_RWRoundnessTolerance.hxx>
-#include <RWStepDimTol_RWStraightnessTolerance.hxx>
-#include <RWStepDimTol_RWSurfaceProfileTolerance.hxx>
-#include <RWStepDimTol_RWSymmetryTolerance.hxx>
-#include <RWStepDimTol_RWTotalRunoutTolerance.hxx>
-#include <RWStepDimTol_RWGeometricTolerance.hxx>
-#include <RWStepDimTol_RWGeometricToleranceWithDatumReference.hxx>
-#include <RWStepDimTol_RWModifiedGeometricTolerance.hxx>
-#include <RWStepDimTol_RWDatum.hxx>
-#include <RWStepDimTol_RWDatumFeature.hxx>
-#include <RWStepDimTol_RWDatumReference.hxx>
-#include <RWStepDimTol_RWCommonDatum.hxx>
-#include <RWStepDimTol_RWDatumTarget.hxx>
-#include <RWStepDimTol_RWPlacedDatumTargetFeature.hxx>
-#include <StepDimTol_GeometricToleranceRelationship.hxx>
-#include <RWStepDimTol_RWGeometricToleranceRelationship.hxx>
-
+#include <StepRepr_ExternallyDefinedRepresentation.hxx>
+#include <StepRepr_FunctionallyDefinedTransformation.hxx>
+#include <StepRepr_GlobalUncertaintyAssignedContext.hxx>
+#include <StepRepr_GlobalUnitAssignedContext.hxx>
+#include <StepRepr_ItemDefinedTransformation.hxx>
+#include <StepRepr_MakeFromUsageOption.hxx>
+#include <StepRepr_MappedItem.hxx>
+#include <StepRepr_MaterialDesignation.hxx>
+#include <StepRepr_MaterialProperty.hxx>
+#include <StepRepr_MaterialPropertyRepresentation.hxx>
+#include <StepRepr_MeasureRepresentationItem.hxx>
+#include <StepRepr_NextAssemblyUsageOccurrence.hxx>
+#include <StepRepr_ParametricRepresentationContext.hxx>
+#include <StepRepr_ProductConcept.hxx>
+#include <StepRepr_ProductDefinitionShape.hxx>
+#include <StepRepr_ProductDefinitionUsage.hxx>
+#include <StepRepr_PromissoryUsageOccurrence.hxx>
+#include <StepRepr_PropertyDefinition.hxx>
+#include <StepRepr_PropertyDefinitionRelationship.hxx>
+#include <StepRepr_PropertyDefinitionRepresentation.hxx>
+#include <StepRepr_QuantifiedAssemblyComponentUsage.hxx>
+#include <StepRepr_Representation.hxx>
+#include <StepRepr_RepresentationContext.hxx>
+#include <StepRepr_RepresentationItem.hxx>
+#include <StepRepr_RepresentationMap.hxx>
+#include <StepRepr_RepresentationRelationship.hxx>
+#include <StepRepr_RepresentationRelationshipWithTransformation.hxx>
 #include <StepRepr_ReprItemAndLengthMeasureWithUnit.hxx>
-#include <RWStepRepr_RWReprItemAndLengthMeasureWithUnit.hxx>
-#include <StepDimTol_GeoTolAndGeoTolWthDatRefAndModGeoTolAndPosTol.hxx>
-#include <RWStepDimTol_RWGeoTolAndGeoTolWthDatRefAndModGeoTolAndPosTol.hxx>
+#include <StepRepr_ShapeAspect.hxx>
+#include <StepRepr_ShapeAspectDerivingRelationship.hxx>
+#include <StepRepr_ShapeAspectRelationship.hxx>
+#include <StepRepr_FeatureForDatumTargetRelationship.hxx>
+#include <StepRepr_ShapeAspectTransition.hxx>
+#include <StepRepr_ShapeRepresentationRelationship.hxx>
+#include <StepRepr_ShapeRepresentationRelationshipWithTransformation.hxx>
+#include <StepRepr_SpecifiedHigherUsageOccurrence.hxx>
+#include <StepRepr_StructuralResponseProperty.hxx>
+#include <StepRepr_StructuralResponsePropertyDefinitionRepresentation.hxx>
+#include <StepRepr_SuppliedPartRelationship.hxx>
+#include <StepRepr_ValueRange.hxx>
+#include <StepShape_AdvancedBrepShapeRepresentation.hxx>
+#include <StepShape_AdvancedFace.hxx>
+#include <StepShape_AngularLocation.hxx>
+#include <StepShape_AngularSize.hxx>
+#include <StepShape_Block.hxx>
+#include <StepShape_BooleanResult.hxx>
+#include <StepShape_BoxDomain.hxx>
+#include <StepShape_BoxedHalfSpace.hxx>
+#include <StepShape_BrepWithVoids.hxx>
+#include <StepShape_ClosedShell.hxx>
+#include <StepShape_CompoundShapeRepresentation.hxx>
+#include <StepShape_ConnectedEdgeSet.hxx>
+#include <StepShape_ConnectedFaceSet.hxx>
+#include <StepShape_ConnectedFaceShapeRepresentation.hxx>
+#include <StepShape_ConnectedFaceSubSet.hxx>
+#include <StepShape_ContextDependentShapeRepresentation.hxx>
+#include <StepShape_CsgShapeRepresentation.hxx>
+#include <StepShape_CsgSolid.hxx>
+#include <StepShape_DefinitionalRepresentationAndShapeRepresentation.hxx>
+#include <StepShape_DimensionalCharacteristicRepresentation.hxx>
+#include <StepShape_DimensionalLocation.hxx>
+#include <StepShape_DimensionalLocationWithPath.hxx>
+#include <StepShape_DimensionalSize.hxx>
+#include <StepShape_DimensionalSizeWithPath.hxx>
+#include <StepShape_DirectedDimensionalLocation.hxx>
+#include <StepShape_Edge.hxx>
+#include <StepShape_EdgeBasedWireframeModel.hxx>
+#include <StepShape_EdgeBasedWireframeShapeRepresentation.hxx>
+#include <StepShape_EdgeCurve.hxx>
+#include <StepShape_EdgeLoop.hxx>
+#include <StepShape_ExtrudedAreaSolid.hxx>
+#include <StepShape_ExtrudedFaceSolid.hxx>
+#include <StepShape_Face.hxx>
+#include <StepShape_FaceBasedSurfaceModel.hxx>
+#include <StepShape_FaceBound.hxx>
+#include <StepShape_FaceOuterBound.hxx>
+#include <StepShape_FaceSurface.hxx>
+#include <StepShape_FacetedBrep.hxx>
+#include <StepShape_FacetedBrepAndBrepWithVoids.hxx>
+#include <StepShape_FacetedBrepShapeRepresentation.hxx>
+#include <StepShape_GeometricallyBoundedSurfaceShapeRepresentation.hxx>
+#include <StepShape_GeometricallyBoundedWireframeShapeRepresentation.hxx>
+#include <StepShape_GeometricCurveSet.hxx>
+#include <StepShape_GeometricSet.hxx>
+#include <StepShape_HalfSpaceSolid.hxx>
+#include <StepShape_LimitsAndFits.hxx>
+#include <StepShape_Loop.hxx>
+#include <StepShape_LoopAndPath.hxx>
+#include <StepShape_ManifoldSolidBrep.hxx>
+#include <StepShape_ManifoldSurfaceShapeRepresentation.hxx>
+#include <StepShape_MeasureQualification.hxx>
+#include <StepShape_MeasureRepresentationItemAndQualifiedRepresentationItem.hxx>
+#include <StepShape_NonManifoldSurfaceShapeRepresentation.hxx>
+#include <StepShape_OpenShell.hxx>
+#include <StepShape_OrientedClosedShell.hxx>
+#include <StepShape_OrientedEdge.hxx>
+#include <StepShape_OrientedFace.hxx>
+#include <StepShape_OrientedOpenShell.hxx>
+#include <StepShape_OrientedPath.hxx>
+#include <StepShape_Path.hxx>
+#include <StepShape_PlusMinusTolerance.hxx>
+#include <StepShape_PointRepresentation.hxx>
+#include <StepShape_PolyLoop.hxx>
+#include <StepShape_PrecisionQualifier.hxx>
+#include <StepShape_QualifiedRepresentationItem.hxx>
+#include <StepShape_RevolvedAreaSolid.hxx>
+#include <StepShape_RevolvedFaceSolid.hxx>
+#include <StepShape_RightAngularWedge.hxx>
+#include <StepShape_RightCircularCone.hxx>
+#include <StepShape_RightCircularCylinder.hxx>
+#include <StepShape_SeamEdge.hxx>
+#include <StepShape_ShapeDefinitionRepresentation.hxx>
+#include <StepShape_ShapeDimensionRepresentation.hxx>
+#include <StepShape_ShapeRepresentation.hxx>
+#include <StepShape_ShapeRepresentationWithParameters.hxx>
+#include <StepShape_ShellBasedSurfaceModel.hxx>
+#include <StepShape_SolidModel.hxx>
+#include <StepShape_SolidReplica.hxx>
+#include <StepShape_Sphere.hxx>
+#include <StepShape_Subedge.hxx>
+#include <StepShape_Subface.hxx>
+#include <StepShape_SweptAreaSolid.hxx>
+#include <StepShape_SweptFaceSolid.hxx>
+#include <StepShape_ToleranceValue.hxx>
+#include <StepShape_TopologicalRepresentationItem.hxx>
+#include <StepShape_Torus.hxx>
+#include <StepShape_TransitionalShapeRepresentation.hxx>
+#include <StepShape_TypeQualifier.hxx>
+#include <StepShape_Vertex.hxx>
+#include <StepShape_VertexLoop.hxx>
+#include <StepShape_VertexPoint.hxx>
+#include <StepVisual_AnnotationOccurrence.hxx>
+#include <StepVisual_AnnotationText.hxx>
+#include <StepVisual_AnnotationTextOccurrence.hxx>
+#include <StepVisual_AreaInSet.hxx>
+#include <StepVisual_BackgroundColour.hxx>
+#include <StepVisual_CameraImage.hxx>
+#include <StepVisual_CameraImage2dWithScale.hxx>
+#include <StepVisual_CameraImage3dWithScale.hxx>
+#include <StepVisual_CameraModel.hxx>
+#include <StepVisual_CameraModelD2.hxx>
+#include <StepVisual_CameraModelD3.hxx>
+#include <StepVisual_CameraUsage.hxx>
+#include <StepVisual_Colour.hxx>
+#include <StepVisual_ColourRgb.hxx>
+#include <StepVisual_ColourSpecification.hxx>
+#include <StepVisual_CompositeText.hxx>
+#include <StepVisual_CompositeTextWithExtent.hxx>
+#include <StepVisual_ContextDependentInvisibility.hxx>
+#include <StepVisual_ContextDependentOverRidingStyledItem.hxx>
+#include <StepVisual_CurveStyle.hxx>
+#include <StepVisual_CurveStyleFont.hxx>
+#include <StepVisual_CurveStyleFontPattern.hxx>
+#include <StepVisual_DraughtingAnnotationOccurrence.hxx>
+#include <StepVisual_DraughtingModel.hxx>
+#include <StepVisual_DraughtingPreDefinedColour.hxx>
+#include <StepVisual_DraughtingPreDefinedCurveFont.hxx>
+#include <StepVisual_ExternallyDefinedCurveFont.hxx>
+#include <StepVisual_ExternallyDefinedTextFont.hxx>
+#include <StepVisual_FillAreaStyle.hxx>
+#include <StepVisual_FillAreaStyleColour.hxx>
+#include <StepVisual_Invisibility.hxx>
+#include <StepVisual_MechanicalDesignGeometricPresentationArea.hxx>
+#include <StepVisual_MechanicalDesignGeometricPresentationRepresentation.hxx>
+#include <StepVisual_OverRidingStyledItem.hxx>
+#include <StepVisual_PlanarBox.hxx>
+#include <StepVisual_PlanarExtent.hxx>
+#include <StepVisual_PointStyle.hxx>
+#include <StepVisual_PreDefinedColour.hxx>
+#include <StepVisual_PreDefinedCurveFont.hxx>
+#include <StepVisual_PreDefinedItem.hxx>
+#include <StepVisual_PreDefinedTextFont.hxx>
+#include <StepVisual_PresentationArea.hxx>
+#include <StepVisual_PresentationLayerAssignment.hxx>
+#include <StepVisual_PresentationLayerUsage.hxx>
+#include <StepVisual_PresentationRepresentation.hxx>
+#include <StepVisual_PresentationSet.hxx>
+#include <StepVisual_PresentationSize.hxx>
+#include <StepVisual_PresentationStyleAssignment.hxx>
+#include <StepVisual_PresentationStyleByContext.hxx>
+#include <StepVisual_PresentationView.hxx>
+#include <StepVisual_PresentedItemRepresentation.hxx>
+#include <StepVisual_StyledItem.hxx>
+#include <StepVisual_SurfaceSideStyle.hxx>
+#include <StepVisual_SurfaceStyleBoundary.hxx>
+#include <StepVisual_SurfaceStyleControlGrid.hxx>
+#include <StepVisual_SurfaceStyleFillArea.hxx>
+#include <StepVisual_SurfaceStyleParameterLine.hxx>
+#include <StepVisual_SurfaceStyleReflectanceAmbient.hxx>
+#include <StepVisual_SurfaceStyleRendering.hxx>
+#include <StepVisual_SurfaceStyleRenderingWithProperties.hxx>
+#include <StepVisual_SurfaceStyleSegmentationCurve.hxx>
+#include <StepVisual_SurfaceStyleSilhouette.hxx>
+#include <StepVisual_SurfaceStyleTransparent.hxx>
+#include <StepVisual_SurfaceStyleUsage.hxx>
+#include <StepVisual_Template.hxx>
+#include <StepVisual_TemplateInstance.hxx>
+#include <StepVisual_TextLiteral.hxx>
+#include <StepVisual_TextStyle.hxx>
+#include <StepVisual_TextStyleForDefinedFont.hxx>
+#include <StepVisual_TextStyleWithBoxCharacteristics.hxx>
+#include <StepVisual_ViewVolume.hxx>
+#include <TCollection_HAsciiString.hxx>
 
+IMPLEMENT_STANDARD_RTTIEXT(RWStepAP214_GeneralModule,StepData_GeneralModule)
+
+//#define DeclareAndCast(atype,result,start) \  NON car Name
+// Handle(atype) result = Handle(atype)::DownCast (start)
+// Removed from Rev2 to Rev4 :  <StepVisual_AnnotationCurveOccurrence.hxx>
+// Removed from Rev2 to Rev4 :  <StepVisual_AnnotationFillArea.hxx>
+// Removed from Rev2 to Rev4 :  <StepVisual_AnnotationFillAreaOccurrence.hxx>
+// Removed from CC1-Rev2 to CC1-Rev4, re-added CC2-Rev4 :
+// Removed from Rev2 to Rev4 :  <StepVisual_AnnotationSubfigureOccurrence.hxx>
+// Removed from Rev2 to Rev4 :  <StepVisual_AnnotationSymbol.hxx>
+// Removed from Rev2 to Rev4 :  <StepVisual_AnnotationSymbolOccurrence.hxx>
+// Removed from CC1-Rev2 to CC1-Rev4, re-added CC2-Rev4 :
+// Removed from Rev2 to Rev4 :  <StepAP214_AutoDesignViewArea.hxx>
+// Removed from CC1-Rev2 to CC1-Rev4, re-added CC2-Rev4 :
+// Removed from Rev2 to Rev4 :  <StepVisual_CompositeTextWithAssociatedCurves.hxx>
+// Removed from Rev2 to Rev4 :  <StepVisual_CompositeTextWithBlankingBox.hxx>
+// Removed from CC1-Rev2 to CC1-Rev4, re-added CC2-Rev4 :
+// Removed from Rev2 to Rev4 :  <StepShape_CsgRepresentation.hxx>
+// Removed from Rev2 to Rev4 :  <StepVisual_DefinedSymbol.hxx>
+// Removed from Rev2 to Rev4 :  <StepVisual_DimensionCurve.hxx>
+// Removed from Rev2 to Rev4 :  <StepVisual_DimensionCurveTerminator.hxx>
+// Removed from CC1-Rev2 to CC1-Rev4, re-added CC2-Rev4 :
+// Removed from Rev2 to Rev4 :  <StepVisual_DraughtingCallout.hxx>
+// Removed from Rev2 to Rev4 :  <StepVisual_DraughtingSubfigureRepresentation.hxx>
+// Removed from Rev2 to Rev4 :  <StepVisual_DraughtingSymbolRepresentation.hxx>
+// Removed from Rev2 to Rev4 :  <StepVisual_DraughtingTextLiteralWithDelineation.hxx>
+// Removed from Rev2 to Rev4 :  <StepVisual_DrawingDefinition.hxx>
+// Removed from Rev2 to Rev4 :  <StepVisual_DrawingRevision.hxx>
+// Removed from Rev2 to Rev4 :  <StepVisual_ExternallyDefinedHatchStyle.hxx>
+// Removed from Rev2 to Rev4 :  <StepVisual_ExternallyDefinedSymbol.hxx>
+// Removed from CC1-Rev2 to CC1-Rev4, re-added CC2-Rev4 :
+// Removed from Rev2 to Rev4 :  <StepVisual_ExternallyDefinedTileStyle.hxx>
+// Removed from Rev2 to Rev4 :  <StepShape_FaceBasedSurfaceModel.hxx>
+// Removed from Rev2 to Rev4 :  <StepVisual_FillAreaStyleHatching.hxx>
+// Removed from Rev2 to Rev4 :  <StepVisual_FillAreaStyleTileSymbolWithStyle.hxx>
+// Removed from Rev2 to Rev4 :  <StepVisual_FillAreaStyleTiles.hxx>
+// Removed from Rev2 to Rev4 :  <StepVisual_MechanicalDesignPresentationArea.hxx>
+// Removed from Rev2 to Rev4 :  <StepShape_NonManifoldSurfaceShapeRepresentation.hxx>
+// Removed from Rev2 to Rev4 :  <StepAP214_OneDirectionRepeatFactor.hxx>
+// Removed from Rev2 to Rev4 :  <StepVisual_PreDefinedSymbol.hxx>
+// Removed from CC1-Rev2 to CC1-Rev4, re-added CC2-Rev4 :
+// Removed from Rev2 to Rev4 :  <StepVisual_ProductDataRepresentationView.hxx>
+// Removed from Rev2 to Rev4 :  <StepVisual_SymbolColour.hxx>
+// Removed from Rev2 to Rev4 :  <StepVisual_SymbolRepresentation.hxx>
+// Removed from Rev2 to Rev4 :  <StepVisual_SymbolRepresentationMap.hxx>
+// Removed from Rev2 to Rev4 :  <StepVisual_SymbolStyle.hxx>
+// Removed from Rev2 to Rev4 :  <StepVisual_SymbolTarget.hxx>
+// Removed from Rev2 to Rev4 :  <StepVisual_TerminatorSymbol.hxx>
+// Removed from CC1-Rev2 to CC1-Rev4, re-added CC2-Rev4 :
+// Removed from Rev2 to Rev4 :  <StepVisual_TextLiteralWithAssociatedCurves.hxx>
+// Removed from Rev2 to Rev4 :  <StepVisual_TextLiteralWithBlankingBox.hxx>
+// Removed from Rev2 to Rev4 :  <StepVisual_TextLiteralWithDelineation.hxx>
+// Removed from Rev2 to Rev4 :  <StepVisual_TextLiteralWithExtent.hxx>
+// Removed from CC1-Rev2 to CC1-Rev4, re-added CC2-Rev4 :
+// Removed from Rev2 to Rev4 :  <StepVisual_TextStyleWithMirror.hxx>
+// Removed from Rev2 to Rev4 :  <StepAP214_TwoDirectionRepeatFactor.hxx>
+// Added by FMA
+// Added by CKY  for Rev4
+// full Rev4
+//  Added by CKY (JUL-1998) for AP214 CC1 -> CC2
+// Removed from Rev2 to Rev4 :  <RWStepVisual_RWAnnotationCurveOccurrence.hxx>
+// Removed from Rev2 to Rev4 :  <RWStepVisual_RWAnnotationFillArea.hxx>
+// Removed from Rev2 to Rev4 :  <RWStepVisual_RWAnnotationFillAreaOccurrence.hxx>
+// Removed from Rev2 to Rev4 :  <RWStepVisual_RWAnnotationOccurrence.hxx>
+// Removed from Rev2 to Rev4 :  <RWStepVisual_RWAnnotationSubfigureOccurrence.hxx>
+// Removed from Rev2 to Rev4 :  <RWStepVisual_RWAnnotationSymbol.hxx>
+// Removed from Rev2 to Rev4 :  <RWStepVisual_RWAnnotationSymbolOccurrence.hxx>
+// Removed from Rev2 to Rev4 :  <RWStepVisual_RWAnnotationText.hxx>
+// Removed from Rev2 to Rev4 :  <RWStepVisual_RWAnnotationTextOccurrence.hxx>
+// Removed from Rev2 to Rev4 :  <RWStepAP214_RWAutoDesignViewArea.hxx>
+// Removed from CC1-Rev2 to CC1-Rev4, re-added CC2-Rev4 :
+// Removed from Rev2 to Rev4 :  <RWStepVisual_RWCompositeTextWithAssociatedCurves.hxx>
+// Removed from Rev2 to Rev4 :  <RWStepVisual_RWCompositeTextWithBlankingBox.hxx>
+// Removed from CC1-Rev2 to CC1-Rev4, re-added CC2-Rev4 :
+// Removed from Rev2 to Rev4 :  <RWStepShape_RWCsgRepresentation.hxx>
+// Removed from Rev2 to Rev4 :  <RWStepVisual_RWDefinedSymbol.hxx>
+// Removed from Rev2 to Rev4 :  <RWStepVisual_RWDimensionCurve.hxx>
+// Removed from Rev2 to Rev4 :  <RWStepVisual_RWDimensionCurveTerminator.hxx>
+// Removed from Rev2 to Rev4 :  <RWStepVisual_RWDraughtingAnnotationOccurrence.hxx>
+// Removed from Rev2 to Rev4 :  <RWStepVisual_RWDraughtingCallout.hxx>
+// Removed from Rev2 to Rev4 :  <RWStepVisual_RWDraughtingSubfigureRepresentation.hxx>
+// Removed from Rev2 to Rev4 :  <RWStepVisual_RWDraughtingSymbolRepresentation.hxx>
+// Removed from Rev2 to Rev4 :  <RWStepVisual_RWDraughtingTextLiteralWithDelineation.hxx>
+// Removed from Rev2 to Rev4 :  <RWStepVisual_RWDrawingDefinition.hxx>
+// Removed from Rev2 to Rev4 :  <RWStepVisual_RWDrawingRevision.hxx>
+// Removed from Rev2 to Rev4 :  <RWStepVisual_RWExternallyDefinedHatchStyle.hxx>
+// Removed from Rev2 to Rev4 :  <RWStepVisual_RWExternallyDefinedSymbol.hxx>
+// Removed from Rev2 to Rev4 :  <RWStepVisual_RWExternallyDefinedTextFont.hxx>
+// Removed from Rev2 to Rev4 :  <RWStepVisual_RWExternallyDefinedTileStyle.hxx>
+// Removed from Rev2 to Rev4 :  <RWStepShape_RWFaceBasedSurfaceModel.hxx>
+// Removed from Rev2 to Rev4 :  <RWStepVisual_RWFillAreaStyleHatching.hxx>
+// Removed from Rev2 to Rev4 :  <RWStepVisual_RWFillAreaStyleTileSymbolWithStyle.hxx>
+// Removed from Rev2 to Rev4 :  <RWStepVisual_RWFillAreaStyleTiles.hxx>
+// Removed from Rev2 to Rev4 :  <RWStepVisual_RWMechanicalDesignPresentationArea.hxx>
+// Removed from Rev2 to Rev4 :  <RWStepShape_RWNonManifoldSurfaceShapeRepresentation.hxx>
+// Removed from Rev2 to Rev4 :  <RWStepAP214_RWOneDirectionRepeatFactor.hxx>
+// Removed from Rev2 to Rev4 :  <RWStepVisual_RWPreDefinedSymbol.hxx>
+// Removed from Rev2 to Rev4 :  <RWStepVisual_RWPreDefinedTextFont.hxx>
+// Removed from Rev2 to Rev4 :  <RWStepVisual_RWProductDataRepresentationView.hxx>
+// Removed from Rev2 to Rev4 :  <RWStepVisual_RWSymbolColour.hxx>
+// Removed from Rev2 to Rev4 :  <RWStepVisual_RWSymbolRepresentation.hxx>
+// Removed from Rev2 to Rev4 :  <RWStepVisual_RWSymbolRepresentationMap.hxx>
+// Removed from Rev2 to Rev4 :  <RWStepVisual_RWSymbolStyle.hxx>
+// Removed from Rev2 to Rev4 :  <RWStepVisual_RWSymbolTarget.hxx>
+// Removed from Rev2 to Rev4 :  <RWStepVisual_RWTerminatorSymbol.hxx>
+// Removed from CC1-Rev2 to CC1-Rev4, re-added CC2-Rev4 :
+// Removed from Rev2 to Rev4 :  <RWStepVisual_RWTextLiteralWithAssociatedCurves.hxx>
+// Removed from Rev2 to Rev4 :  <RWStepVisual_RWTextLiteralWithBlankingBox.hxx>
+// Removed from Rev2 to Rev4 :  <RWStepVisual_RWTextLiteralWithDelineation.hxx>
+// Removed from Rev2 to Rev4 :  <RWStepVisual_RWTextLiteralWithExtent.hxx>
+// Removed from CC1-Rev2 to CC1-Rev4, re-added CC2-Rev4 :
+// Removed from Rev2 to Rev4 :  <RWStepVisual_RWTextStyleWithMirror.hxx>
+// Removed from Rev2 to Rev4 :  <RWStepAP214_RWTwoDirectionRepeatFactor.hxx>
+// Added by FMA  for Rev4
+// full Rev4
+//  Added by CKY (JUL-1998) for AP214 CC1 -> CC2
+//Added from CC2 to DIS :j4
+// Added by ABV 08.09.99 for CAX TRJ 2 (validation properties)
+// Added by ABV 10.11.99 for AP203
+// Added by ABV 13.01.00 for CAX-IF TRJ3
+// Added by ABV 18.04.00 for CAX-IF TRJ4 (dimensions)
+// Added by ABV 10.05.00 for CAX-IF TRJ4 (external references)
+// Added by CKY , 25 APR 2001 for Dimensional Tolerances (CAX-IF TRJ7)
+// abv 28.12.01: CAX-IF TRJ9: edge_based_wireframe
+//Addef for AP209
+// 23.01.2003
+// ptv 28.01.2003
+//  TR12J 04.06.2003 G&DT entities GKA 
 // added by skl 10.02.2004 for TRJ13
 #include <StepBasic_ConversionBasedUnitAndMassUnit.hxx>
 #include <RWStepBasic_RWConversionBasedUnitAndMassUnit.hxx>
 #include <StepBasic_MassMeasureWithUnit.hxx>
 #include <RWStepBasic_RWMassMeasureWithUnit.hxx>
 
+// Added by ika for GD&T AP242
+#include <RWStepRepr_RWApex.hxx>
+#include <RWStepRepr_RWCentreOfSymmetry.hxx>
+#include <RWStepRepr_RWGeometricAlignment.hxx>
+#include <RWStepRepr_RWParallelOffset.hxx>
+#include <RWStepRepr_RWPerpendicularTo.hxx>
+#include <RWStepRepr_RWTangent.hxx>
+#include <RWStepAP242_RWGeometricItemSpecificUsage.hxx>
+#include <RWStepAP242_RWIdAttribute.hxx>
+#include <RWStepAP242_RWItemIdentifiedRepresentationUsage.hxx>
+#include <RWStepRepr_RWAllAroundShapeAspect.hxx>
+#include <RWStepRepr_RWBetweenShapeAspect.hxx>
+#include <RWStepRepr_RWCompositeGroupShapeAspect.hxx>
+#include <RWStepRepr_RWContinuosShapeAspect.hxx>
+#include <RWStepDimTol_RWGeometricToleranceWithDefinedAreaUnit.hxx>
+#include <RWStepDimTol_RWGeometricToleranceWithDefinedUnit.hxx>
+#include <RWStepDimTol_RWGeometricToleranceWithMaximumTolerance.hxx>
+#include <RWStepDimTol_RWGeometricToleranceWithModifiers.hxx>
+#include <RWStepDimTol_RWUnequallyDisposedGeometricTolerance.hxx>
+#include <RWStepDimTol_RWNonUniformZoneDefinition.hxx>
+#include <RWStepDimTol_RWProjectedZoneDefinition.hxx>
+#include <RWStepDimTol_RWRunoutZoneDefinition.hxx>
+#include <RWStepDimTol_RWRunoutZoneOrientation.hxx>
+#include <RWStepDimTol_RWToleranceZone.hxx>
+#include <RWStepDimTol_RWToleranceZoneDefinition.hxx>
+#include <RWStepDimTol_RWToleranceZoneForm.hxx>
+#include <RWStepShape_RWValueFormatTypeQualifier.hxx>
+#include <RWStepDimTol_RWDatumReferenceCompartment.hxx>
+#include <RWStepDimTol_RWDatumReferenceElement.hxx>
+#include <RWStepDimTol_RWDatumReferenceModifierWithValue.hxx>
+#include <RWStepDimTol_RWDatumSystem.hxx>
+#include <RWStepDimTol_RWGeneralDatumReference.hxx>
+#include <RWStepRepr_RWReprItemAndPlaneAngleMeasureWithUnit.hxx>
+#include <RWStepRepr_RWReprItemAndLengthMeasureWithUnitAndQRI.hxx>
+#include <RWStepRepr_RWReprItemAndPlaneAngleMeasureWithUnitAndQRI.hxx>
+#include <RWStepDimTol_RWGeoTolAndGeoTolWthDatRef.hxx>
+#include <RWStepDimTol_RWGeoTolAndGeoTolWthDatRefAndGeoTolWthMod.hxx>
+#include <RWStepDimTol_RWGeoTolAndGeoTolWthMod.hxx>
+#include <RWStepDimTol_RWGeoTolAndGeoTolWthDatRefAndUneqDisGeoTol.hxx>
+#include <RWStepRepr_RWCompGroupShAspAndCompShAspAndDatumFeatAndShAsp.hxx>
+#include <RWStepRepr_RWCompShAspAndDatumFeatAndShAsp.hxx>
+#include <RWStepRepr_RWIntegerRepresentationItem.hxx>
+#include <RWStepRepr_RWValueRepresentationItem.hxx>
+#include <RWStepAP242_RWDraughtingModelItemAssociation.hxx>
+#include <RWStepDimTol_RWGeoTolAndGeoTolWthDatRefAndGeoTolWthMaxTol.hxx>
+#include <RWStepDimTol_RWGeoTolAndGeoTolWthMaxTol.hxx>
+#include <RWStepVisual_RWAnnotationCurveOccurrence.hxx>
+#include <RWStepVisual_RWAnnotationOccurrence.hxx>
+#include <RWStepVisual_RWAnnotationPlane.hxx>
+#include <RWStepVisual_RWDraughtingCallout.hxx>
+
+#include <StepRepr_Apex.hxx>
+#include <StepRepr_CentreOfSymmetry.hxx>
+#include <StepRepr_GeometricAlignment.hxx>
+#include <StepRepr_ParallelOffset.hxx>
+#include <StepRepr_PerpendicularTo.hxx>
+#include <StepRepr_Tangent.hxx>
+#include <StepAP242_GeometricItemSpecificUsage.hxx>
+#include <StepAP242_IdAttribute.hxx>
+#include <StepAP242_ItemIdentifiedRepresentationUsage.hxx>
+#include <StepRepr_AllAroundShapeAspect.hxx>
+#include <StepRepr_BetweenShapeAspect.hxx>
+#include <StepRepr_CompositeGroupShapeAspect.hxx>
+#include <StepRepr_ContinuosShapeAspect.hxx>
+#include <StepDimTol_GeometricToleranceWithDefinedAreaUnit.hxx>
+#include <StepDimTol_GeometricToleranceWithDefinedUnit.hxx>
+#include <StepDimTol_GeometricToleranceWithMaximumTolerance.hxx>
+#include <StepDimTol_GeometricToleranceWithModifiers.hxx>
+#include <StepDimTol_UnequallyDisposedGeometricTolerance.hxx>
+#include <StepDimTol_NonUniformZoneDefinition.hxx>
+#include <StepDimTol_ProjectedZoneDefinition.hxx>
+#include <StepDimTol_RunoutZoneDefinition.hxx>
+#include <StepDimTol_RunoutZoneOrientation.hxx>
+#include <StepDimTol_ToleranceZone.hxx>
+#include <StepDimTol_ToleranceZoneDefinition.hxx>
+#include <StepDimTol_ToleranceZoneForm.hxx>
+#include <StepShape_ValueFormatTypeQualifier.hxx>
+#include <StepDimTol_DatumReferenceCompartment.hxx>
+#include <StepDimTol_DatumReferenceElement.hxx>
+#include <StepDimTol_DatumReferenceModifierWithValue.hxx>
+#include <StepDimTol_DatumSystem.hxx>
+#include <StepDimTol_GeneralDatumReference.hxx>
+#include <StepRepr_ReprItemAndPlaneAngleMeasureWithUnit.hxx>
+#include <StepRepr_ReprItemAndLengthMeasureWithUnitAndQRI.hxx>
+#include <StepRepr_ReprItemAndPlaneAngleMeasureWithUnitAndQRI.hxx>
+#include <StepDimTol_GeoTolAndGeoTolWthDatRef.hxx>
+#include <StepDimTol_GeoTolAndGeoTolWthDatRefAndGeoTolWthMod.hxx>
+#include <StepDimTol_GeoTolAndGeoTolWthMod.hxx>
+#include <StepDimTol_GeoTolAndGeoTolWthDatRefAndUneqDisGeoTol.hxx>
+#include <StepRepr_CompGroupShAspAndCompShAspAndDatumFeatAndShAsp.hxx>
+#include <StepRepr_CompShAspAndDatumFeatAndShAsp.hxx>
+#include <StepRepr_IntegerRepresentationItem.hxx>
+#include <StepRepr_ValueRepresentationItem.hxx>
+#include <StepAP242_DraughtingModelItemAssociation.hxx>
+#include <StepDimTol_GeoTolAndGeoTolWthDatRefAndGeoTolWthMaxTol.hxx>
+#include <StepDimTol_GeoTolAndGeoTolWthMaxTol.hxx>
+#include <StepVisual_AnnotationCurveOccurrence.hxx>
+#include <StepVisual_AnnotationPlane.hxx>
+#include <StepVisual_DraughtingCallout.hxx>
+
+#include <StepVisual_TessellatedAnnotationOccurrence.hxx>
+#include <StepVisual_TessellatedItem.hxx>
+#include <StepVisual_TessellatedGeometricSet.hxx>
+#include <StepVisual_TessellatedCurveSet.hxx>
+#include <StepVisual_CoordinatesList.hxx>
+
+#include <RWStepVisual_RWTessellatedAnnotationOccurrence.hxx>
+#include <RWStepVisual_RWTessellatedItem.hxx>
+#include <RWStepVisual_RWTessellatedGeometricSet.hxx>
+#include <RWStepVisual_RWTessellatedCurveSet.hxx>
+#include <RWStepVisual_RWCoordinatesList.hxx>
+#include <StepRepr_CharacterizedRepresentation.hxx>
+#include <RWStepRepr_RWCharacterizedRepresentation.hxx>
+#include <StepVisual_CharacterizedObjAndRepresentationAndDraughtingModel.hxx>
+#include <RWStepVisual_RWCharacterizedObjAndRepresentationAndDraughtingModel.hxx>
+#include <StepVisual_AnnotationFillArea.hxx>
+#include <StepVisual_AnnotationFillAreaOccurrence.hxx>
+#include <RWStepVisual_RWAnnotationFillArea.hxx>
+#include <RWStepVisual_RWAnnotationFillAreaOccurrence.hxx>
+#include <StepVisual_CameraModelD3MultiClipping.hxx>
+#include <StepVisual_CameraModelD3MultiClippingIntersection.hxx>
+#include <StepVisual_CameraModelD3MultiClippingUnion.hxx>
+#include <RWStepVisual_RWCameraModelD3MultiClipping.hxx>
+#include <RWStepVisual_RWCameraModelD3MultiClippingIntersection.hxx>
+#include <RWStepVisual_RWCameraModelD3MultiClippingUnion.hxx>
+#include <StepVisual_AnnotationCurveOccurrenceAndGeomReprItem.hxx>
+#include <RWStepVisual_RWAnnotationCurveOccurrenceAndGeomReprItem.hxx>
 
 static Standard_Integer catsh,catdr,catstr,catdsc,cataux;
 
@@ -1278,7 +1382,6 @@ RWStepAP214_GeneralModule::RWStepAP214_GeneralModule ()
   catstr = Interface_Category::Number("Structure");
   catdsc = Interface_Category::Number("Description");
   cataux = Interface_Category::Number("Auxiliary");
-//// Interface_GeneralLib::SetGlobal(Handle(RWStepAP214_GeneralModule)::DownCast(This()), StepAP214::Protocol());
 }
 
 
@@ -1337,10 +1440,31 @@ void RWStepAP214_GeneralModule::FillSharedCase(const Standard_Integer CN,
 	tool.Share(anent,iter);
       }
       break;
+    case 4:
+      {
+	DeclareAndCast(StepVisual_AnnotationCurveOccurrence,anent,ent);
+	RWStepVisual_RWAnnotationCurveOccurrence tool;
+	tool.Share(anent,iter);
+      }
+      break;
+    case 5:
+    {
+      DeclareAndCast(StepVisual_AnnotationFillArea, anent, ent);
+      RWStepVisual_RWAnnotationFillArea tool;
+      tool.Share(anent, iter);
+    }
+    break;
+    case 6:
+    {
+      DeclareAndCast(StepVisual_AnnotationFillAreaOccurrence, anent, ent);
+      RWStepVisual_RWAnnotationFillAreaOccurrence tool;
+      tool.Share(anent, iter);
+    }
+    break;
     case 7:
       {
-	DeclareAndCast(StepVisual_StyledItem,anent,ent);
-	RWStepVisual_RWStyledItem tool;
+	DeclareAndCast(StepVisual_AnnotationOccurrence,anent,ent);
+	RWStepVisual_RWAnnotationOccurrence tool;
 	tool.Share(anent,iter);
       }
       break;
@@ -1806,6 +1930,13 @@ void RWStepAP214_GeneralModule::FillSharedCase(const Standard_Integer CN,
       {
 	DeclareAndCast(StepVisual_StyledItem,anent,ent);
 	RWStepVisual_RWStyledItem tool;
+	tool.Share(anent,iter);
+      }
+      break;
+    case 107:
+      {
+	DeclareAndCast(StepVisual_DraughtingCallout,anent,ent);
+	RWStepVisual_RWDraughtingCallout tool;
 	tool.Share(anent,iter);
       }
       break;
@@ -4481,6 +4612,13 @@ void RWStepAP214_GeneralModule::FillSharedCase(const Standard_Integer CN,
       break;
       
       //  TR12J 04.06.2003 G&DT entities GKA      
+    case 609:
+    {
+      DeclareAndCast(StepDimTol_CylindricityTolerance,anent,ent);
+      RWStepDimTol_RWCylindricityTolerance tool;
+      tool.Share(anent,iter);
+    }
+    break;
     case 610:
       {
         DeclareAndCast(StepShape_ShapeRepresentationWithParameters,anent,ent);
@@ -4680,8 +4818,381 @@ void RWStepAP214_GeneralModule::FillSharedCase(const Standard_Integer CN,
 	tool.Share(anent,iter);
       }
       break;
-      
-      
+    case 660:
+      {
+        DeclareAndCast(StepRepr_Apex,anent,ent);
+        RWStepRepr_RWApex tool;
+        tool.Share(anent,iter);
+      }
+      break;
+    case 661:
+      {
+        DeclareAndCast(StepRepr_CentreOfSymmetry,anent,ent);
+        RWStepRepr_RWCentreOfSymmetry tool;
+        tool.Share(anent,iter);
+      }
+      break;
+    case 662:
+      {
+        DeclareAndCast(StepRepr_GeometricAlignment,anent,ent);
+        RWStepRepr_RWGeometricAlignment tool;
+        tool.Share(anent,iter);
+      }
+      break;
+    case 663:
+      {
+        DeclareAndCast(StepRepr_PerpendicularTo,anent,ent);
+        RWStepRepr_RWPerpendicularTo tool;
+        tool.Share(anent,iter);
+      }
+      break;
+    case 664:
+      {
+        DeclareAndCast(StepRepr_Tangent,anent,ent);
+        RWStepRepr_RWTangent tool;
+        tool.Share(anent,iter);
+      }
+      break;
+    case 665:
+      {
+        DeclareAndCast(StepRepr_ParallelOffset,anent,ent);
+        RWStepRepr_RWParallelOffset tool;
+        tool.Share(anent,iter);
+      }
+      break;
+    case 666:
+      {
+        DeclareAndCast(StepAP242_GeometricItemSpecificUsage,anent,ent);
+        RWStepAP242_RWGeometricItemSpecificUsage tool;
+        tool.Share(anent,iter);
+      }
+      break;
+    case 667:
+      {
+        DeclareAndCast(StepAP242_IdAttribute,anent,ent);
+        RWStepAP242_RWIdAttribute tool;
+        tool.Share(anent,iter);
+      }
+      break;
+    case 668:
+      {
+        DeclareAndCast(StepAP242_ItemIdentifiedRepresentationUsage,anent,ent);
+        RWStepAP242_RWItemIdentifiedRepresentationUsage tool;
+        tool.Share(anent,iter);
+      }
+      break;
+    case 669:
+      {
+        DeclareAndCast(StepRepr_AllAroundShapeAspect,anent,ent);
+        RWStepRepr_RWAllAroundShapeAspect tool;
+        tool.Share(anent,iter);
+      }
+      break;
+    case 670:
+      {
+        DeclareAndCast(StepRepr_BetweenShapeAspect,anent,ent);
+        RWStepRepr_RWBetweenShapeAspect tool;
+        tool.Share(anent,iter);
+      }
+      break;
+    case 671:
+      {
+        DeclareAndCast(StepRepr_CompositeGroupShapeAspect,anent,ent);
+        RWStepRepr_RWCompositeGroupShapeAspect tool;
+        tool.Share(anent,iter);
+      }
+      break;
+    case 672:
+      {
+        DeclareAndCast(StepRepr_ContinuosShapeAspect,anent,ent);
+        RWStepRepr_RWContinuosShapeAspect tool;
+        tool.Share(anent,iter);
+      }
+      break;
+    case 673:
+      {
+        DeclareAndCast(StepDimTol_GeometricToleranceWithDefinedAreaUnit,anent,ent);
+        RWStepDimTol_RWGeometricToleranceWithDefinedAreaUnit tool;
+        tool.Share(anent,iter);
+      }
+      break;
+    case 674:
+      {
+        DeclareAndCast(StepDimTol_GeometricToleranceWithDefinedUnit,anent,ent);
+        RWStepDimTol_RWGeometricToleranceWithDefinedUnit tool;
+        tool.Share(anent,iter);
+      }
+      break;
+    case 675:
+      {
+        DeclareAndCast(StepDimTol_GeometricToleranceWithMaximumTolerance,anent,ent);
+        RWStepDimTol_RWGeometricToleranceWithMaximumTolerance tool;
+        tool.Share(anent,iter);
+      }
+      break;
+    case 676:
+      {
+        DeclareAndCast(StepDimTol_GeometricToleranceWithModifiers,anent,ent);
+        RWStepDimTol_RWGeometricToleranceWithModifiers tool;
+        tool.Share(anent,iter);
+      }
+      break;
+    case 677:
+      {
+        DeclareAndCast(StepDimTol_UnequallyDisposedGeometricTolerance,anent,ent);
+        RWStepDimTol_RWUnequallyDisposedGeometricTolerance tool;
+        tool.Share(anent,iter);
+      }
+      break;
+    case 678:
+      {
+        DeclareAndCast(StepDimTol_NonUniformZoneDefinition,anent,ent);
+        RWStepDimTol_RWNonUniformZoneDefinition tool;
+        tool.Share(anent,iter);
+      }
+      break;
+    case 679:
+      {
+        DeclareAndCast(StepDimTol_ProjectedZoneDefinition,anent,ent);
+        RWStepDimTol_RWProjectedZoneDefinition tool;
+        tool.Share(anent,iter);
+      }
+      break;
+    case 680:
+      {
+        DeclareAndCast(StepDimTol_RunoutZoneDefinition,anent,ent);
+        RWStepDimTol_RWRunoutZoneDefinition tool;
+        tool.Share(anent,iter);
+      }
+      break;
+    //case 681: no shared attributes
+    case 682:
+      {
+        DeclareAndCast(StepDimTol_ToleranceZone,anent,ent);
+        RWStepDimTol_RWToleranceZone tool;
+        tool.Share(anent,iter);
+      }
+      break;
+    case 683:
+      {
+        DeclareAndCast(StepDimTol_ToleranceZoneDefinition,anent,ent);
+        RWStepDimTol_RWToleranceZoneDefinition tool;
+        tool.Share(anent,iter);
+      }
+      break;
+    //case 684: no shared attributes
+    //case 685: no shared attributes
+    case 686 :
+    {
+      DeclareAndCast(StepDimTol_DatumReferenceCompartment, anent, ent);
+      RWStepDimTol_RWDatumReferenceCompartment tool;
+      tool.Share(anent,iter);
+    }
+    break;
+  case 687 :
+    {
+      DeclareAndCast(StepDimTol_DatumReferenceElement, anent, ent);
+      RWStepDimTol_RWDatumReferenceElement tool;
+      tool.Share(anent,iter);
+    }
+    break;
+  //case 688: no shared attributes
+  case 689 :
+    {
+      DeclareAndCast(StepDimTol_DatumSystem, anent, ent);
+      RWStepDimTol_RWDatumSystem tool;
+      tool.Share(anent,iter);
+    }
+    break;
+  case 690 :
+    {
+      DeclareAndCast(StepDimTol_GeneralDatumReference, anent, ent);
+      RWStepDimTol_RWGeneralDatumReference tool;
+      tool.Share(anent,iter);
+    }
+    break;
+  case 694:
+    {
+      DeclareAndCast(StepDimTol_GeoTolAndGeoTolWthDatRef,anent,ent);
+      RWStepDimTol_RWGeoTolAndGeoTolWthDatRef tool;
+      tool.Share(anent,iter);
+    }
+    break;
+  case 695:
+    {
+      DeclareAndCast(StepDimTol_GeoTolAndGeoTolWthDatRefAndGeoTolWthMod,anent,ent);
+      RWStepDimTol_RWGeoTolAndGeoTolWthDatRefAndGeoTolWthMod tool;
+      tool.Share(anent,iter);
+    }
+    break;
+  case 696:
+    {
+      DeclareAndCast(StepDimTol_GeoTolAndGeoTolWthMod,anent,ent);
+      RWStepDimTol_RWGeoTolAndGeoTolWthMod tool;
+      tool.Share(anent,iter);
+    }
+    break;
+  case 697:
+    {
+      DeclareAndCast(StepDimTol_GeoTolAndGeoTolWthDatRefAndUneqDisGeoTol,anent,ent);
+      RWStepDimTol_RWGeoTolAndGeoTolWthDatRefAndUneqDisGeoTol tool;
+      tool.Share(anent,iter);
+    }
+    break;
+  case 698:
+    {
+      DeclareAndCast(StepRepr_CompGroupShAspAndCompShAspAndDatumFeatAndShAsp,anent,ent);
+      RWStepRepr_RWCompGroupShAspAndCompShAspAndDatumFeatAndShAsp tool;
+      tool.Share(anent,iter);
+    }
+    break;
+  case 699:
+    {
+      DeclareAndCast(StepRepr_CompShAspAndDatumFeatAndShAsp,anent,ent);
+      RWStepRepr_RWCompShAspAndDatumFeatAndShAsp tool;
+      tool.Share(anent,iter);
+    }
+    break;
+  case 702:
+    {
+      DeclareAndCast(StepRepr_FeatureForDatumTargetRelationship,anent,ent);
+      RWStepRepr_RWFeatureForDatumTargetRelationship tool;
+      tool.Share(anent,iter);
+    }
+    break;
+  case 703:
+    {
+      DeclareAndCast(StepAP242_DraughtingModelItemAssociation,anent,ent);
+      RWStepAP242_RWDraughtingModelItemAssociation tool;
+      tool.Share(anent,iter);
+    }
+    break;
+  case 704:
+    {
+      DeclareAndCast(StepVisual_AnnotationPlane,anent,ent);
+      RWStepVisual_RWAnnotationPlane tool;
+      tool.Share(anent,iter);
+    }
+    break;
+  case 705:
+    {
+      DeclareAndCast(StepDimTol_GeoTolAndGeoTolWthDatRefAndGeoTolWthMaxTol,anent,ent);
+      RWStepDimTol_RWGeoTolAndGeoTolWthDatRefAndGeoTolWthMaxTol tool;
+      tool.Share(anent,iter);
+    }
+    break;
+  case 706:
+    {
+      DeclareAndCast(StepDimTol_GeoTolAndGeoTolWthMaxTol,anent,ent);
+      RWStepDimTol_RWGeoTolAndGeoTolWthMaxTol tool;
+      tool.Share(anent,iter);
+    }
+    break;
+  case 707:
+    {
+      DeclareAndCast(StepVisual_TessellatedAnnotationOccurrence,anent,ent);
+      RWStepVisual_RWTessellatedAnnotationOccurrence tool;
+      tool.Share(anent,iter);
+    }
+    break;
+  case 709:
+    {
+      DeclareAndCast(StepVisual_TessellatedGeometricSet,anent,ent);
+      RWStepVisual_RWTessellatedGeometricSet tool;
+      tool.Share(anent,iter);
+    }
+    break;
+  case 710:
+    {
+      DeclareAndCast(StepVisual_TessellatedCurveSet,anent,ent);
+      RWStepVisual_RWTessellatedCurveSet tool;
+      tool.Share(anent,iter);
+    }
+    break;
+  case 712:
+    {
+      DeclareAndCast(StepRepr_ConstructiveGeometryRepresentation,anent,ent);
+      RWStepRepr_RWConstructiveGeometryRepresentation tool;
+      tool.Share(anent,iter);
+    }
+    break;
+  case 713:
+    {
+      DeclareAndCast(StepRepr_ConstructiveGeometryRepresentationRelationship,anent,ent);
+      RWStepRepr_RWConstructiveGeometryRepresentationRelationship tool;
+      tool.Share(anent,iter);
+    }
+    break;
+  case 714:
+  {
+    DeclareAndCast(StepRepr_CharacterizedRepresentation, anent, ent);
+    RWStepRepr_RWCharacterizedRepresentation tool;
+    tool.Share(anent, iter);
+  }
+  break;
+  case 715:
+  {
+    DeclareAndCast(StepVisual_CharacterizedObjAndRepresentationAndDraughtingModel, anent, ent);
+    RWStepVisual_RWCharacterizedObjAndRepresentationAndDraughtingModel tool;
+    tool.Share(anent, iter);
+  }
+  break;
+  case 716:
+  {
+    DeclareAndCast(StepVisual_CameraModelD3MultiClipping, anent, ent);
+    RWStepVisual_RWCameraModelD3MultiClipping tool;
+    tool.Share(anent, iter);
+  }
+  break;
+  case 717:
+  {
+    DeclareAndCast(StepVisual_CameraModelD3MultiClippingIntersection, anent, ent);
+    RWStepVisual_RWCameraModelD3MultiClippingIntersection tool;
+    tool.Share(anent, iter);
+  }
+  break;
+  case 718:
+  {
+    DeclareAndCast(StepVisual_CameraModelD3MultiClippingUnion, anent, ent);
+    RWStepVisual_RWCameraModelD3MultiClippingUnion tool;
+    tool.Share(anent, iter);
+  }
+  break;
+  case 719:
+  {
+    DeclareAndCast(StepVisual_AnnotationCurveOccurrenceAndGeomReprItem, anent, ent);
+    RWStepVisual_RWAnnotationCurveOccurrenceAndGeomReprItem tool;
+    tool.Share(anent, iter);
+  }
+  break;
+  case 720:
+  {
+    DeclareAndCast(StepVisual_SurfaceStyleTransparent, anent, ent);
+    RWStepVisual_RWSurfaceStyleTransparent tool;
+    tool.Share(anent, iter);
+  }
+  break;
+  case 721:
+  {
+    DeclareAndCast(StepVisual_SurfaceStyleReflectanceAmbient, anent, ent);
+    RWStepVisual_RWSurfaceStyleReflectanceAmbient tool;
+    tool.Share(anent, iter);
+  }
+  break;
+  case 722:
+  {
+    DeclareAndCast(StepVisual_SurfaceStyleRendering, anent, ent);
+    RWStepVisual_RWSurfaceStyleRendering tool;
+    tool.Share(anent, iter);
+  }
+  break;
+  case 723:
+  {
+    DeclareAndCast(StepVisual_SurfaceStyleRenderingWithProperties, anent, ent);
+    RWStepVisual_RWSurfaceStyleRenderingWithProperties tool;
+    tool.Share(anent, iter);
+  }
+  break;
     default : break;
     }
 }
@@ -4835,6 +5346,15 @@ Standard_Boolean RWStepAP214_GeneralModule::NewVoid
   case 3 : 
     ent = new StepShape_AdvancedFace;
     break;
+  case 4 : 
+    ent = new StepVisual_AnnotationCurveOccurrence;
+    break;
+  case 5:
+    ent = new StepVisual_AnnotationFillArea;
+  break;
+  case 6:
+    ent = new StepVisual_AnnotationFillAreaOccurrence;
+  break;
   case 7 : 
     ent = new StepVisual_AnnotationOccurrence;
     break;
@@ -5095,6 +5615,9 @@ Standard_Boolean RWStepAP214_GeneralModule::NewVoid
     break;
   case 106 : 
     ent = new StepVisual_AnnotationOccurrence;
+    break;
+  case 107 : 
+    ent = new StepVisual_DraughtingCallout;
     break;
   case 108 : 
     ent = new StepVisual_DraughtingPreDefinedColour;
@@ -6410,7 +6933,9 @@ Standard_Boolean RWStepAP214_GeneralModule::NewVoid
   case 601:
     ent = new StepBasic_DocumentProductEquivalence;
     break;
-    
+  case 609:
+    ent = new StepDimTol_CylindricityTolerance;
+    break;    
   case 610:
     ent = new StepShape_ShapeRepresentationWithParameters;
     break;
@@ -6500,8 +7025,198 @@ Standard_Boolean RWStepAP214_GeneralModule::NewVoid
   case 651 : 
     ent = new StepBasic_MassMeasureWithUnit;
     break;
-    
-    
+  case 660 : 
+    ent = new StepRepr_Apex;
+    break;
+  case 661 : 
+    ent = new StepRepr_CentreOfSymmetry;
+    break;
+  case 662 : 
+    ent = new StepRepr_GeometricAlignment;
+    break;
+  case 663 : 
+    ent = new StepRepr_PerpendicularTo;
+    break;
+  case 664 : 
+    ent = new StepRepr_Tangent;
+    break;
+  case 665 : 
+    ent = new StepRepr_ParallelOffset;
+    break;
+  case 666 : 
+    ent = new StepAP242_GeometricItemSpecificUsage;
+    break;
+  case 667 : 
+    ent = new StepAP242_IdAttribute;
+    break;
+  case 668 : 
+    ent = new StepAP242_ItemIdentifiedRepresentationUsage;
+    break;
+  case 669 : 
+    ent = new StepRepr_AllAroundShapeAspect;
+    break;
+  case 670 : 
+    ent = new StepRepr_BetweenShapeAspect;
+    break;
+  case 671 : 
+    ent = new StepRepr_CompositeGroupShapeAspect;
+    break;
+  case 672 : 
+    ent = new StepRepr_ContinuosShapeAspect;
+    break;
+  case 673 : 
+    ent = new StepDimTol_GeometricToleranceWithDefinedAreaUnit;
+    break;
+  case 674 : 
+    ent = new StepDimTol_GeometricToleranceWithDefinedUnit;
+    break;
+  case 675 : 
+    ent = new StepDimTol_GeometricToleranceWithMaximumTolerance;
+    break;
+  case 676 : 
+    ent = new StepDimTol_GeometricToleranceWithModifiers;
+    break;
+  case 677 : 
+    ent = new StepDimTol_UnequallyDisposedGeometricTolerance;
+    break;
+  case 678 : 
+    ent = new StepDimTol_NonUniformZoneDefinition;
+    break;
+  case 679 : 
+    ent = new StepDimTol_ProjectedZoneDefinition;
+    break;
+  case 680 : 
+    ent = new StepDimTol_RunoutZoneDefinition;
+    break;
+  case 681 : 
+    ent = new StepDimTol_RunoutZoneOrientation;
+    break;
+  case 682 : 
+    ent = new StepDimTol_ToleranceZone;
+    break;
+  case 683 : 
+    ent = new StepDimTol_ToleranceZoneDefinition;
+    break;
+  case 684 : 
+    ent = new StepDimTol_ToleranceZoneForm;
+    break;
+  case 685 : 
+    ent = new StepShape_ValueFormatTypeQualifier;
+    break;
+  case 686 : 
+    ent = new StepDimTol_DatumReferenceCompartment;
+    break;
+  case 687 : 
+    ent = new StepDimTol_DatumReferenceElement;
+    break;
+  case 688 : 
+    ent = new StepDimTol_DatumReferenceModifierWithValue;
+    break;
+  case 689 : 
+    ent = new StepDimTol_DatumSystem;
+    break;
+  case 690 : 
+    ent = new StepDimTol_GeneralDatumReference;
+    break;
+  case 691 : 
+    ent = new StepRepr_ReprItemAndPlaneAngleMeasureWithUnit;
+    break;
+  case 692 : 
+    ent = new StepRepr_ReprItemAndLengthMeasureWithUnitAndQRI;
+    break;
+  case 693 : 
+    ent = new StepRepr_ReprItemAndPlaneAngleMeasureWithUnitAndQRI;
+    break;
+  case 694 : 
+    ent = new StepDimTol_GeoTolAndGeoTolWthDatRef;
+    break;
+  case 695 : 
+    ent = new StepDimTol_GeoTolAndGeoTolWthDatRefAndGeoTolWthMod;
+    break;
+  case 696 : 
+    ent = new StepDimTol_GeoTolAndGeoTolWthMod;
+    break;
+  case 697 : 
+    ent = new StepDimTol_GeoTolAndGeoTolWthDatRefAndUneqDisGeoTol;
+    break;
+  case 698 : 
+    ent = new StepRepr_CompGroupShAspAndCompShAspAndDatumFeatAndShAsp;
+    break;
+  case 699 : 
+    ent = new StepRepr_CompShAspAndDatumFeatAndShAsp;
+    break;
+  case 700:
+    ent = new StepRepr_IntegerRepresentationItem;
+    break;
+  case 701:
+    ent = new StepRepr_ValueRepresentationItem;
+    break;
+  case 702:
+    ent = new StepRepr_FeatureForDatumTargetRelationship;
+    break;
+  case 703:
+    ent = new StepAP242_DraughtingModelItemAssociation;
+    break;
+  case 704:
+    ent = new StepVisual_AnnotationPlane;
+    break;
+  case 705:
+    ent = new StepDimTol_GeoTolAndGeoTolWthDatRefAndGeoTolWthMaxTol;
+    break;
+  case 706:
+    ent = new StepDimTol_GeoTolAndGeoTolWthMaxTol;
+    break;
+   case 707:
+        ent = new StepVisual_TessellatedAnnotationOccurrence;
+     break;
+   case 708:
+     ent = new StepVisual_TessellatedItem;     
+    break;
+   case 709:
+     ent = new StepVisual_TessellatedGeometricSet;
+   break;
+   case 710:
+     ent = new StepVisual_TessellatedCurveSet;
+   break;
+   case 711:
+       ent = new StepVisual_CoordinatesList;
+   break;
+   case 712:
+       ent = new StepRepr_ConstructiveGeometryRepresentation;
+   break;
+   case 713:
+       ent = new StepRepr_ConstructiveGeometryRepresentationRelationship;
+   break;
+   case 714:
+   ent = new StepRepr_CharacterizedRepresentation;
+   break;
+   case 715:
+   ent = new StepVisual_CharacterizedObjAndRepresentationAndDraughtingModel;
+   break;
+   case 716:
+     ent = new StepVisual_CameraModelD3MultiClipping;
+   break;
+   case 717:
+     ent = new StepVisual_CameraModelD3MultiClippingIntersection;
+   break;
+   case 718:
+     ent = new StepVisual_CameraModelD3MultiClippingUnion;
+   break;
+   case 719:
+     ent = new StepVisual_AnnotationCurveOccurrenceAndGeomReprItem;
+   break;
+   case 720:
+     ent = new StepVisual_SurfaceStyleTransparent;
+   break;
+   case 721:
+     ent = new StepVisual_SurfaceStyleReflectanceAmbient;
+   break;
+   case 722:
+     ent = new StepVisual_SurfaceStyleRendering;
+   break;
+   case 723:
+     ent = new StepVisual_SurfaceStyleRenderingWithProperties;
+   break;
   default: 
     return Standard_False;
   }
@@ -7010,6 +7725,7 @@ Standard_Integer  RWStepAP214_GeneralModule::CategoryNumber
   case 496: return catsh;
   case 600:
   case 601: return cataux;
+  case 609:
   case 610: 
   case 611:
   case 612:
@@ -7039,7 +7755,71 @@ Standard_Integer  RWStepAP214_GeneralModule::CategoryNumber
   case 636: return cataux;
   case 650: 
   case 651: return cataux;
-    
+  case 660:
+  case 661:
+  case 662:
+  case 663:
+  case 664:
+  case 665: 
+  case 666:
+  case 667:
+  case 668:
+  case 669:
+  case 670:
+  case 671:
+  case 672: return catdr;
+  case 673:
+  case 674:
+  case 675:
+  case 676:
+  case 677:
+  case 678:
+  case 679:
+  case 680:
+  case 681:
+  case 682:
+  case 683:
+  case 684: return cataux;
+  case 685: return catdr;
+  case 686:
+  case 687:
+  case 688:
+  case 689:
+  case 690:
+  case 691:
+  case 692:
+  case 693:
+  case 694:
+  case 695:
+  case 696:
+  case 697: return cataux;
+  case 698:
+  case 699:
+  case 700:
+  case 701:
+  case 702:
+  case 703:
+  case 704: return catdr;
+  case 705:
+  case 706: 
+  case 707:  
+  case 708: 
+  case 709:
+  case 710:
+  case 711: return cataux;
+  case 712:
+  case 713: return catsh;
+  case 714: return catstr;
+  case 715: return catdsc;
+  case 716:
+  case 717:
+  case 718: return cataux;
+  case 719: return catdr;
+  case 720:
+  case 721:
+  case 722:
+  case 723: return catdr;
+
   default : break;
   }
   return 0;

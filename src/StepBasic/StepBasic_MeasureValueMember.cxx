@@ -11,13 +11,16 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepBasic_MeasureValueMember.ixx>
+
+#include <Standard_Type.hxx>
+#include <StepBasic_MeasureValueMember.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepBasic_MeasureValueMember,StepData_SelectReal)
 
 //=======================================================================
 //function : StepBasic_MeasureValueMember
 //purpose  : 
 //=======================================================================
-
 StepBasic_MeasureValueMember::StepBasic_MeasureValueMember()
 {
   thecase = 0;
@@ -58,6 +61,7 @@ Standard_CString StepBasic_MeasureValueMember::Name () const
     case 12 : return "VOLUME_MEASURE"; 
     case 13 : return "MASS_MEASURE"; 
     case 14 : return "THERMODYNAMIC_TEMPERATURE_MEASURE"; 
+    case 15 : return "COUNT_MEASURE";
     default : break;
   }
   return "";
@@ -79,7 +83,7 @@ Standard_Boolean  StepBasic_MeasureValueMember::SetName (const Standard_CString 
   else if (name[0] == 'S' && !strcmp (name,"SOLID_ANGLE_MEASURE")) thecase = 4;
   else if (name[2] == 'T' && !strcmp (name,"RATIO_MEASURE"))       thecase = 5;
   else if (name[2] == 'R' && !strcmp (name,"PARAMETER_VALUE"))     thecase = 6;
-  else if (name[0] == 'C' && !strcmp (name,"CONTEXT_DEPENDANT_MEASURE"))    thecase = 7;
+  else if (name[3] == 'T' && !strcmp (name,"CONTEXT_DEPENDANT_MEASURE"))    thecase = 7;
   else if (name[9] == 'L' && !strcmp (name,"POSITIVE_LENGTH_MEASURE"))      thecase = 8;
   else if (name[9] == 'P' && !strcmp (name,"POSITIVE_PLANE_ANGLE_MEASURE")) thecase = 9;
   else if (name[9] == 'R' && !strcmp (name,"POSITIVE_RATIO_MEASURE"))       thecase = 10;
@@ -87,6 +91,7 @@ Standard_Boolean  StepBasic_MeasureValueMember::SetName (const Standard_CString 
   else if (name[0] == 'V' && !strcmp (name,"VOLUME_MEASURE"))      thecase = 12;
   else if (name[0] == 'M' && !strcmp (name,"MASS_MEASURE"))        thecase = 13;
   else if (name[1] == 'H' && !strcmp (name,"THERMODYNAMIC_TEMPERATURE_MEASURE")) thecase = 14;
+  else if (name[2] == 'U' && !strcmp (name,"COUNT_MEASURE"))       thecase = 15;
   else return Standard_False;
 
   return Standard_True;

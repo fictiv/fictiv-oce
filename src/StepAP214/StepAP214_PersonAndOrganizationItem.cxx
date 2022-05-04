@@ -11,8 +11,25 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepAP214_PersonAndOrganizationItem.ixx>
+
 #include <Interface_Macros.hxx>
+#include <Standard_Transient.hxx>
+#include <StepAP214_AppliedOrganizationAssignment.hxx>
+#include <StepAP214_AppliedSecurityClassificationAssignment.hxx>
+#include <StepAP214_PersonAndOrganizationItem.hxx>
+#include <StepBasic_Approval.hxx>
+#include <StepBasic_DocumentFile.hxx>
+#include <StepBasic_Product.hxx>
+#include <StepBasic_ProductDefinition.hxx>
+#include <StepBasic_ProductDefinitionFormation.hxx>
+#include <StepBasic_ProductDefinitionRelationship.hxx>
+#include <StepBasic_SecurityClassification.hxx>
+#include <StepRepr_AssemblyComponentUsageSubstitute.hxx>
+#include <StepRepr_MaterialDesignation.hxx>
+#include <StepRepr_PropertyDefinition.hxx>
+#include <StepShape_ShapeRepresentation.hxx>
+#include <StepVisual_MechanicalDesignGeometricPresentationRepresentation.hxx>
+#include <StepVisual_PresentationArea.hxx>
 
 StepAP214_PersonAndOrganizationItem::StepAP214_PersonAndOrganizationItem () {  }
 
@@ -32,7 +49,8 @@ Standard_Integer StepAP214_PersonAndOrganizationItem::CaseNum(const Handle(Stand
   if (ent->IsKind(STANDARD_TYPE(StepRepr_PropertyDefinition))) return 11;
   if (ent->IsKind(STANDARD_TYPE(StepShape_ShapeRepresentation))) return 12;
   if (ent->IsKind(STANDARD_TYPE(StepBasic_SecurityClassification))) return 13;
-  
+  if (ent->IsKind(STANDARD_TYPE(StepAP214_AppliedSecurityClassificationAssignment))) return 14;
+  if (ent->IsKind(STANDARD_TYPE(StepBasic_Approval))) return 15;
   return 0;
 }
 
@@ -42,4 +60,12 @@ Handle(StepAP214_AppliedOrganizationAssignment) StepAP214_PersonAndOrganizationI
   return GetCasted(StepAP214_AppliedOrganizationAssignment,Value());
 }
 
+Handle(StepAP214_AppliedSecurityClassificationAssignment) StepAP214_PersonAndOrganizationItem::AppliedSecurityClassificationAssignment() const
+{
+  return GetCasted(StepAP214_AppliedSecurityClassificationAssignment,Value());
+}
 
+Handle(StepBasic_Approval) StepAP214_PersonAndOrganizationItem::Approval() const
+{
+  return GetCasted(StepBasic_Approval,Value());
+}

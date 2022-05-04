@@ -11,7 +11,12 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepData_SelectNamed.ixx>
+
+#include <Standard_Type.hxx>
+#include <StepData_Field.hxx>
+#include <StepData_SelectNamed.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepData_SelectNamed,StepData_SelectMember)
 
 //  Definitions reprises de Field :
 #define KindInteger 1

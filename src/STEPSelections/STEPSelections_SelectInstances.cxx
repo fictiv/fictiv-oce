@@ -14,24 +14,32 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <STEPSelections_SelectInstances.ixx>
+
+#include <Interface_EntityIterator.hxx>
+#include <Interface_Graph.hxx>
+#include <Interface_HGraph.hxx>
 #include <Interface_Macros.hxx>
-#include <StepShape_ShapeDefinitionRepresentation.hxx>
-#include <StepShape_ContextDependentShapeRepresentation.hxx>
-#include <StepShape_ShapeRepresentation.hxx>
+#include <Standard_Transient.hxx>
+#include <Standard_Type.hxx>
+#include <STEPConstruct_Assembly.hxx>
+#include <StepRepr_MappedItem.hxx>
 #include <StepRepr_RepresentationItem.hxx>
-#include <StepShape_FacetedBrep.hxx>
+#include <StepRepr_ShapeRepresentationRelationship.hxx>
+#include <STEPSelections_SelectInstances.hxx>
 #include <StepShape_BrepWithVoids.hxx>
-#include <StepShape_ManifoldSolidBrep.hxx>
-#include <StepShape_ShellBasedSurfaceModel.hxx>
+#include <StepShape_ContextDependentShapeRepresentation.hxx>
+#include <StepShape_FaceSurface.hxx>
+#include <StepShape_FacetedBrep.hxx>
 #include <StepShape_FacetedBrepAndBrepWithVoids.hxx>
 #include <StepShape_GeometricSet.hxx>
-#include <StepShape_FaceSurface.hxx>
-#include <StepRepr_MappedItem.hxx>
-#include <STEPConstruct_Assembly.hxx>
-#include <StepRepr_ShapeRepresentationRelationship.hxx>
+#include <StepShape_ManifoldSolidBrep.hxx>
+#include <StepShape_ShapeDefinitionRepresentation.hxx>
+#include <StepShape_ShapeRepresentation.hxx>
+#include <StepShape_ShellBasedSurfaceModel.hxx>
+#include <TCollection_AsciiString.hxx>
 #include <TColStd_IndexedMapOfTransient.hxx>
-#include <Interface_HGraph.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(STEPSelections_SelectInstances,IFSelect_SelectExplore)
 
 static Handle(Interface_HGraph) myGraph;
 static Interface_EntityIterator myEntities;
@@ -94,11 +102,11 @@ static void AddInstances(const Handle(Standard_Transient)& start,
 
   if (start->IsKind(STANDARD_TYPE(StepShape_ContextDependentShapeRepresentation))) {
     DeclareAndCast(StepShape_ContextDependentShapeRepresentation,CDSR,start);
-    DeclareAndCast(StepRepr_RepresentationRelationship,SRR,CDSR->RepresentationRelation());
+    Handle(StepRepr_RepresentationRelationship) SRR = CDSR->RepresentationRelation();
     if ( SRR.IsNull() ) return ;
     
     Handle(StepRepr_Representation) rep;
-    Standard_Boolean SRRReversed = STEPConstruct_Assembly::CheckSRRReversesNAUO ( graph.Model(), CDSR );
+    Standard_Boolean SRRReversed = STEPConstruct_Assembly::CheckSRRReversesNAUO ( graph, CDSR );
     if(SRRReversed)
       rep = SRR->Rep2();
     else

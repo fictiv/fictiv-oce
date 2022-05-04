@@ -15,13 +15,16 @@
 
 // Generator:	ExpToCas (EXPRESS -> CASCADE/XSTEP Translator) V1.2
 
-#include <StepElement_CurveElementEndReleasePacket.ixx>
+#include <Standard_Type.hxx>
+#include <StepElement_CurveElementEndReleasePacket.hxx>
+#include <StepElement_CurveElementFreedom.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepElement_CurveElementEndReleasePacket,Standard_Transient)
 
 //=======================================================================
 //function : StepElement_CurveElementEndReleasePacket
 //purpose  : 
 //=======================================================================
-
 StepElement_CurveElementEndReleasePacket::StepElement_CurveElementEndReleasePacket ()
 {
 }

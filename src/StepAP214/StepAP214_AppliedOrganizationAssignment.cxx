@@ -11,18 +11,16 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepAP214_AppliedOrganizationAssignment.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepAP214_AppliedOrganizationAssignment.hxx>
+#include <StepAP214_OrganizationItem.hxx>
+#include <StepBasic_Organization.hxx>
+#include <StepBasic_OrganizationRole.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepAP214_AppliedOrganizationAssignment,StepBasic_OrganizationAssignment)
 
 StepAP214_AppliedOrganizationAssignment::StepAP214_AppliedOrganizationAssignment ()  {}
-
-void StepAP214_AppliedOrganizationAssignment::Init(
-	const Handle(StepBasic_Organization)& aAssignedOrganization,
-	const Handle(StepBasic_OrganizationRole)& aRole)
-{
-
-	StepBasic_OrganizationAssignment::Init(aAssignedOrganization, aRole);
-}
 
 void StepAP214_AppliedOrganizationAssignment::Init(
 	const Handle(StepBasic_Organization)& aAssignedOrganization,

@@ -11,119 +11,115 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepAP209_Construct.ixx>
 
+#include <HeaderSection_FileDescription.hxx>
+#include <HeaderSection_FileName.hxx>
+#include <HeaderSection_FileSchema.hxx>
 #include <Interface_EntityIterator.hxx>
 #include <Interface_HArray1OfHAsciiString.hxx>
+#include <OSD_Process.hxx>
+#include <Quantity_Date.hxx>
+#include <StepAP203_CcDesignApproval.hxx>
+#include <StepAP203_CcDesignDateAndTimeAssignment.hxx>
+#include <StepAP203_CcDesignPersonAndOrganizationAssignment.hxx>
+#include <StepAP203_CcDesignSecurityClassification.hxx>
+#include <StepAP203_HArray1OfApprovedItem.hxx>
+#include <StepAP203_HArray1OfClassifiedItem.hxx>
+#include <StepAP203_HArray1OfDateTimeItem.hxx>
+#include <StepAP203_HArray1OfPersonOrganizationItem.hxx>
+#include <StepAP209_Construct.hxx>
+#include <StepAP214_AppliedApprovalAssignment.hxx>
+#include <StepAP214_AppliedDateAndTimeAssignment.hxx>
+#include <StepAP214_AppliedPersonAndOrganizationAssignment.hxx>
+#include <StepAP214_AppliedSecurityClassificationAssignment.hxx>
+#include <StepAP214_ApprovalItem.hxx>
+#include <StepAP214_DateAndTimeItem.hxx>
+#include <StepAP214_HArray1OfApprovalItem.hxx>
+#include <StepAP214_HArray1OfDateAndTimeItem.hxx>
+#include <StepAP214_HArray1OfPersonAndOrganizationItem.hxx>
+#include <StepAP214_HArray1OfSecurityClassificationItem.hxx>
+#include <StepAP214_PersonAndOrganizationItem.hxx>
+#include <StepAP214_SecurityClassificationItem.hxx>
+#include <StepBasic_ApplicationContext.hxx>
+#include <StepBasic_ApplicationProtocolDefinition.hxx>
+#include <StepBasic_Approval.hxx>
+#include <StepBasic_ApprovalDateTime.hxx>
+#include <StepBasic_ApprovalPersonOrganization.hxx>
+#include <StepBasic_ApprovalRole.hxx>
+#include <StepBasic_ApprovalStatus.hxx>
+#include <StepBasic_CalendarDate.hxx>
+#include <StepBasic_CoordinatedUniversalTimeOffset.hxx>
+#include <StepBasic_DateAndTime.hxx>
+#include <StepBasic_DateTimeRole.hxx>
+#include <StepBasic_DateTimeSelect.hxx>
+#include <StepBasic_DesignContext.hxx>
+#include <StepBasic_DimensionalExponents.hxx>
+#include <StepBasic_HArray1OfNamedUnit.hxx>
+#include <StepBasic_HArray1OfProduct.hxx>
+#include <StepBasic_HArray1OfProductContext.hxx>
+#include <StepBasic_HArray1OfUncertaintyMeasureWithUnit.hxx>
+#include <StepBasic_LocalTime.hxx>
+#include <StepBasic_MechanicalContext.hxx>
+#include <StepBasic_Organization.hxx>
+#include <StepBasic_Person.hxx>
+#include <StepBasic_PersonAndOrganization.hxx>
+#include <StepBasic_PersonAndOrganizationRole.hxx>
+#include <StepBasic_PersonOrganizationSelect.hxx>
+#include <StepBasic_Product.hxx>
+#include <StepBasic_ProductCategory.hxx>
+#include <StepBasic_ProductCategoryRelationship.hxx>
+#include <StepBasic_ProductContext.hxx>
+#include <StepBasic_ProductDefinition.hxx>
+#include <StepBasic_ProductDefinitionContext.hxx>
+#include <StepBasic_ProductDefinitionFormation.hxx>
+#include <StepBasic_ProductDefinitionFormationRelationship.hxx>
+#include <StepBasic_ProductRelatedProductCategory.hxx>
+#include <StepBasic_SecurityClassification.hxx>
+#include <StepBasic_SecurityClassificationLevel.hxx>
+#include <StepBasic_SiUnitAndMassUnit.hxx>
+#include <StepBasic_SiUnitAndThermodynamicTemperatureUnit.hxx>
+#include <StepBasic_SiUnitAndTimeUnit.hxx>
+#include <StepData_StepModel.hxx>
+#include <StepElement_AnalysisItemWithinRepresentation.hxx>
+#include <StepElement_ElementMaterial.hxx>
+#include <StepFEA_CoordinateSystemType.hxx>
+#include <StepFEA_Curve3dElementProperty.hxx>
+#include <StepFEA_Curve3dElementRepresentation.hxx>
+#include <StepFEA_CurveElementIntervalConstant.hxx>
+#include <StepFEA_ElementGeometricRelationship.hxx>
+#include <StepFEA_ElementRepresentation.hxx>
+#include <StepFEA_FeaAxis2Placement3d.hxx>
+#include <StepFEA_FeaModel.hxx>
+#include <StepFEA_FeaModel3d.hxx>
+#include <StepFEA_FeaModelDefinition.hxx>
+#include <StepFEA_HArray1OfCurveElementInterval.hxx>
+#include <StepFEA_Surface3dElementRepresentation.hxx>
+#include <StepFEA_Volume3dElementRepresentation.hxx>
+#include <StepGeom_CartesianPoint.hxx>
+#include <StepGeom_Direction.hxx>
+#include <StepGeom_GeometricRepresentationContextAndGlobalUnitAssignedContext.hxx>
+#include <StepGeom_GeomRepContextAndGlobUnitAssCtxAndGlobUncertaintyAssCtx.hxx>
+#include <StepRepr_GlobalUncertaintyAssignedContext.hxx>
+#include <StepRepr_GlobalUnitAssignedContext.hxx>
+#include <StepRepr_HArray1OfRepresentationItem.hxx>
+#include <StepRepr_ProductDefinitionShape.hxx>
+#include <StepRepr_PropertyDefinitionRepresentation.hxx>
+#include <StepRepr_RepresentationItem.hxx>
+#include <StepRepr_ShapeRepresentationRelationship.hxx>
+#include <StepRepr_StructuralResponseProperty.hxx>
+#include <StepRepr_StructuralResponsePropertyDefinitionRepresentation.hxx>
+#include <StepShape_ShapeDefinitionRepresentation.hxx>
+#include <StepShape_ShapeRepresentation.hxx>
 #include <TCollection_HAsciiString.hxx>
 #include <TColStd_HArray1OfAsciiString.hxx>
 #include <TColStd_HArray1OfReal.hxx>
-#include <OSD_Process.hxx>
-#include <Quantity_Date.hxx>
-
-#include <HeaderSection_FileName.hxx>
-#include <HeaderSection_FileSchema.hxx>
-#include <HeaderSection_FileDescription.hxx>
-
-#include <StepBasic_ProductDefinitionFormation.hxx>
-#include <StepBasic_ProductDefinitionFormationRelationship.hxx>
-#include <StepBasic_HArray1OfProductContext.hxx>
-#include <StepBasic_ProductDefinitionContext.hxx>
-#include <StepBasic_HArray1OfNamedUnit.hxx>
-#include <StepBasic_HArray1OfUncertaintyMeasureWithUnit.hxx>
-#include <StepBasic_SiUnitAndTimeUnit.hxx>
-#include <StepBasic_SiUnitAndMassUnit.hxx>
-#include <StepBasic_SiUnitAndThermodynamicTemperatureUnit.hxx>
-#include <StepBasic_DimensionalExponents.hxx>
-#include <StepBasic_ApprovalStatus.hxx>
-#include <StepBasic_Approval.hxx>
-#include <StepBasic_SecurityClassificationLevel.hxx>
-#include <StepBasic_SecurityClassification.hxx>
-#include <StepBasic_CalendarDate.hxx>
-#include <StepBasic_CoordinatedUniversalTimeOffset.hxx>
-#include <StepBasic_LocalTime.hxx>
-#include <StepBasic_DateAndTime.hxx>
-#include <StepBasic_DateTimeRole.hxx>
-#include <StepBasic_ApprovalDateTime.hxx>
-#include <StepBasic_DateTimeSelect.hxx>
-#include <StepBasic_Person.hxx>
-#include <StepBasic_Organization.hxx>
-#include <StepBasic_PersonAndOrganization.hxx>
-#include <StepBasic_PersonAndOrganizationRole.hxx>
-#include <StepBasic_ApprovalRole.hxx>
-#include <StepBasic_ApprovalPersonOrganization.hxx>
-#include <StepBasic_PersonOrganizationSelect.hxx>
-#include <StepBasic_HArray1OfProduct.hxx>
-#include <StepBasic_ProductRelatedProductCategory.hxx>
-#include <StepBasic_ProductCategory.hxx>
-#include <StepBasic_ProductCategoryRelationship.hxx>
-#include <StepBasic_MechanicalContext.hxx>
-#include <StepBasic_DesignContext.hxx>
-#include <StepBasic_ApplicationProtocolDefinition.hxx>
-
-#include <StepRepr_PropertyDefinitionRepresentation.hxx>
-#include <StepRepr_StructuralResponseProperty.hxx>
-#include <StepRepr_StructuralResponsePropertyDefinitionRepresentation.hxx>
-#include <StepRepr_RepresentationItem.hxx>
-#include <StepRepr_HArray1OfRepresentationItem.hxx>
-#include <StepRepr_ShapeRepresentationRelationship.hxx>
-#include <StepRepr_GlobalUncertaintyAssignedContext.hxx>
-#include <StepRepr_GlobalUnitAssignedContext.hxx>
-
-#include <StepFEA_Curve3dElementRepresentation.hxx>
-#include <StepFEA_Surface3dElementRepresentation.hxx>
-#include <StepFEA_Volume3dElementRepresentation.hxx>
-#include <StepFEA_FeaModelDefinition.hxx>
-#include <StepFEA_HArray1OfCurveElementInterval.hxx>
-#include <StepFEA_CurveElementIntervalConstant.hxx>
-#include <StepFEA_Curve3dElementProperty.hxx>
-#include <StepFEA_ElementGeometricRelationship.hxx>
-#include <StepFEA_FeaModel3d.hxx>
-#include <StepFEA_FeaAxis2Placement3d.hxx>
-#include <StepFEA_CoordinateSystemType.hxx>
-
-#include <StepShape_ShapeDefinitionRepresentation.hxx>
-
-#include <StepData_StepModel.hxx>
-
-#include <StepElement_AnalysisItemWithinRepresentation.hxx>
-
-#include <StepGeom_GeomRepContextAndGlobUnitAssCtxAndGlobUncertaintyAssCtx.hxx>
-#include <StepGeom_GeometricRepresentationContextAndGlobalUnitAssignedContext.hxx>
-#include <StepGeom_CartesianPoint.hxx>
-#include <StepGeom_Direction.hxx>
-
-#include <StepAP203_CcDesignApproval.hxx>
-#include <StepAP203_CcDesignPersonAndOrganizationAssignment.hxx>
-#include <StepAP203_CcDesignDateAndTimeAssignment.hxx>
-#include <StepAP203_CcDesignSecurityClassification.hxx>
-#include <StepAP203_HArray1OfApprovedItem.hxx>
-#include <StepAP203_HArray1OfPersonOrganizationItem.hxx>
-#include <StepAP203_HArray1OfDateTimeItem.hxx>
-#include <StepAP203_HArray1OfClassifiedItem.hxx>
-
-#include <StepAP214_AppliedApprovalAssignment.hxx>
-#include <StepAP214_AppliedPersonAndOrganizationAssignment.hxx>
-#include <StepAP214_AppliedDateAndTimeAssignment.hxx>
-#include <StepAP214_AppliedSecurityClassificationAssignment.hxx>
-#include <StepAP214_HArray1OfApprovalItem.hxx>
-#include <StepAP214_ApprovalItem.hxx>
-#include <StepAP214_HArray1OfPersonAndOrganizationItem.hxx>
-#include <StepAP214_PersonAndOrganizationItem.hxx>
-#include <StepAP214_HArray1OfDateAndTimeItem.hxx>
-#include <StepAP214_DateAndTimeItem.hxx>
-#include <StepAP214_HArray1OfSecurityClassificationItem.hxx>
-#include <StepAP214_SecurityClassificationItem.hxx>
-#include <StepAP214_ApprovalItem.hxx>
+#include <XSControl_WorkSession.hxx>
 
 //#include <.hxx>
-
-
 //=======================================================================
 //function : StepAP209_Construct
 //purpose  : 
 //=======================================================================
-
 StepAP209_Construct::StepAP209_Construct () 
 {
 }
@@ -695,8 +691,7 @@ Standard_Boolean StepAP209_Construct::CreateAnalysStructure (const Handle(StepBa
   Handle(StepData_StepModel) smodel = Handle(StepData_StepModel)::DownCast(Model());
 
   // replace existing contexts for using AP209
-  Handle(StepBasic_ProductContext) OldProdCtx = 
-    Handle(StepBasic_ProductContext)::DownCast(Prod->FrameOfReferenceValue(1));
+  Handle(StepBasic_ProductContext) OldProdCtx = Prod->FrameOfReferenceValue(1);
   if(!OldProdCtx.IsNull()) {
     Handle(StepBasic_ProductContext) ProdCtx = new StepBasic_ProductContext;
     ProdCtx->Init(OldProdCtx->Name(),
@@ -708,8 +703,7 @@ Standard_Boolean StepAP209_Construct::CreateAnalysStructure (const Handle(StepBa
     HAPC->SetValue(1,ProdCtx);
     Prod->SetFrameOfReference(HAPC);
   }
-  Handle(StepBasic_ProductDefinitionContext) OldPDCtx =
-    Handle(StepBasic_ProductDefinitionContext)::DownCast(PD->FrameOfReference());
+  Handle(StepBasic_ProductDefinitionContext) OldPDCtx = PD->FrameOfReference();
   if(!OldPDCtx.IsNull()) {
     Handle(StepBasic_ProductDefinitionContext) PDCtx = new StepBasic_ProductDefinitionContext;
     PDCtx->Init(OldPDCtx->Name(),
@@ -815,14 +809,14 @@ Standard_Boolean StepAP209_Construct::CreateFeaStructure (const Handle(StepBasic
 {
   if(Prod.IsNull()) {
 #ifdef OCCT_DEBUG
-    cout<<"Prod.IsNull()"<<endl;
+    std::cout<<"Prod.IsNull()"<<std::endl;
 #endif
     return Standard_False;
   }
   Handle(StepShape_ShapeRepresentation) AnaSR = IdealShape(Prod);
   if(AnaSR.IsNull()) {
 #ifdef OCCT_DEBUG
-    cout<<"AnaSR.IsNull()"<<endl;
+    std::cout<<"AnaSR.IsNull()"<<std::endl;
 #endif
     return Standard_False;
   }
@@ -887,37 +881,21 @@ Standard_Boolean StepAP209_Construct::CreateFeaStructure (const Handle(StepBasic
   for(Standard_Integer i=1; i<=OldHANU->Length(); i++)
     NewHANU->SetValue(i,OldHANU->Value(i));
   // create SiUnitAndTimeUnit
-  Handle(StepBasic_DimensionalExponents) DimExpT = new StepBasic_DimensionalExponents;
-  DimExpT->Init(0.,0.,1.,0.,0.,0.,0.);
-  smodel->AddWithRefs(DimExpT);
-  smodel->SetIdentLabel(DimExpT, smodel->Number(DimExpT));
   Handle(StepBasic_SiUnitAndTimeUnit) SUTU = new StepBasic_SiUnitAndTimeUnit;
-  SUTU->Init(DimExpT);
-  SUTU->SetName(StepBasic_sunSecond);
+  SUTU->Init(Standard_False,StepBasic_spExa,StepBasic_sunSecond);
   smodel->AddWithRefs(SUTU);
   smodel->SetIdentLabel(SUTU, smodel->Number(SUTU));
   NewHANU->SetValue(OldHANU->Length()+1,SUTU);
   //create SiUnitAndMassUnit
-  Handle(StepBasic_DimensionalExponents) DimExpM = new StepBasic_DimensionalExponents;
-  DimExpM->Init(0.,1.,0.,0.,0.,0.,0.);
-  smodel->AddWithRefs(DimExpM);
-  smodel->SetIdentLabel(DimExpM, smodel->Number(DimExpM));
   Handle(StepBasic_SiUnitAndMassUnit) SUMU = new StepBasic_SiUnitAndMassUnit;
-  SUMU->Init(DimExpM);
-  SUMU->SetName(StepBasic_sunGram);
-  SUMU->SetPrefix(StepBasic_spKilo);
+  SUMU->Init(Standard_True,StepBasic_spKilo,StepBasic_sunGram);
   smodel->AddWithRefs(SUMU);
   smodel->SetIdentLabel(SUMU, smodel->Number(SUMU));
   NewHANU->SetValue(OldHANU->Length()+2,SUMU);
   // create SiUnitAndThermodynamicTemperatureUnit
-  Handle(StepBasic_DimensionalExponents) DimExpTT = new StepBasic_DimensionalExponents;
-  DimExpTT->Init(0.,0.,0.,0.,1.,0.,0.);
-  smodel->AddWithRefs(DimExpTT);
-  smodel->SetIdentLabel(DimExpTT, smodel->Number(DimExpTT));
   Handle(StepBasic_SiUnitAndThermodynamicTemperatureUnit) SUTTU =
     new StepBasic_SiUnitAndThermodynamicTemperatureUnit;
-  SUTTU->Init(DimExpTT);
-  SUTTU->SetName(StepBasic_sunDegreeCelsius);
+  SUTTU->Init(Standard_False,StepBasic_spExa,StepBasic_sunDegreeCelsius);
   smodel->AddWithRefs(SUTTU);
   smodel->SetIdentLabel(SUTTU, smodel->Number(SUTTU));
   NewHANU->SetValue(OldHANU->Length()+3,SUTTU);
@@ -1328,8 +1306,7 @@ Handle(StepData_StepModel) StepAP209_Construct::CreateAP203Structure() const
 
   // replacing contexts:
   Handle(StepBasic_ApplicationContext) ApplCtx;
-  Handle(StepBasic_ProductContext) ProdCtx = 
-    Handle(StepBasic_ProductContext)::DownCast(Prod->FrameOfReferenceValue(1));
+  Handle(StepBasic_ProductContext) ProdCtx = Prod->FrameOfReferenceValue(1);
   if(!ProdCtx.IsNull()) {
     Handle(StepBasic_MechanicalContext) MechCtx = new StepBasic_MechanicalContext;
     MechCtx->Init(ProdCtx->Name(), ProdCtx->FrameOfReference(),
@@ -1340,8 +1317,7 @@ Handle(StepData_StepModel) StepAP209_Construct::CreateAP203Structure() const
     Prod->SetFrameOfReference(HAPC);
     ApplCtx = MechCtx->FrameOfReference();
   }
-  Handle(StepBasic_ProductDefinitionContext) PDCtx = 
-    Handle(StepBasic_ProductDefinitionContext)::DownCast(PD->FrameOfReference());
+  Handle(StepBasic_ProductDefinitionContext) PDCtx = PD->FrameOfReference();
   if(!PDCtx.IsNull()) {
     Handle(StepBasic_DesignContext) DesCtx = new StepBasic_DesignContext;
     DesCtx->Init(PDCtx->Name(), PDCtx->FrameOfReference(),

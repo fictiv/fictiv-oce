@@ -11,8 +11,12 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepVisual_Invisibility.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepVisual_Invisibility.hxx>
+#include <StepVisual_InvisibleItem.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepVisual_Invisibility,Standard_Transient)
 
 StepVisual_Invisibility::StepVisual_Invisibility ()  {}
 

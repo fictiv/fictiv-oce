@@ -15,13 +15,15 @@
 
 // Generator:	ExpToCas (EXPRESS -> CASCADE/XSTEP Translator) V1.2
 
-#include <StepElement_SurfaceSectionField.ixx>
+#include <Standard_Type.hxx>
+#include <StepElement_SurfaceSectionField.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepElement_SurfaceSectionField,Standard_Transient)
 
 //=======================================================================
 //function : StepElement_SurfaceSectionField
 //purpose  : 
 //=======================================================================
-
 StepElement_SurfaceSectionField::StepElement_SurfaceSectionField ()
 {
 }

@@ -11,34 +11,38 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepSelect_WorkLibrary.ixx>
 
-#include <sys/stat.h>
-#include <errno.h>
-
-#include <StepData_Protocol.hxx>
-#include <StepData_StepModel.hxx>
-#include <StepFile_Read.hxx>
-#include <StepData_StepWriter.hxx>
-#include <Interface_CheckIterator.hxx>
-
-#include <StepSelect_FileModifier.hxx>
-
-#include <StepData_UndefinedEntity.hxx>
-#include <StepData_StepDumper.hxx>
-
-#include <TCollection_HAsciiString.hxx>
-#include <TColStd_HSequenceOfInteger.hxx>
+#include <IFSelect_ContextWrite.hxx>
 #include <IFSelect_GeneralModifier.hxx>
+#include <Interface_Check.hxx>
+#include <Interface_CheckIterator.hxx>
+#include <Interface_CopyTool.hxx>
+#include <Interface_EntityIterator.hxx>
+#include <Interface_InterfaceModel.hxx>
+#include <Interface_Macros.hxx>
 #include <Interface_ParamType.hxx>
+#include <Interface_Protocol.hxx>
 #include <Interface_ReportEntity.hxx>
 #include <Interface_UndefinedContent.hxx>
-
 #include <Message.hxx>
 #include <Message_Messenger.hxx>
-#include <Interface_Macros.hxx>
-#include <Interface_Check.hxx>
 #include <OSD_OpenFile.hxx>
+#include <Standard_Transient.hxx>
+#include <Standard_Type.hxx>
+#include <StepData_Protocol.hxx>
+#include <StepData_StepDumper.hxx>
+#include <StepData_StepModel.hxx>
+#include <StepData_StepWriter.hxx>
+#include <StepData_UndefinedEntity.hxx>
+#include <StepFile_Read.hxx>
+#include <StepSelect_FileModifier.hxx>
+#include <StepSelect_WorkLibrary.hxx>
+#include <TCollection_HAsciiString.hxx>
+#include <TColStd_HSequenceOfInteger.hxx>
+
+#include <errno.h>
+#include <sys/stat.h>
+IMPLEMENT_STANDARD_RTTIEXT(StepSelect_WorkLibrary,IFSelect_WorkLibrary)
 
 StepSelect_WorkLibrary::StepSelect_WorkLibrary
   (const Standard_Boolean copymode)
@@ -68,9 +72,21 @@ Standard_Integer  StepSelect_WorkLibrary::ReadFile
   if (stepro.IsNull()) return 1;
   Handle(StepData_StepModel) stepmodel  = new StepData_StepModel;
   model  = stepmodel;
-  StepFile_ReadTrace (0);
-  char *pName=(char *)name;
-  status = StepFile_Read (pName,stepmodel,stepro);
+  status = StepFile_Read(name, 0, stepmodel, stepro);
+  return status;
+}
+
+Standard_Integer  StepSelect_WorkLibrary::ReadStream (const Standard_CString theName,
+                                                      std::istream& theIStream,
+                                                      Handle(Interface_InterfaceModel)& model,
+                                                      const Handle(Interface_Protocol)& protocol) const
+{
+  long status = 1;
+  DeclareAndCast(StepData_Protocol, stepro, protocol);
+  if (stepro.IsNull()) return 1;
+  Handle(StepData_StepModel) stepmodel = new StepData_StepModel;
+  model = stepmodel;
+  status = StepFile_Read(theName, &theIStream, stepmodel, stepro);
   return status;
 }
 
@@ -79,17 +95,17 @@ Standard_Boolean  StepSelect_WorkLibrary::WriteFile
   (IFSelect_ContextWrite& ctx) const
 {
 //  Preparation
-  Handle(Message_Messenger) sout = Message::DefaultMessenger();
+  Message_Messenger::StreamBuffer sout = Message::SendInfo();
   DeclareAndCast(StepData_StepModel,stepmodel,ctx.Model());
   DeclareAndCast(StepData_Protocol,stepro,ctx.Protocol());
   if (stepmodel.IsNull() || stepro.IsNull()) return Standard_False;
 
-  ofstream fout;
-  OSD_OpenStream(fout,ctx.FileName(),ios::out|ios::trunc);
+  std::ofstream fout;
+  OSD_OpenStream(fout,ctx.FileName(),std::ios::out|std::ios::trunc);
 
-  if (!fout || !fout.rdbuf()->is_open()) {
+  if (!fout || !fout.is_open()) {
     ctx.CCheck(0)->AddFail("Step File could not be created");
-    sout<<" Step File could not be created : " << ctx.FileName() << endl; return 0;
+    sout<<" Step File could not be created : " << ctx.FileName() << std::endl; return 0;
   }
   sout << " Step File Name : "<<ctx.FileName();
   StepData_StepWriter SW(stepmodel);
@@ -105,7 +121,7 @@ Standard_Boolean  StepSelect_WorkLibrary::WriteFile
     sout << " .. FileMod." << numod << filemod->Label();
     if (ctx.IsForAll()) sout << " (all model)";
     else  sout << " (" << ctx.NbEntities() << " entities)";
-//    sout << flush;
+//    sout << std::flush;
   }
 
 //  Envoi
@@ -115,13 +131,13 @@ Standard_Boolean  StepSelect_WorkLibrary::WriteFile
     ctx.CCheck(chl.Number())->GetMessages(chl.Value());
   sout<<" Write ";
   Standard_Boolean isGood = SW.Print(fout);                 
-  sout<<" Done"<<endl;
+  sout<<" Done"<<std::endl;
       
   errno = 0;
   fout.close();
   isGood = fout.good() && isGood && !errno;
   if(errno)
-    sout << strerror(errno) << endl;
+    sout << strerror(errno) << std::endl;
   return isGood;  
 }
 
@@ -142,22 +158,22 @@ void  StepSelect_WorkLibrary::DumpEntity
   (const Handle(Interface_InterfaceModel)& model,
    const Handle(Interface_Protocol)& protocol,
    const Handle(Standard_Transient)& entity,
-   const Handle(Message_Messenger)& S, const Standard_Integer level) const
+   Standard_OStream& S, const Standard_Integer level) const
 {
   Standard_Integer nument = model->Number(entity);
   if (nument <= 0 || nument > model->NbEntities()) return;
   Standard_Boolean iserr = model->IsRedefinedContent(nument);
   Handle(Standard_Transient) ent, con;  ent = entity;
-  S<<" --- (STEP) Entity ";  model->Print(entity,S);
+  S <<" --- (STEP) Entity ";  model->Print(entity, S);
   if (iserr) con = model->ReportEntity(nument)->Content();
-  if (entity.IsNull()) {  S<<" Null"<<endl; return;  }
+  if (entity.IsNull()) {  S <<" Null"<<std::endl; return;  }
 
 //  On attaque le dump : d abord cas de l Erreur
-  S << " Type cdl : " << entity->DynamicType()->Name() << endl;
+  S << " Type cdl : " << entity->DynamicType()->Name() << std::endl;
   if (iserr)
-    S<<" ***  NOT WELL LOADED : CONTENT FROM FILE  ***"<<endl;
+    S <<" ***  NOT WELL LOADED : CONTENT FROM FILE  ***"<<std::endl;
   else if (model->IsUnknownEntity(nument))
-    S<<" ***  UNKNOWN TYPE  ***"<<endl;
+    S <<" ***  UNKNOWN TYPE  ***"<<std::endl;
 
   StepData_StepDumper dump(GetCasted(StepData_StepModel,model),
                            GetCasted(StepData_Protocol,protocol),thelabmode);

@@ -11,7 +11,11 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepData_SelectArrReal.ixx>
+
+#include <Standard_Type.hxx>
+#include <StepData_SelectArrReal.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepData_SelectArrReal,StepData_SelectNamed)
 
 //  Definitions : cf Field
 #define myKindArrReal 8

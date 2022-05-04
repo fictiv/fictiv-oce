@@ -11,16 +11,22 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepData_StepDumper.ixx>
-#include <StepData_ReadWriteModule.hxx>
-#include <TColStd_Array1OfInteger.hxx>
-#include <Interface_GeneralModule.hxx>
-#include <Interface_EntityIterator.hxx>
-#include <TColStd_SequenceOfAsciiString.hxx>
-#include <Message_Messenger.hxx>
-#include <Message.hxx>
-#include <stdio.h>
 
+#include <Interface_EntityIterator.hxx>
+#include <Interface_GeneralModule.hxx>
+#include <Interface_InterfaceMismatch.hxx>
+#include <Message.hxx>
+#include <Message_Messenger.hxx>
+#include <Standard_Transient.hxx>
+#include <StepData_Protocol.hxx>
+#include <StepData_ReadWriteModule.hxx>
+#include <StepData_StepDumper.hxx>
+#include <StepData_StepModel.hxx>
+#include <StepData_StepWriter.hxx>
+#include <TColStd_Array1OfInteger.hxx>
+#include <TColStd_SequenceOfAsciiString.hxx>
+
+#include <stdio.h>
 StepData_StepDumper::StepData_StepDumper
   (const Handle(StepData_StepModel)& amodel,
    const Handle(StepData_Protocol)& protocol,
@@ -39,7 +45,7 @@ StepData_StepWriter&  StepData_StepDumper::StepWriter ()
 
 
 Standard_Boolean  StepData_StepDumper::Dump
-  (const Handle(Message_Messenger)& S, const Handle(Standard_Transient)& ent,
+  (Standard_OStream& S, const Handle(Standard_Transient)& ent,
    const Standard_Integer level)
 {
   Standard_Integer i, nb = themodel->NbEntities();
@@ -58,18 +64,18 @@ Standard_Boolean  StepData_StepDumper::Dump
 	TColStd_SequenceOfAsciiString listypes;
 	if (!module->ComplexType(CN,listypes))
 	  S << "(Complex Type : ask level > 0) cdl = "
-	    << ent->DynamicType()->Name() << " (...);" << endl;
+	    << ent->DynamicType()->Name() << " (...);" << std::endl;
 	else {
 	  Standard_Integer n = listypes.Length();
 	  for (i = 1; i <= n; i ++) S << listypes.Value(i) << " (...)";
-	  S << endl;
+	  S << std::endl;
 	}
       }
-      else S << module->StepType(CN)  << " (...);" << endl;
+      else S << module->StepType(CN)  << " (...);" << std::endl;
     }
     else S << "(Unrecognized Type for protocol) cdl = "
-        << ent->DynamicType()->Name() << " (...);" << endl;
-    if (nlab > 0) S << "/*   Ident in file for "<<num<<" : #"<<nlab<<"   */"<<endl;
+        << ent->DynamicType()->Name() << " (...);" << std::endl;
+    if (nlab > 0) S << "/*   Ident in file for "<<num<<" : #"<<nlab<<"   */"<<std::endl;
   }
 
   else if (level == 1) {
@@ -92,7 +98,7 @@ Standard_Boolean  StepData_StepDumper::Dump
   }
   else {
     Handle(Standard_Transient) anent;
-//    S << " --  Dumping Entity n0 " << num << "  --" << endl;
+//    S<< " --  Dumping Entity n0 " << num << "  --" << std::endl;
 //  ...  Envoi  ...
     TColStd_Array1OfInteger tab(0,nb); tab.Init(0);
     tab.SetValue(num,1);
@@ -135,57 +141,55 @@ Standard_Boolean  StepData_StepDumper::Dump
     else if (nlab >  0) nbi ++;
   }
   if (nbe > 0) {
-//    S <<" --   Displayed nums:"<<nbe<<"  with ident=num:"<<nbq<<" , distinct proper ident:"<<nbi<<"\n";
+//    S<<" --   Displayed nums:"<<nbe<<"  with ident=num:"<<nbq<<" , distinct proper ident:"<<nbi<<"\n";
     if (nbu > 0) {
-      S<<" (no ident): ";
+      S <<" (no ident): ";
       for (i = 1; i <= nb; i ++)
-	{  if (ids.Value(i) >=  0) continue;	S<<" #"<<i;      }
-      S<<endl;
+	{  if (ids.Value(i) >=  0) continue;	S <<" #"<<i;      }
+      S <<std::endl;
     }
     if (nbq > 0) {
-      S<<" (ident = num): ";
-      for (i = 1; i <= nb; i ++)  {  if (ids.Value(i) == i) S<<" #"<<i;  }
-      S<<endl;
+      S <<" (ident = num): ";
+      for (i = 1; i <= nb; i ++)  {  if (ids.Value(i) == i) S <<" #"<<i;  }
+      S <<std::endl;
     }
     if (nbi < 0) {  // on n affiche plus num:#id , on envoie un petit help
       Standard_Integer nbl = 0, nbr = 0, nbr0 = 0, nbc = 0;
       char unid[30];
-//      S<<" (proper ident):  #num	     #ident"<<endl;
-      S<<" (proper ident):  num:#ident  num:#ident  ..."<<endl;
+//      S <<" (proper ident):  #num	     #ident"<<std::endl;
+      S <<" (proper ident):  num:#ident  num:#ident  ..."<<std::endl;
       for (i = 1; i <= nb; i ++)  {
 	if (ids.Value(i) <= 0 || ids.Value(i) == i) continue;
 	sprintf (unid,"%d:#%d",i,ids.Value(i));
 	nbc = (Standard_Integer) strlen (unid);  nbr = ((80-nbc) %4) +2;
 	nbl +=  nbc;
-	if (nbl+nbr0 > 79) { nbl  = nbc;  S<<endl; }
+	if (nbl+nbr0 > 79) { nbl  = nbc;  S <<std::endl; }
 	else               { nbl += nbr0; for (; nbr0 > 0; nbr0 --) S << " "; }
-	S<<unid;
+	S <<unid;
 	nbr0 = nbr;
 
-//	if (nbl+nbc > 79) { S<<endl<<unid; nbl  = 0; }
+//	if (nbl+nbc > 79) { S<<std::endl<<unid; nbl  = 0; }
 //	else              { S<<unid;       }
 //	nbl += (nbc+nbr);
 //	nbr = ((80-nbc) % 4) +1;
 //	S<<"  "<<i<<" ->#"<<ids.Value(i);
-//	nbl ++; if (nbl > 5) {  nbl = nbr = 0;  S<<endl;  }
+//	nbl ++; if (nbl > 5) {  nbl = nbr = 0;  S<<std::endl;  }
       }
-      if (nbl > 0) S<<endl;
+      if (nbl > 0) S <<std::endl;
     }
-    if (nbi > 0) S<<"In dump, iii:#jjj means : entity rank iii has step ident #jjj"<<endl;
-//    S <<" --   Dumping data, entity "<<num<<"  level "<<level<<" :"<<endl;
+    if (nbi > 0) S <<"In dump, iii:#jjj means : entity rank iii has step ident #jjj"<<std::endl;
+//    S<<" --   Dumping data, entity "<<num<<"  level "<<level<<" :"<<std::endl;
   }
   if (level > 0) 
   {
-    Standard_SStream aStream;
-    thewriter.Print(aStream);
-    S << aStream;
+    thewriter.Print (S);
   }
   return Standard_True;
 }
 
 
 Standard_Boolean  StepData_StepDumper::Dump
-  (const Handle(Message_Messenger)& S, const Standard_Integer num,
+  (Standard_OStream& S, const Standard_Integer num,
    const Standard_Integer level)
 {
   if (num <= 0 || num > themodel->NbEntities()) return Standard_False;

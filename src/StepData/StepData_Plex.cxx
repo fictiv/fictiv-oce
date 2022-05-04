@@ -11,10 +11,18 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepData_Plex.ixx>
-#include <TCollection_AsciiString.hxx>
-#include <Interface_InterfaceMismatch.hxx>
 
+#include <Interface_Check.hxx>
+#include <Interface_EntityIterator.hxx>
+#include <Interface_InterfaceMismatch.hxx>
+#include <Standard_Type.hxx>
+#include <StepData_ECDescr.hxx>
+#include <StepData_Field.hxx>
+#include <StepData_Plex.hxx>
+#include <StepData_Simple.hxx>
+#include <TCollection_AsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepData_Plex,StepData_Described)
 
 static StepData_Field bid;
 
@@ -69,8 +77,7 @@ static StepData_Field bid;
     ent = Member(i);
     if (ent->HasField (name)) return ent->Field (name);
   }
-  Interface_InterfaceMismatch::Raise("StepData_Plex : Field");
-  return bid;  // pour faire plaisir au compilo
+  throw Interface_InterfaceMismatch("StepData_Plex : Field");
 }
 
 
@@ -82,8 +89,7 @@ static StepData_Field bid;
     ent = Member(i);
     if (ent->HasField (name)) return ent->CField (name);
   }
-  Interface_InterfaceMismatch::Raise("StepData_Plex : Field");
-  return bid;  // pour faire plaisir au compilo
+  throw Interface_InterfaceMismatch("StepData_Plex : Field");
 }
 
 

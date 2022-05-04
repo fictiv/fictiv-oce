@@ -11,30 +11,23 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepBasic_ConversionBasedUnitAndMassUnit.ixx>
-#include <StepBasic_ConversionBasedUnit.hxx>
-#include <StepBasic_MassUnit.hxx>
 
+#include <Standard_Type.hxx>
+#include <StepBasic_ConversionBasedUnit.hxx>
+#include <StepBasic_ConversionBasedUnitAndMassUnit.hxx>
+#include <StepBasic_DimensionalExponents.hxx>
+#include <StepBasic_MassUnit.hxx>
+#include <StepBasic_MeasureWithUnit.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepBasic_ConversionBasedUnitAndMassUnit,StepBasic_ConversionBasedUnit)
 
 //=======================================================================
 //function : StepBasic_ConversionBasedUnitAndMassUnit
 //purpose  : 
 //=======================================================================
-
 StepBasic_ConversionBasedUnitAndMassUnit::StepBasic_ConversionBasedUnitAndMassUnit ()
 {
-}
-
-
-//=======================================================================
-//function : Init
-//purpose  : 
-//=======================================================================
-
-void StepBasic_ConversionBasedUnitAndMassUnit::Init
-  (const Handle(StepBasic_DimensionalExponents)& aDimensions)
-{
-  StepBasic_NamedUnit::Init(aDimensions);
 }
 
 

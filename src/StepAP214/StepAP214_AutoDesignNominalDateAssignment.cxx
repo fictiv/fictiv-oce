@@ -11,18 +11,16 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepAP214_AutoDesignNominalDateAssignment.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepAP214_AutoDesignDatedItem.hxx>
+#include <StepAP214_AutoDesignNominalDateAssignment.hxx>
+#include <StepBasic_Date.hxx>
+#include <StepBasic_DateRole.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepAP214_AutoDesignNominalDateAssignment,StepBasic_DateAssignment)
 
 StepAP214_AutoDesignNominalDateAssignment::StepAP214_AutoDesignNominalDateAssignment ()  {}
-
-void StepAP214_AutoDesignNominalDateAssignment::Init(
-	const Handle(StepBasic_Date)& aAssignedDate,
-	const Handle(StepBasic_DateRole)& aRole)
-{
-
-	StepBasic_DateAssignment::Init(aAssignedDate, aRole);
-}
 
 void StepAP214_AutoDesignNominalDateAssignment::Init(
 	const Handle(StepBasic_Date)& aAssignedDate,

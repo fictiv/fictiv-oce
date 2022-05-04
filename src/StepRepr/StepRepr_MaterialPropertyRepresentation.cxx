@@ -15,13 +15,18 @@
 
 // Generator:	ExpToCas (EXPRESS -> CASCADE/XSTEP Translator) V1.2
 
-#include <StepRepr_MaterialPropertyRepresentation.ixx>
+#include <Standard_Type.hxx>
+#include <StepRepr_DataEnvironment.hxx>
+#include <StepRepr_MaterialPropertyRepresentation.hxx>
+#include <StepRepr_Representation.hxx>
+#include <StepRepr_RepresentedDefinition.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepRepr_MaterialPropertyRepresentation,StepRepr_PropertyDefinitionRepresentation)
 
 //=======================================================================
 //function : StepRepr_MaterialPropertyRepresentation
 //purpose  : 
 //=======================================================================
-
 StepRepr_MaterialPropertyRepresentation::StepRepr_MaterialPropertyRepresentation ()
 {
 }

@@ -11,8 +11,11 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepShape_FacetedBrepShapeRepresentation.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepShape_FacetedBrepShapeRepresentation.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepShape_FacetedBrepShapeRepresentation,StepShape_ShapeRepresentation)
 
 StepShape_FacetedBrepShapeRepresentation::StepShape_FacetedBrepShapeRepresentation ()  {}
 

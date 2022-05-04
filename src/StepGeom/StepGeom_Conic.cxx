@@ -11,17 +11,15 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepGeom_Conic.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepGeom_Axis2Placement.hxx>
+#include <StepGeom_Conic.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepGeom_Conic,StepGeom_Curve)
 
 StepGeom_Conic::StepGeom_Conic ()  {}
-
-void StepGeom_Conic::Init(
-	const Handle(TCollection_HAsciiString)& aName)
-{
-
-	StepRepr_RepresentationItem::Init(aName);
-}
 
 void StepGeom_Conic::Init(
 	const Handle(TCollection_HAsciiString)& aName,

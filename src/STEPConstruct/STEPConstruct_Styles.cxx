@@ -14,71 +14,77 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <STEPConstruct_Styles.ixx>
-#include <STEPConstruct.hxx>
-
-#include <TCollection_HAsciiString.hxx>
-#include <TopoDS_Iterator.hxx>
-
-#include <XSControl_TransferReader.hxx>
-#include <XSControl_TransferWriter.hxx>
-#include <Interface_Graph.hxx>
-#include <Interface_Static.hxx>
-#include <Interface_InterfaceModel.hxx>
-#include <Interface_EntityIterator.hxx>
-#include <TransferBRep_ShapeMapper.hxx>
-#include <TransferBRep.hxx>
-#include <Transfer_Binder.hxx>
 
 #include <APIHeaderSection_MakeHeader.hxx>
-#include <StepRepr_RepresentationItem.hxx>
-#include <StepRepr_RepresentationContext.hxx>
-#include <StepRepr_HArray1OfRepresentationItem.hxx>
+#include <gp_Pnt.hxx>
+#include <Interface_EntityIterator.hxx>
+#include <Interface_Graph.hxx>
+#include <Interface_InterfaceModel.hxx>
+#include <Interface_Static.hxx>
+#include <Quantity_Color.hxx>
+#include <StepBasic_MeasureValueMember.hxx>
+#include <STEPConstruct.hxx>
+#include <STEPConstruct_Styles.hxx>
+#include <StepData_StepModel.hxx>
 #include <StepGeom_GeometricRepresentationItem.hxx>
+#include <StepRepr_HArray1OfRepresentationItem.hxx>
+#include <StepRepr_ItemDefinedTransformation.hxx>
+#include <StepRepr_ProductDefinitionShape.hxx>
+#include <StepRepr_Representation.hxx>
+#include <StepRepr_RepresentationContext.hxx>
+#include <StepRepr_RepresentationItem.hxx>
+#include <StepRepr_RepresentationRelationshipWithTransformation.hxx>
+#include <StepRepr_ShapeRepresentationRelationship.hxx>
+#include <StepRepr_Transformation.hxx>
+#include <StepShape_ContextDependentShapeRepresentation.hxx>
+#include <StepShape_ShapeDefinitionRepresentation.hxx>
 #include <StepShape_ShapeRepresentation.hxx>
+#include <StepVisual_Colour.hxx>
 #include <StepVisual_ColourRgb.hxx>
+#include <StepVisual_CurveStyle.hxx>
+#include <StepVisual_DraughtingModel.hxx>
+#include <StepVisual_DraughtingPreDefinedColour.hxx>
+#include <StepVisual_DraughtingPreDefinedCurveFont.hxx>
+#include <StepVisual_FillAreaStyle.hxx>
 #include <StepVisual_FillAreaStyleColour.hxx>
 #include <StepVisual_FillStyleSelect.hxx>
 #include <StepVisual_HArray1OfFillStyleSelect.hxx>
-#include <StepVisual_FillAreaStyle.hxx>
-#include <StepVisual_SurfaceStyleFillArea.hxx>
-#include <StepVisual_SurfaceStyleElementSelect.hxx>
-#include <StepVisual_HArray1OfSurfaceStyleElementSelect.hxx>
-#include <StepVisual_SurfaceSideStyle.hxx>
-#include <StepVisual_SurfaceStyleUsage.hxx>
-#include <StepVisual_PresentationStyleSelect.hxx>
-#include <StepVisual_HArray1OfPresentationStyleSelect.hxx>
-#include <StepVisual_PresentationStyleAssignment.hxx>
 #include <StepVisual_HArray1OfPresentationStyleAssignment.hxx>
-#include <StepVisual_OverRidingStyledItem.hxx>
-#include <StepVisual_StyledItem.hxx>
+#include <StepVisual_HArray1OfPresentationStyleSelect.hxx>
+#include <StepVisual_HArray1OfSurfaceStyleElementSelect.hxx>
+#include <StepVisual_Invisibility.hxx>
+#include <StepVisual_InvisibleItem.hxx>
 #include <StepVisual_MechanicalDesignGeometricPresentationRepresentation.hxx>
+#include <StepVisual_OverRidingStyledItem.hxx>
 #include <StepVisual_PreDefinedColour.hxx>
 #include <StepVisual_PreDefinedItem.hxx>
-#include <StepVisual_CurveStyle.hxx>
-#include <StepVisual_DraughtingPreDefinedCurveFont.hxx>
-#include <StepVisual_SurfaceStyleBoundary.hxx>
-#include <StepVisual_DraughtingPreDefinedColour.hxx>
-#include <StepBasic_MeasureValueMember.hxx>
-#include <StepVisual_DraughtingModel.hxx>
+#include <StepVisual_PresentationStyleAssignment.hxx>
 #include <StepVisual_PresentationStyleByContext.hxx>
-#include <StepRepr_ProductDefinitionShape.hxx>
-#include <StepShape_ShapeDefinitionRepresentation.hxx>
-#include <StepRepr_ShapeRepresentationRelationship.hxx>
-#include <StepRepr_RepresentationRelationshipWithTransformation.hxx>
-#include <StepRepr_Transformation.hxx>
-#include <StepRepr_ItemDefinedTransformation.hxx>
-#include <StepVisual_Invisibility.hxx>
+#include <StepVisual_PresentationStyleSelect.hxx>
+#include <StepVisual_StyledItem.hxx>
+#include <StepVisual_SurfaceSideStyle.hxx>
+#include <StepVisual_SurfaceStyleBoundary.hxx>
+#include <StepVisual_SurfaceStyleElementSelect.hxx>
+#include <StepVisual_SurfaceStyleFillArea.hxx>
+#include <StepVisual_SurfaceStyleRendering.hxx>
+#include <StepVisual_SurfaceStyleRenderingWithProperties.hxx>
+#include <StepVisual_RenderingPropertiesSelect.hxx>
+#include <StepVisual_SurfaceStyleTransparent.hxx>
+#include <StepVisual_SurfaceStyleUsage.hxx>
+#include <TCollection_HAsciiString.hxx>
 #include <TColStd_HSequenceOfTransient.hxx>
-#include <StepVisual_InvisibleItem.hxx>
-#include <gp_Pnt.hxx>
-
+#include <TopoDS_Shape.hxx>
+#include <Transfer_Binder.hxx>
+#include <TransferBRep.hxx>
+#include <TransferBRep_ShapeMapper.hxx>
+#include <XSControl_TransferReader.hxx>
+#include <XSControl_TransferWriter.hxx>
+#include <XSControl_WorkSession.hxx>
 
 //=======================================================================
 //function : STEPConstruct_Styles
 //purpose  : 
 //=======================================================================
-
 STEPConstruct_Styles::STEPConstruct_Styles () 
 {
 }
@@ -310,7 +316,7 @@ Handle(StepRepr_RepresentationContext) STEPConstruct_Styles::FindContext (const 
   Handle(StepShape_ShapeRepresentation) sr;
   if ( FinderProcess()->FindTypedTransient (mapper,STANDARD_TYPE(StepShape_ShapeRepresentation), sr) ) {
 #ifdef OCCT_DEBUG
-//    cout << "Context of " << Shape.TShape()->DynamicType()->Name() << ": SR found: " << sr->DynamicType()->Name() << endl;
+//    std::cout << "Context of " << Shape.TShape()->DynamicType()->Name() << ": SR found: " << sr->DynamicType()->Name() << std::endl;
 #endif
     Context = sr->ContextOfItems();
   }
@@ -318,12 +324,12 @@ Handle(StepRepr_RepresentationContext) STEPConstruct_Styles::FindContext (const 
     Handle(StepGeom_GeometricRepresentationItem) item;
     if ( FinderProcess()->FindTypedTransient (mapper,STANDARD_TYPE(StepGeom_GeometricRepresentationItem), item) ) {
 #ifdef OCCT_DEBUG
-//      cout << "Context of " << Shape.TShape()->DynamicType()->Name() << ": GeomRepItem found: " << item->DynamicType()->Name() << endl;
+//      std::cout << "Context of " << Shape.TShape()->DynamicType()->Name() << ": GeomRepItem found: " << item->DynamicType()->Name() << std::endl;
 #endif
       Interface_EntityIterator subs = Graph().Sharings(item);
       for (subs.Start(); Context.IsNull() && subs.More(); subs.Next()) {
 #ifdef OCCT_DEBUG
-//	cout << "Parsing back refs: found " << subs.Value()->DynamicType()->Name() << endl;
+//	std::cout << "Parsing back refs: found " << subs.Value()->DynamicType()->Name() << std::endl;
 #endif
 	if ( ! subs.Value()->IsKind(STANDARD_TYPE(StepShape_ShapeRepresentation)) ) continue;
 	sr = Handle(StepShape_ShapeRepresentation)::DownCast ( subs.Value() );
@@ -333,7 +339,7 @@ Handle(StepRepr_RepresentationContext) STEPConstruct_Styles::FindContext (const 
   }
 #ifdef OCCT_DEBUG
   if ( Context.IsNull() ) {
-    cout << Shape.TShape()->DynamicType()->Name() << ": Cannot find context" << endl;
+    std::cout << Shape.TShape()->DynamicType()->Name() << ": Cannot find context" << std::endl;
   }
 #endif
 
@@ -427,6 +433,8 @@ Standard_Boolean STEPConstruct_Styles::LoadInvisStyles (Handle(TColStd_HSequence
 Handle(StepVisual_PresentationStyleAssignment) STEPConstruct_Styles::MakeColorPSA (const Handle(StepRepr_RepresentationItem) &/*item*/,
 										   const Handle(StepVisual_Colour) &SurfCol, 
 										   const Handle(StepVisual_Colour) &CurveCol,
+                                                                                   const Handle(StepVisual_Colour) &RenderCol,
+                                                                                   const Standard_Real RenderTransp,
                                                                                    const Standard_Boolean isForNAUO) const
 {  
   Handle(StepVisual_PresentationStyleAssignment) PSA;
@@ -454,10 +462,29 @@ Handle(StepVisual_PresentationStyleAssignment) STEPConstruct_Styles::MakeColorPS
     StepVisual_SurfaceStyleElementSelect SES;
     SES.SetValue ( SSFA );
   
-    Handle(StepVisual_HArray1OfSurfaceStyleElementSelect) SSESs = 
-      new StepVisual_HArray1OfSurfaceStyleElementSelect ( 1, 1 );
+    Handle(StepVisual_HArray1OfSurfaceStyleElementSelect) SSESs;
+    if (RenderTransp == 0.0) {
+      SSESs = new StepVisual_HArray1OfSurfaceStyleElementSelect ( 1, 1 );
+    } else {
+        Handle(StepVisual_SurfaceStyleTransparent) SST = new StepVisual_SurfaceStyleTransparent;
+        SST->Init(RenderTransp);
+        StepVisual_RenderingPropertiesSelect RPS;
+        RPS.SetValue(SST);
+        Handle(StepVisual_HArray1OfRenderingPropertiesSelect) HARP = new
+               StepVisual_HArray1OfRenderingPropertiesSelect (1, 1);
+        HARP->SetValue(1, RPS);
+        Handle(StepVisual_SurfaceStyleRenderingWithProperties) SSRWP = new StepVisual_SurfaceStyleRenderingWithProperties;
+
+        SSRWP->Init(StepVisual_ssmNormalShading, RenderCol, HARP);
+
+        StepVisual_SurfaceStyleElementSelect SESR;
+        SESR.SetValue (SSRWP);
+
+        SSESs = new StepVisual_HArray1OfSurfaceStyleElementSelect ( 1, 2 );
+        SSESs->SetValue ( 2, SESR );
+    }
     SSESs->SetValue ( 1, SES );
-  
+
     Handle(TCollection_HAsciiString) SSSName = new TCollection_HAsciiString ( "" );
     Handle(StepVisual_SurfaceSideStyle) SSS = new StepVisual_SurfaceSideStyle;
     SSS->Init ( SSSName, SSESs );
@@ -493,7 +520,7 @@ Handle(StepVisual_PresentationStyleAssignment) STEPConstruct_Styles::MakeColorPS
   
   if ( items.Length() <1 ) {
 #ifdef OCCT_DEBUG
-    cout << "Error: no color is supplied" << endl;
+    std::cout << "Error: no color is supplied" << std::endl;
 #endif
     return PSA;
   }
@@ -531,7 +558,7 @@ Handle(StepVisual_PresentationStyleAssignment) STEPConstruct_Styles::GetColorPSA
       DownCast(myMapOfStyles.FindFromKey(Col));
   }
   else {
-    PSA = MakeColorPSA ( item, Col, Col );
+    PSA = MakeColorPSA ( item, Col, Col, Col, 0.0 );
     myMapOfStyles.Add(Col,PSA);
   }
   return PSA;
@@ -547,16 +574,19 @@ Standard_Boolean STEPConstruct_Styles::GetColors (const Handle(StepVisual_Styled
 						  Handle(StepVisual_Colour) &SurfCol,
 						  Handle(StepVisual_Colour) &BoundCol,
 						  Handle(StepVisual_Colour) &CurveCol,
+                                                  Handle(StepVisual_Colour) &RenderCol,
+                                                  Standard_Real& RenderTransp,
                                                   Standard_Boolean& IsComponent) const
 {
   SurfCol.Nullify();
   BoundCol.Nullify();
   CurveCol.Nullify();
+  RenderCol.Nullify();
     
   // parse on styles
   for(Standard_Integer j=1; j<=style->NbStyles(); j++ ) {
     Handle(StepVisual_PresentationStyleAssignment) PSA = style->StylesValue ( j );
-    if(PSA.IsNull()) continue;
+    if(PSA.IsNull() || PSA->Styles().IsNull()) continue;
     IsComponent = Standard_True;
     
     for(Standard_Integer k=1; k<=PSA->NbStyles(); k++ ) {
@@ -572,6 +602,8 @@ Standard_Boolean STEPConstruct_Styles::GetColors (const Handle(StepVisual_Styled
 	  Handle(StepVisual_SurfaceStyleFillArea) SSFA = SSES.SurfaceStyleFillArea();
 	  if ( !SSFA.IsNull() ) {
 	    Handle(StepVisual_FillAreaStyle) FAS = SSFA->FillArea();
+      if (FAS.IsNull())
+        continue;
 	    for ( Standard_Integer m=1; m <= FAS->NbFillStyles(); m++ ) {
 	      StepVisual_FillStyleSelect FSS = FAS->FillStylesValue ( m );
 	      Handle(StepVisual_FillAreaStyleColour) FASC = FSS.FillAreaStyleColour();
@@ -587,6 +619,27 @@ Standard_Boolean STEPConstruct_Styles::GetColors (const Handle(StepVisual_Styled
 	    if ( ! CS.IsNull() ) BoundCol = CS->CurveColour();
 	    continue;
 	  }
+      // try rendering color and transparency
+      Handle(StepVisual_SurfaceStyleRendering) SSR = SSES.SurfaceStyleRendering();
+      if (!SSR.IsNull()) {
+          RenderCol = SSR->SurfaceColour();
+          RenderTransp = 0.0;
+          Handle(StepVisual_SurfaceStyleRenderingWithProperties) SSRWP =
+              Handle(StepVisual_SurfaceStyleRenderingWithProperties)::DownCast(SSR);
+          if (!SSRWP.IsNull()) {
+              Handle(StepVisual_HArray1OfRenderingPropertiesSelect) HARP = SSRWP->Properties();
+              if (!HARP.IsNull())
+              {
+                  for (Standard_Integer aPropIndex = 1; aPropIndex <= HARP->Length(); ++aPropIndex) {
+                      Handle(StepVisual_SurfaceStyleTransparent) SST = HARP->Value(aPropIndex).SurfaceStyleTransparent();
+                      if (!SST.IsNull()) {
+                          RenderTransp = SST->Transparency();
+                      }
+                  }
+               }
+          }
+      }
+
 	}
 	continue;
       }
@@ -596,7 +649,7 @@ Standard_Boolean STEPConstruct_Styles::GetColors (const Handle(StepVisual_Styled
       if ( ! CS.IsNull() ) CurveCol = CS->CurveColour();
     }
   }
-  return ! SurfCol.IsNull() || ! BoundCol.IsNull() || ! CurveCol.IsNull();
+  return ! SurfCol.IsNull() || ! BoundCol.IsNull() || ! CurveCol.IsNull() || ! RenderCol.IsNull();
 }
 
 
@@ -628,7 +681,9 @@ Handle(StepVisual_Colour) STEPConstruct_Styles::EncodeColor(const Quantity_Color
   else {
     Handle(TCollection_HAsciiString) ColName = new TCollection_HAsciiString ( "" );
     Handle(StepVisual_ColourRgb) ColRGB = new StepVisual_ColourRgb;
-    ColRGB->Init ( ColName, C.Red(), C.Green(), C.Blue() );
+    NCollection_Vec3<Standard_Real> aColor_sRGB;
+    C.Values (aColor_sRGB.r(), aColor_sRGB.g(), aColor_sRGB.b(), Quantity_TOC_sRGB);
+    ColRGB->Init ( ColName, aColor_sRGB.r(), aColor_sRGB.g(), aColor_sRGB.b() );
     return ColRGB;
   }
 }
@@ -671,14 +726,18 @@ Handle(StepVisual_Colour) STEPConstruct_Styles::EncodeColor
   }
   else {
     Handle(StepVisual_ColourRgb) ColRGB;
-    gp_Pnt P(C.Red(),C.Green(),C.Blue());
+    gp_Pnt P;
+    C.Values (P.ChangeCoord().ChangeData()[0],
+              P.ChangeCoord().ChangeData()[1],
+              P.ChangeCoord().ChangeData()[2],
+              Quantity_TOC_sRGB);
     if(ColRGBs.IsBound(P)) {
       ColRGB = Handle(StepVisual_ColourRgb)::DownCast(ColRGBs.Find(P));
       if(!ColRGB.IsNull()) return ColRGB;
     }
     Handle(TCollection_HAsciiString) ColName = new TCollection_HAsciiString ( "" );
     ColRGB = new StepVisual_ColourRgb;
-    ColRGB->Init ( ColName, C.Red(), C.Green(), C.Blue() );
+    ColRGB->Init ( ColName, P.Coord (1), P.Coord (2), P.Coord (3) );
     ColRGBs.Bind(P,ColRGB);
     return ColRGB;
   }
@@ -699,10 +758,10 @@ Standard_Boolean STEPConstruct_Styles::DecodeColor (const Handle(StepVisual_Colo
       if(norm<rgb->Green()) norm = rgb->Green();
       if(norm<rgb->Blue()) norm = rgb->Blue();
       Col.SetValues(rgb->Red()/norm, rgb->Green()/norm,
-                    rgb->Blue()/norm, Quantity_TOC_RGB);
+                    rgb->Blue()/norm, Quantity_TOC_sRGB);
     }
     else
-      Col.SetValues(rgb->Red(), rgb->Green(), rgb->Blue(), Quantity_TOC_RGB);
+      Col.SetValues(rgb->Red(), rgb->Green(), rgb->Blue(), Quantity_TOC_sRGB);
     return Standard_True;
   }
   else if ( Colour->IsKind (STANDARD_TYPE(StepVisual_PreDefinedColour)) ) {
@@ -720,7 +779,7 @@ Standard_Boolean STEPConstruct_Styles::DecodeColor (const Handle(StepVisual_Colo
     else if ( name.IsEqual ( "white"   ) ) Col.SetValues ( Quantity_NOC_WHITE );
     else {
 #ifdef OCCT_DEBUG
-      cout << "Error: color name \"" << name << "\" is not recognized" << endl;
+      std::cout << "Error: color name \"" << name << "\" is not recognized" << std::endl;
 #endif
       return Standard_False;
     }

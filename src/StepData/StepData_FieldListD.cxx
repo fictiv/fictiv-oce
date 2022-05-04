@@ -11,9 +11,10 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepData_FieldListD.ixx>
-#include <Standard_OutOfRange.hxx>
 
+#include <Standard_OutOfRange.hxx>
+#include <StepData_Field.hxx>
+#include <StepData_FieldListD.hxx>
 
 StepData_FieldListD::StepData_FieldListD  (const Standard_Integer nb)
 {  if (nb > 0) thefields = new StepData_HArray1OfField (1,nb);  }
@@ -29,15 +30,12 @@ Standard_Integer  StepData_FieldListD::NbFields () const
 
 const StepData_Field&  StepData_FieldListD::Field (const Standard_Integer num) const
 {
-  if (thefields.IsNull()) Standard_OutOfRange::Raise("StepData_FieldListD::Field");
+  if (thefields.IsNull()) throw Standard_OutOfRange("StepData_FieldListD::Field");
   return thefields->Value(num);
 }
 
 StepData_Field&  StepData_FieldListD::CField (const Standard_Integer num)
 {
-  if (thefields.IsNull()) Standard_OutOfRange::Raise("StepData_FieldListD::Field");
+  if (thefields.IsNull()) throw Standard_OutOfRange("StepData_FieldListD::Field");
   return thefields->ChangeValue(num);
 }
-
-void StepData_FieldListD::Destroy () {}
-     

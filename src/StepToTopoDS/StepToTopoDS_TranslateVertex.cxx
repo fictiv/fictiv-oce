@@ -16,31 +16,31 @@
 
 //:   gka 09.04.99: S4136: eliminate BRepAPI::Precision()
 
-#include <StepToTopoDS_TranslateVertex.ixx>
-#include <StepToGeom_MakeCartesianPoint.hxx>
-#include <TopoDS.hxx>
-
-#include <TopoDS_Vertex.hxx>
 #include <BRep_Builder.hxx>
-//#include <BRepAPI.hxx>
-
-#include <StepGeom_Point.hxx>
-#include <StepGeom_CartesianPoint.hxx>
-#include <StepShape_VertexPoint.hxx>
-#include <StepShape_Vertex.hxx>
-
 #include <Geom_CartesianPoint.hxx>
 #include <Precision.hxx>
-
-// For I-DEAS-like processing (ssv; 15.11.2010)
+#include <StdFail_NotDone.hxx>
+#include <StepGeom_CartesianPoint.hxx>
+#include <StepGeom_Point.hxx>
+#include <StepShape_Vertex.hxx>
+#include <StepShape_VertexPoint.hxx>
+#include <StepToGeom.hxx>
+#include <StepToTopoDS_NMTool.hxx>
+#include <StepToTopoDS_Tool.hxx>
+#include <StepToTopoDS_TranslateVertex.hxx>
 #include <TCollection_HAsciiString.hxx>
+#include <TopoDS.hxx>
+#include <TopoDS_Shape.hxx>
+#include <TopoDS_Vertex.hxx>
 
+//#include <BRepAPI.hxx>
+// For I-DEAS-like processing (ssv; 15.11.2010)
 // ============================================================================
 // Method  : StepToTopoDS_TranslateVertex::StepToTopoDS_TranslateVertex
 // Purpose : Empty Constructor
 // ============================================================================
-
 StepToTopoDS_TranslateVertex::StepToTopoDS_TranslateVertex()
+: myError(StepToTopoDS_TranslateVertexOther)
 {
   done = Standard_False;
 }
@@ -66,6 +66,11 @@ void StepToTopoDS_TranslateVertex::Init(const Handle(StepShape_Vertex)& aVertex,
 				                                StepToTopoDS_Tool& aTool,
                                         StepToTopoDS_NMTool& NMTool)
 {
+  if (aVertex.IsNull()) {
+    myError = StepToTopoDS_TranslateVertexOther;
+    done = Standard_False;
+    return;
+  }
   if (!aTool.IsBound(aVertex)) {
 
     // [BEGIN] Proceed with non-manifold topology (ssv; 14.11.2010)
@@ -92,8 +97,7 @@ void StepToTopoDS_TranslateVertex::Init(const Handle(StepShape_Vertex)& aVertex,
     const Handle(StepShape_VertexPoint) VP = Handle(StepShape_VertexPoint)::DownCast(aVertex);
     const Handle(StepGeom_Point) P = VP->VertexGeometry();
     const Handle(StepGeom_CartesianPoint) P1 = Handle(StepGeom_CartesianPoint)::DownCast(P);
-    Handle(Geom_CartesianPoint) P2;
-    StepToGeom_MakeCartesianPoint::Convert(P1,P2);
+    Handle(Geom_CartesianPoint) P2 = StepToGeom::MakeCartesianPoint (P1);
     BRep_Builder B;
     TopoDS_Vertex V;
     B.MakeVertex(V, P2->Pnt(), Precision::Confusion()); //:S4136: preci
@@ -122,7 +126,7 @@ void StepToTopoDS_TranslateVertex::Init(const Handle(StepShape_Vertex)& aVertex,
 
 const TopoDS_Shape& StepToTopoDS_TranslateVertex::Value() const 
 {
-  StdFail_NotDone_Raise_if(!done,"");
+  StdFail_NotDone_Raise_if (!done, "StepToTopoDS_TranslateVertex::Value() - no result");
   return myResult;
 }
 

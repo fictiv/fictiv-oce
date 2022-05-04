@@ -11,8 +11,13 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepVisual_SurfaceSideStyle.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepVisual_SurfaceSideStyle.hxx>
+#include <StepVisual_SurfaceStyleElementSelect.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepVisual_SurfaceSideStyle,Standard_Transient)
 
 StepVisual_SurfaceSideStyle::StepVisual_SurfaceSideStyle ()  {}
 
@@ -53,5 +58,5 @@ StepVisual_SurfaceStyleElementSelect StepVisual_SurfaceSideStyle::StylesValue(co
 
 Standard_Integer StepVisual_SurfaceSideStyle::NbStyles () const
 {
-	return styles->Length();
+  return (styles.IsNull()) ? 0 : styles->Length();
 }

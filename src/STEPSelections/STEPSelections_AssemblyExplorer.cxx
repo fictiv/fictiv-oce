@@ -14,20 +14,27 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <STEPSelections_AssemblyExplorer.ixx>
-#include <Interface_Macros.hxx>
-#include <StepRepr_ProductDefinitionShape.hxx>
+
 #include <Interface_EntityIterator.hxx>
-#include <StepShape_ContextDependentShapeRepresentation.hxx>
-#include <StepShape_ShapeRepresentation.hxx>
+#include <Interface_Graph.hxx>
+#include <Interface_InterfaceModel.hxx>
+#include <Interface_Macros.hxx>
+#include <Standard_Transient.hxx>
+#include <StepBasic_Product.hxx>
+#include <StepBasic_ProductDefinition.hxx>
+#include <StepBasic_ProductDefinitionFormation.hxx>
 #include <StepRepr_MappedItem.hxx>
+#include <StepRepr_NextAssemblyUsageOccurrence.hxx>
+#include <StepRepr_ProductDefinitionShape.hxx>
+#include <StepRepr_PropertyDefinition.hxx>
+#include <STEPSelections_AssemblyComponent.hxx>
+#include <STEPSelections_AssemblyExplorer.hxx>
 #include <STEPSelections_AssemblyLink.hxx>
 #include <STEPSelections_HSequenceOfAssemblyLink.hxx>
-#include <StepBasic_Product.hxx>
-#include <StepBasic_ProductDefinitionFormation.hxx>
-#include <Interface_InterfaceModel.hxx>
+#include <StepShape_ContextDependentShapeRepresentation.hxx>
+#include <StepShape_ShapeDefinitionRepresentation.hxx>
+#include <StepShape_ShapeRepresentation.hxx>
 #include <TCollection_HAsciiString.hxx>
-
 
 STEPSelections_AssemblyExplorer::STEPSelections_AssemblyExplorer(const Interface_Graph &G):myGraph(G)
 {
@@ -159,7 +166,7 @@ static void PrintSubAssembly(Standard_OStream &os,
   //for ( Standard_Integer j=0; j < level; j++ ) os << "\t";
   os << "SDR: " <<Model->StringLabel(cmp->GetSDR())->ToCString()<<"\t";
   
-  os << "Product: "<<GetProductName(cmp->GetSDR())<<endl;
+  os << "Product: "<<GetProductName(cmp->GetSDR())<<std::endl;
   for ( Standard_Integer i = 1; i <= cmp->GetList()->Length(); i++) {
     for ( Standard_Integer j=0; j < level+1; j++ ) os << "\t";
     os << "NAUO :"<<Model->StringLabel(cmp->GetList()->Value(i)->GetNAUO())->ToCString()<<";\t";
@@ -179,7 +186,7 @@ void STEPSelections_AssemblyExplorer::Dump(Standard_OStream &os) const
 {
   Handle(Interface_InterfaceModel) model = myGraph.Model();
   for(Standard_Integer i = 1 ; i <=myRoots.Length(); i++) {
-    os<<"Assembly N: "<<i<<endl<<endl;
+    os<<"Assembly N: "<<i<<std::endl<<std::endl;
     PrintSubAssembly(os,myRoots.Value(i),model,0);
   }
 }

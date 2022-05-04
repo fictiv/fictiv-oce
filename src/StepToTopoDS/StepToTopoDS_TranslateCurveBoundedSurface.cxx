@@ -17,30 +17,28 @@
 //#4  szv          S4163: optimization
 //:   abv 07.04.99 S4136: turn off fixing intersection of non-adjacent edges
 
-#include <StepToTopoDS_TranslateCurveBoundedSurface.ixx>
-
-#include <Precision.hxx>
-
-#include <Geom_BoundedSurface.hxx>
-#include <StepToGeom_MakeSurface.hxx>
-#include <StepGeom_HArray1OfSurfaceBoundary.hxx>
-#include <StepToTopoDS_TranslateCompositeCurve.hxx>
-
-#include <TopoDS.hxx>
-#include <TopoDS_Edge.hxx>
-#include <TopoDS_Iterator.hxx>
 #include <BRep_Builder.hxx>
-
 #include <BRepBuilderAPI_MakeFace.hxx>
-#include <StepGeom_BSplineSurface.hxx>
+#include <Geom_BoundedSurface.hxx>
+#include <Precision.hxx>
 #include <ShapeAlgo.hxx>
 #include <ShapeAlgo_AlgoContainer.hxx>
+#include <StepGeom_BoundaryCurve.hxx>
+#include <StepGeom_BSplineSurface.hxx>
+#include <StepGeom_CurveBoundedSurface.hxx>
+#include <StepGeom_HArray1OfSurfaceBoundary.hxx>
+#include <StepToGeom.hxx>
+#include <StepToTopoDS_TranslateCompositeCurve.hxx>
+#include <StepToTopoDS_TranslateCurveBoundedSurface.hxx>
+#include <TopoDS.hxx>
+#include <TopoDS_Edge.hxx>
+#include <TopoDS_Face.hxx>
+#include <Transfer_TransientProcess.hxx>
 
 //=======================================================================
 //function : StepToTopoDS_TranslateCurveBoundedSurface
 //purpose  : 
 //=======================================================================
-
 StepToTopoDS_TranslateCurveBoundedSurface::StepToTopoDS_TranslateCurveBoundedSurface ()
 {
 }
@@ -57,6 +55,11 @@ StepToTopoDS_TranslateCurveBoundedSurface::StepToTopoDS_TranslateCurveBoundedSur
   Init ( CBS, TP );
 }
 
+//=======================================================================
+//function : Init
+//purpose  : 
+//=======================================================================
+
 Standard_Boolean StepToTopoDS_TranslateCurveBoundedSurface::Init (
 		 const Handle(StepGeom_CurveBoundedSurface) &CBS, 
 		 const Handle(Transfer_TransientProcess) &TP)
@@ -66,8 +69,9 @@ Standard_Boolean StepToTopoDS_TranslateCurveBoundedSurface::Init (
   
   // translate basis surface 
   Handle(StepGeom_Surface) S = CBS->BasisSurface();
-  Handle(Geom_Surface) Surf;
-  if ( !StepToGeom_MakeSurface::Convert(S,Surf) ) {
+  Handle(Geom_Surface) Surf = StepToGeom::MakeSurface (S);
+  if (Surf.IsNull())
+  {
     TP->AddFail ( CBS, "Basis surface not translated" );
     return Standard_False;
   }
@@ -76,22 +80,10 @@ Standard_Boolean StepToTopoDS_TranslateCurveBoundedSurface::Init (
   // pdn to force bsplsurf to be periodic
   Handle(StepGeom_BSplineSurface) sgbss = Handle(StepGeom_BSplineSurface)::DownCast(S);
   if (!sgbss.IsNull()) {
-/*
-    StepGeom_BSplineSurfaceForm form = sgbss->SurfaceForm();
-    if ((form == StepGeom_bssfCylindricalSurf)||
-	(form == StepGeom_bssfConicalSurf)||
-	(form == StepGeom_bssfSphericalSurf)||
-	(form == StepGeom_bssfToroidalSurf)||
-	(form == StepGeom_bssfSurfOfRevolution)||
-	(form == StepGeom_bssfGeneralisedCone)||
-        (form == StepGeom_bssfUnspecified)) 
-*/
-    {
-      Handle(Geom_Surface) periodicSurf = ShapeAlgo::AlgoContainer()->ConvertToPeriodic (Surf);
-      if(!periodicSurf.IsNull()) {
-	TP->AddWarning(S,"Surface forced to be periodic");
-	Surf = periodicSurf;
-      }
+    Handle(Geom_Surface) periodicSurf = ShapeAlgo::AlgoContainer()->ConvertToPeriodic(Surf);
+    if (!periodicSurf.IsNull()) {
+      TP->AddWarning(S, "Surface forced to be periodic");
+      Surf = periodicSurf;
     }
   }
     

@@ -11,29 +11,21 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepBasic_SiUnitAndMassUnit.ixx>
-#include <StepBasic_SiUnit.hxx>
-#include <StepBasic_MassUnit.hxx>
 
+#include <Standard_Type.hxx>
+#include <StepBasic_DimensionalExponents.hxx>
+#include <StepBasic_MassUnit.hxx>
+#include <StepBasic_SiUnit.hxx>
+#include <StepBasic_SiUnitAndMassUnit.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepBasic_SiUnitAndMassUnit,StepBasic_SiUnit)
 
 //=======================================================================
 //function : StepBasic_SiUnitAndLengthUnit
 //purpose  : 
 //=======================================================================
-
 StepBasic_SiUnitAndMassUnit::StepBasic_SiUnitAndMassUnit ()
 {
-}
-
-
-//=======================================================================
-//function : Init
-//purpose  : 
-//=======================================================================
-
-void StepBasic_SiUnitAndMassUnit::Init(const Handle(StepBasic_DimensionalExponents)& aDimensions)
-{
-  StepBasic_NamedUnit::Init(aDimensions);
 }
 
 

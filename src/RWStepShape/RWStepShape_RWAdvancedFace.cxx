@@ -11,17 +11,16 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <RWStepShape_RWAdvancedFace.ixx>
-#include <StepShape_HArray1OfFaceBound.hxx>
-#include <StepShape_FaceBound.hxx>
-#include <StepGeom_Surface.hxx>
 
-
+#include <Interface_Check.hxx>
 #include <Interface_EntityIterator.hxx>
-
-
+#include <RWStepShape_RWAdvancedFace.hxx>
+#include <StepData_StepReaderData.hxx>
+#include <StepData_StepWriter.hxx>
+#include <StepGeom_Surface.hxx>
 #include <StepShape_AdvancedFace.hxx>
-
+#include <StepShape_FaceBound.hxx>
+#include <StepShape_HArray1OfFaceBound.hxx>
 
 RWStepShape_RWAdvancedFace::RWStepShape_RWAdvancedFace () {}
 
@@ -69,7 +68,7 @@ void RWStepShape_RWAdvancedFace::ReadStep
 
 	// --- inherited field : sameSense ---
 
-	Standard_Boolean aSameSense;
+	Standard_Boolean aSameSense = Standard_True;
 	//szv#4:S4163:12Mar99 `Standard_Boolean stat4 =` not needed
 	data->ReadBoolean (num,4,"same_sense",ach,aSameSense);
 

@@ -11,20 +11,19 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <RWStepGeom_RWRationalBSplineSurface.ixx>
-#include <TColStd_HArray2OfReal.hxx>
-#include <StepGeom_HArray2OfCartesianPoint.hxx>
-#include <StepGeom_CartesianPoint.hxx>
-#include <StepGeom_BSplineSurfaceForm.hxx>
-#include <StepData_Logical.hxx>
 
-
+#include <Interface_Check.hxx>
 #include <Interface_EntityIterator.hxx>
-
-
+#include <Interface_ShareTool.hxx>
+#include <RWStepGeom_RWRationalBSplineSurface.hxx>
+#include <StepData_Logical.hxx>
+#include <StepData_StepReaderData.hxx>
+#include <StepData_StepWriter.hxx>
+#include <StepGeom_BSplineSurfaceForm.hxx>
+#include <StepGeom_CartesianPoint.hxx>
+#include <StepGeom_HArray2OfCartesianPoint.hxx>
 #include <StepGeom_RationalBSplineSurface.hxx>
-
-
+#include <TColStd_HArray2OfReal.hxx>
 
 // --- Enum : BSplineSurfaceForm ---
 static TCollection_AsciiString bssfSurfOfLinearExtrusion(".SURF_OF_LINEAR_EXTRUSION.");
@@ -260,10 +259,10 @@ void RWStepGeom_RWRationalBSplineSurface::Check
   Standard_Integer nbCPLV = ent->NbControlPointsListJ();
   Standard_Integer i;
   Standard_Integer j;
-//  cout << "RationalBSplineCurve: nbWgtU=" << nbWgtU << " nbCPLU: " << 
-//    nbCPLU << endl;
-//  cout << "                      nbWgtV=" << nbWgtV << " nbCPLV: " << 
-//    nbCPLV << endl;
+//  std::cout << "RationalBSplineCurve: nbWgtU=" << nbWgtU << " nbCPLU: " << 
+//    nbCPLU << std::endl;
+//  std::cout << "                      nbWgtV=" << nbWgtV << " nbCPLV: " << 
+//    nbCPLV << std::endl;
   if(nbWgtU != nbCPLU) {
     ach->AddFail("ERROR: No.of ControlPoints not equal No.of Weights in U");
   }

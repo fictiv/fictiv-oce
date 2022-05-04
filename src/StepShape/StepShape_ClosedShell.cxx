@@ -11,8 +11,11 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepShape_ClosedShell.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepShape_ClosedShell.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepShape_ClosedShell,StepShape_ConnectedFaceSet)
 
 StepShape_ClosedShell::StepShape_ClosedShell ()  {}
 

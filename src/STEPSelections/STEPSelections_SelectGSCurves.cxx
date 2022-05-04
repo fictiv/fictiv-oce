@@ -14,11 +14,19 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <STEPSelections_SelectGSCurves.ixx>
-#include <StepGeom_Curve.hxx>
+
+#include <Interface_EntityIterator.hxx>
+#include <Interface_Graph.hxx>
+#include <Standard_Transient.hxx>
+#include <Standard_Type.hxx>
 #include <StepGeom_CompositeCurve.hxx>
-#include <StepShape_GeometricSet.hxx>
 #include <StepGeom_CompositeCurveSegment.hxx>
+#include <StepGeom_Curve.hxx>
+#include <STEPSelections_SelectGSCurves.hxx>
+#include <StepShape_GeometricSet.hxx>
+#include <TCollection_AsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(STEPSelections_SelectGSCurves,IFSelect_SelectExplore)
 
 static Standard_Integer flag;
 
@@ -44,11 +52,11 @@ Standard_Boolean STEPSelections_SelectGSCurves::Explore(const Standard_Integer /
 	  isInGeomSet = Standard_True; 
 	}
       if(isInGeomSet) {
-	Interface_EntityIterator subs = G.Shareds(start);
-	subs.Start();
-	Standard_Boolean isSome = subs.More();
-	for (; subs.More(); subs.Next()) 
-	  explored.AddItem (subs.Value());
+	Interface_EntityIterator aSubsShareds = G.Shareds(start);
+        aSubsShareds.Start();
+	Standard_Boolean isSome = aSubsShareds.More();
+	for (; aSubsShareds.More(); aSubsShareds.Next())
+	  explored.AddItem (aSubsShareds.Value());
 	return isSome;
       } else
 	return Standard_False;

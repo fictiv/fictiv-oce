@@ -15,13 +15,18 @@
 
 // Generator:	ExpToCas (EXPRESS -> CASCADE/XSTEP Translator) V1.2
 
-#include <StepFEA_CurveElementIntervalConstant.ixx>
+#include <Standard_Type.hxx>
+#include <StepBasic_EulerAngles.hxx>
+#include <StepElement_CurveElementSectionDefinition.hxx>
+#include <StepFEA_CurveElementIntervalConstant.hxx>
+#include <StepFEA_CurveElementLocation.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepFEA_CurveElementIntervalConstant,StepFEA_CurveElementInterval)
 
 //=======================================================================
 //function : StepFEA_CurveElementIntervalConstant
 //purpose  : 
 //=======================================================================
-
 StepFEA_CurveElementIntervalConstant::StepFEA_CurveElementIntervalConstant ()
 {
 }

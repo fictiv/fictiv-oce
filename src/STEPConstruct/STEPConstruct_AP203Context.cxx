@@ -14,17 +14,27 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <STEPConstruct_AP203Context.ixx>
 
-#ifndef _WIN32
-# include <pwd.h>
-# include <netdb.h>
-#else
-# include <winsock2.h>
-#endif
+#include <StepAP203_CcDesignApproval.hxx>
+#include <StepAP203_CcDesignDateAndTimeAssignment.hxx>
+#include <StepAP203_CcDesignPersonAndOrganizationAssignment.hxx>
+#include <StepAP203_CcDesignSecurityClassification.hxx>
+#include <StepBasic_Approval.hxx>
+#include <StepBasic_ApprovalDateTime.hxx>
+#include <StepBasic_ApprovalPersonOrganization.hxx>
+#include <StepBasic_ApprovalRole.hxx>
+#include <StepBasic_DateAndTime.hxx>
+#include <StepBasic_DateTimeRole.hxx>
+#include <StepBasic_PersonAndOrganization.hxx>
+#include <StepBasic_PersonAndOrganizationRole.hxx>
+#include <StepBasic_ProductCategoryRelationship.hxx>
+#include <StepBasic_SecurityClassificationLevel.hxx>
+#include <STEPConstruct_AP203Context.hxx>
+#include <STEPConstruct_Part.hxx>
+#include <StepRepr_NextAssemblyUsageOccurrence.hxx>
+#include <StepShape_ShapeDefinitionRepresentation.hxx>
 
-#include <stdio.h>
-
+#include <OSD_Host.hxx>
 #include <OSD_Process.hxx>
 #include <Quantity_Date.hxx>
 
@@ -40,14 +50,18 @@
 #include <StepBasic_Person.hxx>
 #include <StepBasic_Organization.hxx>
 #include <StepBasic_SecurityClassification.hxx>
+#include <StepBasic_Product.hxx>
+#include <StepBasic_ProductDefinition.hxx>
+#include <StepBasic_ProductDefinitionFormation.hxx>
+#include <StepBasic_ProductRelatedProductCategory.hxx>
 #include <StepAP203_HArray1OfPersonOrganizationItem.hxx>
 #include <StepAP203_HArray1OfClassifiedItem.hxx>
 #include <StepAP203_HArray1OfDateTimeItem.hxx>
 #include <StepAP203_HArray1OfApprovedItem.hxx>
 #include <StepBasic_ProductCategory.hxx>
 
-#if defined(__BORLANDC__) || (defined(_MSC_VER) && _MSC_VER >= 1900)
-# define timezone _timezone
+#ifndef _WIN32
+# include <pwd.h>
 #endif
 
 //=======================================================================
@@ -146,25 +160,15 @@ Handle(StepBasic_PersonAndOrganization) STEPConstruct_AP203Context::DefaultPerso
 {
   if ( defPersonAndOrganization.IsNull() ) {
     // get IP address as a unique id of organization
-#ifdef WNT // adapted for NT which lacks gethostent()
-    char hostname[1024];
-    hostname[0] = '\0';
-    gethostname ( hostname, 1020 );
-    hostname[1020] = '\0';
-    struct hostent *he = gethostbyname ( hostname );
-#else // adapted for Sun2.5, which lacks definition of gethostname()
-    struct hostent *he = gethostent();
-    while ( he && he->h_name && (unsigned char)he->h_addr_list[0][0] == 127 )
-      he = gethostent();
-#endif
-    Handle(TCollection_HAsciiString) orgId = new TCollection_HAsciiString ( "" );
-    if ( he && he->h_addr_list && he->h_length >0 ) {
-      char str[100];
-      unsigned i1 = (unsigned char)he->h_addr_list[0][0];
-      unsigned i2 = (unsigned char)he->h_addr_list[0][1];
-      unsigned i3 = (unsigned char)he->h_addr_list[0][2];
-      sprintf ( str, "IP%03u.%03u.%03u.000", i1, i2, i3 );
-      orgId->AssignCat ( str );
+    Handle(TCollection_HAsciiString) orgId = new TCollection_HAsciiString ( "IP" );
+    OSD_Host aHost;
+    TCollection_AsciiString anIP = aHost.InternetAddress();
+    // cut off last number
+    Standard_Integer aLastDotIndex = anIP.SearchFromEnd (".");
+    if (aLastDotIndex >0)
+    {
+      anIP.Trunc (aLastDotIndex - 1);
+      orgId->AssignCat (anIP.ToCString());
     }
     
     // create organization
@@ -175,15 +179,14 @@ Handle(StepBasic_PersonAndOrganization) STEPConstruct_AP203Context::DefaultPerso
     
     // construct person`s name
     OSD_Process sys;
-    Standard_CString usr = sys.UserName().ToCString();
-#if !defined(_WIN32) && !defined(__ANDROID__)
-    if ( usr ) {
-      struct passwd *pwd = getpwnam ( usr );
-      if ( pwd ) usr = pwd->pw_gecos;
+    TCollection_AsciiString user (sys.UserName());
+#if !defined(_WIN32) && !defined(__ANDROID__)	
+    if ( !user.IsEmpty() ) {
+      struct passwd *pwd = getpwnam ( user.ToCString() );
+      if ( pwd ) user = pwd->pw_gecos;
     }
-    else usr = "Unknown";
+    else user = "Unknown";
 #endif
-    TCollection_AsciiString user ( usr );
     Handle(TCollection_HAsciiString) fname = new TCollection_HAsciiString ("");
     Handle(TCollection_HAsciiString) lname = new TCollection_HAsciiString ("");
     Handle(Interface_HArray1OfHAsciiString) mname;
@@ -206,7 +209,7 @@ Handle(StepBasic_PersonAndOrganization) STEPConstruct_AP203Context::DefaultPerso
     Handle(StepBasic_Person) aPerson = new StepBasic_Person;
     Handle(TCollection_HAsciiString) uid = new TCollection_HAsciiString ( orgId );
     uid->AssignCat ( "," );
-    uid->AssignCat ( TCollection_AsciiString ( sys.UserId() ).ToCString() );
+    uid->AssignCat (sys.UserName().ToCString());
     Handle(Interface_HArray1OfHAsciiString) suffix, prefix;
     aPerson->Init ( uid, Standard_True, lname, Standard_True, fname, ( ! mname.IsNull() ),
 		    mname, Standard_False, suffix, Standard_False, prefix );

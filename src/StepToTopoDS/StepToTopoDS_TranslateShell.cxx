@@ -16,40 +16,29 @@
 
 //:   gka 09.04.99: S4136: improving tolerance management
 
-#include <StepToTopoDS_TranslateShell.ixx>
-
-#include <StepToTopoDS_TranslateFace.hxx>
-
-#include <StepShape_FaceSurface.hxx>
-
 #include <BRep_Builder.hxx>
+#include <Message_ProgressScope.hxx>
+#include <StdFail_NotDone.hxx>
+#include <StepShape_ConnectedFaceSet.hxx>
+#include <StepShape_FaceSurface.hxx>
+#include <StepToTopoDS_NMTool.hxx>
+#include <StepToTopoDS_Tool.hxx>
+#include <StepToTopoDS_TranslateFace.hxx>
+#include <StepToTopoDS_TranslateShell.hxx>
 #include <TopoDS.hxx>
-#include <TopoDS_Shell.hxx>
 #include <TopoDS_Face.hxx>
+#include <TopoDS_Shape.hxx>
+#include <TopoDS_Shell.hxx>
 #include <Transfer_TransientProcess.hxx>
-
-#include <Message_ProgressIndicator.hxx>
-#include <Message_ProgressSentry.hxx>
 
 // ============================================================================
 // Method  : StepToTopoDS_TranslateShell::StepToTopoDS_TranslateShell
 // Purpose : Empty Constructor
 // ============================================================================
-
 StepToTopoDS_TranslateShell::StepToTopoDS_TranslateShell()
+: myError(StepToTopoDS_TranslateShellOther)
 {
   done = Standard_False;
-}
-
-// ============================================================================
-// Method  : StepToTopoDS_TranslateShell::StepToTopoDS_TranslateShell()
-// Purpose : Constructor with a ConnectedFaceSet and a Tool
-// ============================================================================
-
-StepToTopoDS_TranslateShell::StepToTopoDS_TranslateShell
-(const Handle(StepShape_ConnectedFaceSet)& CFS, StepToTopoDS_Tool& T, StepToTopoDS_NMTool& NMTool)
-{
-  Init(CFS, T, NMTool);
 }
 
 // ============================================================================
@@ -58,7 +47,10 @@ StepToTopoDS_TranslateShell::StepToTopoDS_TranslateShell
 // ============================================================================
 
 void StepToTopoDS_TranslateShell::Init
-(const Handle(StepShape_ConnectedFaceSet)& CFS, StepToTopoDS_Tool& aTool, StepToTopoDS_NMTool& NMTool)
+(const Handle(StepShape_ConnectedFaceSet)& CFS,
+ StepToTopoDS_Tool& aTool,
+ StepToTopoDS_NMTool& NMTool,
+ const Message_ProgressRange& theProgress)
 {
   //bug15697
   if(CFS.IsNull())
@@ -80,27 +72,27 @@ void StepToTopoDS_TranslateShell::Init
     myTranFace.SetPrecision(Precision()); //gka
     myTranFace.SetMaxTol(MaxTol());
 
-    Message_ProgressSentry PS ( TP->GetProgress(), "Face", 0, NbFc, 1 );
-    for (Standard_Integer i=1; i<=NbFc && PS.More(); i++, PS.Next()) {
+    Message_ProgressScope PS ( theProgress, "Face", NbFc);
+    for (Standard_Integer i = 1; i <= NbFc && PS.More(); i++, PS.Next()) {
 #ifdef OCCT_DEBUG
-      cout << "Processing Face : " << i << endl;
+      std::cout << "Processing Face : " << i << std::endl;
 #endif
       StepFace = CFS->CfsFacesValue(i);
-      Handle(StepShape_FaceSurface) theFS = 
-	Handle(StepShape_FaceSurface)::DownCast(StepFace);
+      Handle(StepShape_FaceSurface) theFS =
+        Handle(StepShape_FaceSurface)::DownCast(StepFace);
       if (!theFS.IsNull()) {
-	myTranFace.Init(theFS, aTool, NMTool);
-	if (myTranFace.IsDone()) {
-	  S = myTranFace.Value();
-	  F = TopoDS::Face(S);
-	  B.Add(Sh, F);
-	}
-	else { // Warning only + add FaceSurface file Identifier
-	  TP->AddWarning(theFS," a Face from Shell not mapped to TopoDS");
-	}
+        myTranFace.Init(theFS, aTool, NMTool);
+        if (myTranFace.IsDone()) {
+          S = myTranFace.Value();
+          F = TopoDS::Face(S);
+          B.Add(Sh, F);
+        }
+        else { // Warning only + add FaceSurface file Identifier
+          TP->AddWarning(theFS, " a Face from Shell not mapped to TopoDS");
+        }
       }
-      else { // Warning : ajouter identifier
-	TP->AddWarning(StepFace," Face is not of FaceSurface Type; not mapped to TopoDS");
+      else { // Warning : add identifier
+        TP->AddWarning(StepFace, " Face is not of FaceSurface Type; not mapped to TopoDS");
       }
     }
     Sh.Closed (BRep_Tool::IsClosed (Sh));
@@ -123,7 +115,7 @@ void StepToTopoDS_TranslateShell::Init
 
 const TopoDS_Shape& StepToTopoDS_TranslateShell::Value() const 
 {
-  StdFail_NotDone_Raise_if(!done,"");
+  StdFail_NotDone_Raise_if (!done, "StepToTopoDS_TranslateShell::Value() - no result");
   return myResult;
 }
 

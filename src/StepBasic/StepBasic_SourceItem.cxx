@@ -15,14 +15,16 @@
 
 // Generator:	ExpToCas (EXPRESS -> CASCADE/XSTEP Translator) V1.1
 
-#include <StepBasic_SourceItem.ixx>
+#include <Standard_Transient.hxx>
+#include <StepBasic_SourceItem.hxx>
+#include <StepData_SelectMember.hxx>
 #include <StepData_SelectNamed.hxx>
+#include <TCollection_HAsciiString.hxx>
 
 //=======================================================================
 //function : StepBasic_SourceItem
 //purpose  : 
 //=======================================================================
-
 StepBasic_SourceItem::StepBasic_SourceItem ()
 {
 }

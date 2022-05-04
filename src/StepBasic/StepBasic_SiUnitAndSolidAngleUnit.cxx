@@ -11,20 +11,18 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepBasic_SiUnitAndSolidAngleUnit.ixx>
+
+#include <Standard_Type.hxx>
+#include <StepBasic_DimensionalExponents.hxx>
 #include <StepBasic_SiUnit.hxx>
+#include <StepBasic_SiUnitAndSolidAngleUnit.hxx>
 #include <StepBasic_SolidAngleUnit.hxx>
 
+IMPLEMENT_STANDARD_RTTIEXT(StepBasic_SiUnitAndSolidAngleUnit,StepBasic_SiUnit)
 
 StepBasic_SiUnitAndSolidAngleUnit::StepBasic_SiUnitAndSolidAngleUnit ()
 {
 }
-
-void StepBasic_SiUnitAndSolidAngleUnit::Init(const Handle(StepBasic_DimensionalExponents)& aDimensions)
-{
-  StepBasic_NamedUnit::Init(aDimensions);
-}
-
 
 void StepBasic_SiUnitAndSolidAngleUnit::Init(const Standard_Boolean hasAprefix,
 					     const StepBasic_SiPrefix aPrefix,

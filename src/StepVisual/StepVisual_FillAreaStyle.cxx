@@ -11,8 +11,13 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepVisual_FillAreaStyle.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepVisual_FillAreaStyle.hxx>
+#include <StepVisual_FillStyleSelect.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepVisual_FillAreaStyle,Standard_Transient)
 
 StepVisual_FillAreaStyle::StepVisual_FillAreaStyle ()  {}
 
@@ -53,5 +58,5 @@ StepVisual_FillStyleSelect StepVisual_FillAreaStyle::FillStylesValue(const Stand
 
 Standard_Integer StepVisual_FillAreaStyle::NbFillStyles () const
 {
-	return fillStyles->Length();
+  return (fillStyles.IsNull() ? 0 : fillStyles->Length());
 }

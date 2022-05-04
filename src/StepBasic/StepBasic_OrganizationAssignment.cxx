@@ -11,7 +11,13 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepBasic_OrganizationAssignment.ixx>
+
+#include <Standard_Type.hxx>
+#include <StepBasic_Organization.hxx>
+#include <StepBasic_OrganizationAssignment.hxx>
+#include <StepBasic_OrganizationRole.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepBasic_OrganizationAssignment,Standard_Transient)
 
 void StepBasic_OrganizationAssignment::Init(
 	const Handle(StepBasic_Organization)& aAssignedOrganization,

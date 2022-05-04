@@ -11,16 +11,14 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepBasic_SiUnit.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepBasic_DimensionalExponents.hxx>
+#include <StepBasic_SiUnit.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepBasic_SiUnit,StepBasic_NamedUnit)
 
 StepBasic_SiUnit::StepBasic_SiUnit ()  {}
-
-void StepBasic_SiUnit::Init(
-	const Handle(StepBasic_DimensionalExponents)& aDimensions)
-{
-  StepBasic_NamedUnit::Init(aDimensions);
-}
 
 void StepBasic_SiUnit::Init(const Standard_Boolean hasAprefix,
                             const StepBasic_SiPrefix aPrefix,
@@ -79,7 +77,7 @@ void StepBasic_SiUnit::SetDimensions(const Handle(StepBasic_DimensionalExponents
   // WARNING : the field is redefined.
   // field set up forbidden.
 #ifdef OCCT_DEBUG
-  cout << "Field is redefined, SetUp Forbidden" << endl;
+  std::cout << "Field is redefined, SetUp Forbidden" << std::endl;
 #endif
 }
 

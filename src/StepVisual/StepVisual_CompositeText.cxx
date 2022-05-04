@@ -11,17 +11,15 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepVisual_CompositeText.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepVisual_CompositeText.hxx>
+#include <StepVisual_TextOrCharacter.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepVisual_CompositeText,StepGeom_GeometricRepresentationItem)
 
 StepVisual_CompositeText::StepVisual_CompositeText ()  {}
-
-void StepVisual_CompositeText::Init(
-	const Handle(TCollection_HAsciiString)& aName)
-{
-
-	StepRepr_RepresentationItem::Init(aName);
-}
 
 void StepVisual_CompositeText::Init(
 	const Handle(TCollection_HAsciiString)& aName,

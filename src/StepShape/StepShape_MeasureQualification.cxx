@@ -11,7 +11,14 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepShape_MeasureQualification.ixx>
+
+#include <Standard_Type.hxx>
+#include <StepBasic_MeasureWithUnit.hxx>
+#include <StepShape_MeasureQualification.hxx>
+#include <StepShape_ValueQualifier.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepShape_MeasureQualification,Standard_Transient)
 
 StepShape_MeasureQualification::StepShape_MeasureQualification  ()    {  }
 

@@ -11,16 +11,15 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <RWStepVisual_RWPresentationLayerAssignment.ixx>
+
+#include <Interface_Check.hxx>
+#include <Interface_EntityIterator.hxx>
+#include <RWStepVisual_RWPresentationLayerAssignment.hxx>
+#include <StepData_StepReaderData.hxx>
+#include <StepData_StepWriter.hxx>
 #include <StepVisual_HArray1OfLayeredItem.hxx>
 #include <StepVisual_LayeredItem.hxx>
-
-
-#include <Interface_EntityIterator.hxx>
-
-
 #include <StepVisual_PresentationLayerAssignment.hxx>
-
 
 RWStepVisual_RWPresentationLayerAssignment::RWStepVisual_RWPresentationLayerAssignment () {}
 
@@ -55,12 +54,15 @@ void RWStepVisual_RWPresentationLayerAssignment::ReadStep
 	Standard_Integer nsub3;
 	if (data->ReadSubList (num,3,"assigned_items",ach,nsub3)) {
 	  Standard_Integer nb3 = data->NbParams(nsub3);
-	  aAssignedItems = new StepVisual_HArray1OfLayeredItem (1, nb3);
-	  for (Standard_Integer i3 = 1; i3 <= nb3; i3 ++) {
-	    //szv#4:S4163:12Mar99 `Standard_Boolean stat3 =` not needed
-	    if (data->ReadEntity (nsub3,i3,"assigned_items",ach,aAssignedItemsItem))
-	      aAssignedItems->SetValue(i3,aAssignedItemsItem);
-	  }
+    if (nb3 > 0)
+    {
+	    aAssignedItems = new StepVisual_HArray1OfLayeredItem (1, nb3);
+	    for (Standard_Integer i3 = 1; i3 <= nb3; i3 ++) {
+	      //szv#4:S4163:12Mar99 `Standard_Boolean stat3 =` not needed
+	      if (data->ReadEntity (nsub3,i3,"assigned_items",ach,aAssignedItemsItem))
+	        aAssignedItems->SetValue(i3,aAssignedItemsItem);
+	    }
+    }
 	}
 
 	//--- Initialisation of the read entity ---

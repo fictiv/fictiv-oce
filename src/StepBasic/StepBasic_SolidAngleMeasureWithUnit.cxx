@@ -11,8 +11,11 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepBasic_SolidAngleMeasureWithUnit.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepBasic_SolidAngleMeasureWithUnit.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepBasic_SolidAngleMeasureWithUnit,StepBasic_MeasureWithUnit)
 
 StepBasic_SolidAngleMeasureWithUnit::StepBasic_SolidAngleMeasureWithUnit ()  {}
 

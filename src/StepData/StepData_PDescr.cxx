@@ -11,7 +11,14 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepData_PDescr.ixx>
+
+#include <Interface_Check.hxx>
+#include <Standard_Type.hxx>
+#include <StepData_EDescr.hxx>
+#include <StepData_Field.hxx>
+#include <StepData_PDescr.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepData_PDescr,Standard_Transient)
 
 #define KindInteger 1
 #define KindBoolean 2

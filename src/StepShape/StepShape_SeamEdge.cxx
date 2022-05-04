@@ -15,13 +15,18 @@
 
 // Generator:	ExpToCas (EXPRESS -> CASCADE/XSTEP Translator) V1.1
 
-#include <StepShape_SeamEdge.ixx>
+#include <Standard_Type.hxx>
+#include <StepGeom_Pcurve.hxx>
+#include <StepShape_Edge.hxx>
+#include <StepShape_SeamEdge.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepShape_SeamEdge,StepShape_OrientedEdge)
 
 //=======================================================================
 //function : StepShape_SeamEdge
 //purpose  : 
 //=======================================================================
-
 StepShape_SeamEdge::StepShape_SeamEdge ()
 {
 }

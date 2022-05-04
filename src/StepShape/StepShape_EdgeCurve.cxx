@@ -11,19 +11,16 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepShape_EdgeCurve.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepGeom_Curve.hxx>
+#include <StepShape_EdgeCurve.hxx>
+#include <StepShape_Vertex.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepShape_EdgeCurve,StepShape_Edge)
 
 StepShape_EdgeCurve::StepShape_EdgeCurve ()  {}
-
-void StepShape_EdgeCurve::Init(
-	const Handle(TCollection_HAsciiString)& aName,
-	const Handle(StepShape_Vertex)& aEdgeStart,
-	const Handle(StepShape_Vertex)& aEdgeEnd)
-{
-
-	StepShape_Edge::Init(aName, aEdgeStart, aEdgeEnd);
-}
 
 void StepShape_EdgeCurve::Init(
 	const Handle(TCollection_HAsciiString)& aName,

@@ -14,40 +14,40 @@
 //:k8 abv 06.01.99: TR10: writing unique names for NAUOs
 // :j4 16.03.99 gka S4134
 // abv 18.11.99 renamed from StepPDR_MakeItem
-#include <STEPConstruct_Assembly.ixx>
 
+#include <Interface_EntityIterator.hxx>
+#include <Interface_Graph.hxx>
+#include <Interface_InterfaceModel.hxx>
+#include <Standard_Transient.hxx>
+#include <StepBasic_ApplicationContext.hxx>
+#include <StepBasic_DesignContext.hxx>
+#include <StepBasic_HArray1OfProductContext.hxx>
+#include <StepBasic_MechanicalContext.hxx>
+#include <StepBasic_Product.hxx>
+#include <StepBasic_ProductDefinition.hxx>
+#include <StepBasic_ProductDefinitionFormationWithSpecifiedSource.hxx>
+#include <STEPConstruct_Assembly.hxx>
+#include <StepGeom_Axis2Placement3d.hxx>
+#include <StepRepr_CharacterizedDefinition.hxx>
+#include <StepRepr_HArray1OfRepresentationItem.hxx>
+#include <StepRepr_ItemDefinedTransformation.hxx>
+#include <StepRepr_NextAssemblyUsageOccurrence.hxx>
+#include <StepRepr_ProductDefinitionShape.hxx>
+#include <StepRepr_RepresentationContext.hxx>
+#include <StepRepr_ShapeRepresentationRelationshipWithTransformation.hxx>
+#include <StepRepr_Transformation.hxx>
+#include <StepShape_ContextDependentShapeRepresentation.hxx>
+#include <StepShape_ShapeDefinitionRepresentation.hxx>
+#include <StepShape_ShapeRepresentation.hxx>
 #include <TCollection_HAsciiString.hxx>
 
 //  ProductDefinition (pour Relationship)
-#include <StepBasic_ProductDefinition.hxx>
-#include <StepBasic_DesignContext.hxx>
-#include <StepBasic_ProductDefinitionFormationWithSpecifiedSource.hxx>
-
-#include <StepBasic_Product.hxx>
-#include <StepBasic_HArray1OfProductContext.hxx>
-#include <StepBasic_MechanicalContext.hxx>
-#include <StepBasic_ApplicationContext.hxx>
-
 //  ContextDependentShapeRepresentation qui contient la Relationship
-#include <StepRepr_NextAssemblyUsageOccurrence.hxx>
-#include <StepRepr_ProductDefinitionShape.hxx>
-#include <StepRepr_CharacterizedDefinition.hxx>
-#include <StepShape_ContextDependentShapeRepresentation.hxx>
-
 //  Relationship
-#include <StepRepr_ShapeRepresentationRelationshipWithTransformation.hxx>
-#include <StepRepr_HArray1OfRepresentationItem.hxx>
-#include <StepRepr_RepresentationContext.hxx>
-#include <StepShape_ShapeRepresentation.hxx>
-
-#include <StepRepr_ItemDefinedTransformation.hxx>
-#include <StepRepr_Transformation.hxx>
-
 //=======================================================================
 //function : STEPConstruct_Assembly
 //purpose  : 
 //=======================================================================
-
 STEPConstruct_Assembly::STEPConstruct_Assembly ()
 {  
 }
@@ -145,7 +145,7 @@ void STEPConstruct_Assembly::MakeRelationship ()
 
 Handle(Standard_Transient)  STEPConstruct_Assembly::ItemValue () const
 {
-  if (theval.IsNull()) return thesr;
+  if (theval.IsNull()) return Handle(Standard_Transient) (thesr);
   return theval;
 }
 
@@ -181,7 +181,7 @@ Handle(StepRepr_NextAssemblyUsageOccurrence) STEPConstruct_Assembly::GetNAUO () 
 //purpose  : 
 //=======================================================================
 
-Standard_Boolean STEPConstruct_Assembly::CheckSRRReversesNAUO(const Handle(Interface_InterfaceModel) &Model,
+Standard_Boolean STEPConstruct_Assembly::CheckSRRReversesNAUO(const Interface_Graph& theGraph,
 							      const Handle(StepShape_ContextDependentShapeRepresentation) &CDSR)
 {
   Handle(StepRepr_NextAssemblyUsageOccurrence) nauo = 
@@ -189,30 +189,41 @@ Standard_Boolean STEPConstruct_Assembly::CheckSRRReversesNAUO(const Handle(Inter
 	  ( CDSR->RepresentedProductRelation()->Definition().ProductDefinitionRelationship() );
   if ( nauo.IsNull() ) {
 #ifdef OCCT_DEBUG
-    cout << "Warning: No NAUO found in CDSR !" << endl;
+    std::cout << "Warning: No NAUO found in CDSR !" << std::endl;
 #endif
     return Standard_False;
   }
-  
+
   Handle(StepBasic_ProductDefinition) pd1, pd2;
   Handle(StepRepr_Representation) rep1 = CDSR->RepresentationRelation()->Rep1();
   Handle(StepRepr_Representation) rep2 = CDSR->RepresentationRelation()->Rep2();
+  if( rep1.IsNull() || rep2.IsNull())
+    return Standard_False;
   
   // find SDRs corresponding to Rep1 and Rep2 and remember their PDs
   Handle(Standard_Type) tSDR = STANDARD_TYPE(StepShape_ShapeDefinitionRepresentation);
-  Standard_Integer nb = Model->NbEntities();
-  for (Standard_Integer i = 1; i <= nb; i ++) {
-    Handle(Standard_Transient) enti = Model->Value(i);
+  Interface_EntityIterator anIter = theGraph.Sharings(rep1);
+  for (; anIter.More() && pd1.IsNull(); anIter.Next()) {
+      Handle(Standard_Transient) enti = anIter.Value();
     if (enti->DynamicType() == tSDR) {
       Handle(StepShape_ShapeDefinitionRepresentation) SDR =
-	Handle(StepShape_ShapeDefinitionRepresentation)::DownCast(enti);
+        Handle(StepShape_ShapeDefinitionRepresentation)::DownCast(enti);
       if ( SDR->UsedRepresentation() == rep1 ) 
-	pd1 = SDR->Definition().PropertyDefinition()->Definition().ProductDefinition();
-      if ( SDR->UsedRepresentation() == rep2 ) 
-	pd2 = SDR->Definition().PropertyDefinition()->Definition().ProductDefinition();
+        pd1 = SDR->Definition().PropertyDefinition()->Definition().ProductDefinition();
     }
   }
   
+  anIter = theGraph.Sharings(rep2);
+  for (; anIter.More() && pd2.IsNull(); anIter.Next()) {
+      Handle(Standard_Transient) enti = anIter.Value();
+    if (enti->DynamicType() == tSDR) {
+      Handle(StepShape_ShapeDefinitionRepresentation) SDR =
+        Handle(StepShape_ShapeDefinitionRepresentation)::DownCast(enti);
+      if ( SDR->UsedRepresentation() == rep2 ) 
+        pd2 = SDR->Definition().PropertyDefinition()->Definition().ProductDefinition();
+    }
+  }
+
   // checks..
   
   if ( pd1 == nauo->RelatedProductDefinition() && // OK
@@ -224,15 +235,15 @@ Standard_Boolean STEPConstruct_Assembly::CheckSRRReversesNAUO(const Handle(Inter
   }
 
 #ifdef OCCT_DEBUG
-  cout << "Warning: SRR and NAUO are incompatible" << endl;
-//  cout << "NAUO = " << Model->StringLabel(nauo)->ToCString() << 
-//       ",\tCDSR = " << Model->StringLabel(CDSR)->ToCString() << endl;
-//  cout << "Rep1 = " << Model->StringLabel(rep1)->ToCString() << 
-//       ",\tRep2 = " << Model->StringLabel(rep2)->ToCString() << endl;
-//  cout << "PD1  = " << Model->StringLabel(pd1)->ToCString() << 
-//       ",\tPD2  = " << Model->StringLabel(pd2)->ToCString() << endl;
-//  cout << "Rel1 = " << Model->StringLabel(nauo->RelatingProductDefinition())->ToCString() << 
-//       ",\tRel2 = " << Model->StringLabel(nauo->RelatedProductDefinition())->ToCString() << endl;
+  std::cout << "Warning: SRR and NAUO are incompatible" << std::endl;
+//  std::cout << "NAUO = " << Model->StringLabel(nauo)->ToCString() << 
+//       ",\tCDSR = " << Model->StringLabel(CDSR)->ToCString() << std::endl;
+//  std::cout << "Rep1 = " << Model->StringLabel(rep1)->ToCString() << 
+//       ",\tRep2 = " << Model->StringLabel(rep2)->ToCString() << std::endl;
+//  std::cout << "PD1  = " << Model->StringLabel(pd1)->ToCString() << 
+//       ",\tPD2  = " << Model->StringLabel(pd2)->ToCString() << std::endl;
+//  std::cout << "Rel1 = " << Model->StringLabel(nauo->RelatingProductDefinition())->ToCString() << 
+//       ",\tRel2 = " << Model->StringLabel(nauo->RelatedProductDefinition())->ToCString() << std::endl;
 #endif
 
   if ( pd2 == nauo->RelatedProductDefinition() || //:k3 abv 25 Nov 98: rp1sd.stp - bad assemblies

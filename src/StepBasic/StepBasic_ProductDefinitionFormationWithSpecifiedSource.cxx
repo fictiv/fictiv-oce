@@ -11,19 +11,15 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepBasic_ProductDefinitionFormationWithSpecifiedSource.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepBasic_Product.hxx>
+#include <StepBasic_ProductDefinitionFormationWithSpecifiedSource.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepBasic_ProductDefinitionFormationWithSpecifiedSource,StepBasic_ProductDefinitionFormation)
 
 StepBasic_ProductDefinitionFormationWithSpecifiedSource::StepBasic_ProductDefinitionFormationWithSpecifiedSource ()  {}
-
-void StepBasic_ProductDefinitionFormationWithSpecifiedSource::Init(
-	const Handle(TCollection_HAsciiString)& aId,
-	const Handle(TCollection_HAsciiString)& aDescription,
-	const Handle(StepBasic_Product)& aOfProduct)
-{
-
-	StepBasic_ProductDefinitionFormation::Init(aId, aDescription, aOfProduct);
-}
 
 void StepBasic_ProductDefinitionFormationWithSpecifiedSource::Init(
 	const Handle(TCollection_HAsciiString)& aId,

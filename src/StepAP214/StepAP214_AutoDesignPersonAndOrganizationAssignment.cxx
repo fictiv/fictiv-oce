@@ -11,18 +11,16 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepAP214_AutoDesignPersonAndOrganizationAssignment.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepAP214_AutoDesignGeneralOrgItem.hxx>
+#include <StepAP214_AutoDesignPersonAndOrganizationAssignment.hxx>
+#include <StepBasic_PersonAndOrganization.hxx>
+#include <StepBasic_PersonAndOrganizationRole.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepAP214_AutoDesignPersonAndOrganizationAssignment,StepBasic_PersonAndOrganizationAssignment)
 
 StepAP214_AutoDesignPersonAndOrganizationAssignment::StepAP214_AutoDesignPersonAndOrganizationAssignment ()  {}
-
-void StepAP214_AutoDesignPersonAndOrganizationAssignment::Init(
-	const Handle(StepBasic_PersonAndOrganization)& aAssignedPersonAndOrganization,
-	const Handle(StepBasic_PersonAndOrganizationRole)& aRole)
-{
-
-	StepBasic_PersonAndOrganizationAssignment::Init(aAssignedPersonAndOrganization, aRole);
-}
 
 void StepAP214_AutoDesignPersonAndOrganizationAssignment::Init(
 	const Handle(StepBasic_PersonAndOrganization)& aAssignedPersonAndOrganization,

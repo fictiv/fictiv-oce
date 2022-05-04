@@ -15,13 +15,15 @@
 
 // Generator:	ExpToCas (EXPRESS -> CASCADE/XSTEP Translator) V1.2
 
-#include <StepFEA_NodeWithSolutionCoordinateSystem.ixx>
+#include <Standard_Type.hxx>
+#include <StepFEA_NodeWithSolutionCoordinateSystem.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepFEA_NodeWithSolutionCoordinateSystem,StepFEA_Node)
 
 //=======================================================================
 //function : StepFEA_NodeWithSolutionCoordinateSystem
 //purpose  : 
 //=======================================================================
-
 StepFEA_NodeWithSolutionCoordinateSystem::StepFEA_NodeWithSolutionCoordinateSystem ()
 {
 }

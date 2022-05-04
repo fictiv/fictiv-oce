@@ -11,18 +11,16 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepAP214_AutoDesignActualDateAndTimeAssignment.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepAP214_AutoDesignActualDateAndTimeAssignment.hxx>
+#include <StepAP214_AutoDesignDateAndTimeItem.hxx>
+#include <StepBasic_DateAndTime.hxx>
+#include <StepBasic_DateTimeRole.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepAP214_AutoDesignActualDateAndTimeAssignment,StepBasic_DateAndTimeAssignment)
 
 StepAP214_AutoDesignActualDateAndTimeAssignment::StepAP214_AutoDesignActualDateAndTimeAssignment ()  {}
-
-void StepAP214_AutoDesignActualDateAndTimeAssignment::Init(
-	const Handle(StepBasic_DateAndTime)& aAssignedDateAndTime,
-	const Handle(StepBasic_DateTimeRole)& aRole)
-{
-
-	StepBasic_DateAndTimeAssignment::Init(aAssignedDateAndTime, aRole);
-}
 
 void StepAP214_AutoDesignActualDateAndTimeAssignment::Init(
 	const Handle(StepBasic_DateAndTime)& aAssignedDateAndTime,

@@ -11,28 +11,26 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <RWStepGeom_RWBSplineSurfaceWithKnotsAndRationalBSplineSurface.ixx>
-#include <StepGeom_BSplineSurfaceWithKnots.hxx>
-#include <StepGeom_RationalBSplineSurface.hxx>
-#include <StepGeom_HArray2OfCartesianPoint.hxx>
-#include <StepGeom_CartesianPoint.hxx>
-#include <StepGeom_BSplineSurfaceForm.hxx>
+
+#include <Interface_Check.hxx>
+#include <Interface_EntityIterator.hxx>
+#include <Interface_ShareTool.hxx>
+#include <RWStepGeom_RWBSplineSurfaceWithKnots.hxx>
+#include <RWStepGeom_RWBSplineSurfaceWithKnotsAndRationalBSplineSurface.hxx>
+#include <RWStepGeom_RWRationalBSplineSurface.hxx>
 #include <StepData_Logical.hxx>
+#include <StepData_StepReaderData.hxx>
+#include <StepData_StepWriter.hxx>
+#include <StepGeom_BSplineSurfaceForm.hxx>
+#include <StepGeom_BSplineSurfaceWithKnots.hxx>
+#include <StepGeom_BSplineSurfaceWithKnotsAndRationalBSplineSurface.hxx>
+#include <StepGeom_CartesianPoint.hxx>
+#include <StepGeom_HArray2OfCartesianPoint.hxx>
+#include <StepGeom_KnotType.hxx>
+#include <StepGeom_RationalBSplineSurface.hxx>
 #include <TColStd_HArray1OfInteger.hxx>
 #include <TColStd_HArray1OfReal.hxx>
-#include <StepGeom_KnotType.hxx>
 #include <TColStd_HArray2OfReal.hxx>
-
-#include <RWStepGeom_RWBSplineSurfaceWithKnots.hxx>
-#include <RWStepGeom_RWRationalBSplineSurface.hxx>
-
-
-#include <Interface_EntityIterator.hxx>
-
-
-#include <StepGeom_BSplineSurfaceWithKnotsAndRationalBSplineSurface.hxx>
-
-
 
 // --- Enum : BSplineSurfaceForm ---
 static TCollection_AsciiString bssfSurfOfLinearExtrusion(".SURF_OF_LINEAR_EXTRUSION.");
@@ -63,14 +61,10 @@ void RWStepGeom_RWBSplineSurfaceWithKnotsAndRationalBSplineSurface::ReadStep
 {
 
 	Standard_Integer num = 0;    // num0
-	data->NamedForComplex("BOUNDED_SURFACE BNDSRF",num0,num,ach);
-
-	// --- Instance of plex componant BoundedSurface ---
-
-	if (!data->CheckNbParams(num,0,ach,"bounded_surface")) return;
+	data->NamedForComplex("BOUNDED_SURFACE", "BNDSRF",num0,num,ach);
 
 //	num = data->NextForComplex(num);
-	data->NamedForComplex("B_SPLINE_SURFACE BSPSR",num0,num,ach);
+	data->NamedForComplex("B_SPLINE_SURFACE", "BSPSR",num0,num,ach);
 
 	// --- Instance of common supertype BSplineSurface ---
 
@@ -98,8 +92,8 @@ void RWStepGeom_RWBSplineSurfaceWithKnotsAndRationalBSplineSurface::ReadStep
 	  Standard_Integer nbj3 = data->NbParams(data->ParamNumber(nsub3,1));
 	  aControlPointsList = new StepGeom_HArray2OfCartesianPoint (1, nbi3, 1, nbj3);
 	  for (Standard_Integer i3 = 1; i3 <= nbi3; i3 ++) {
-	    Standard_Integer nsi3;
-	    if (data->ReadSubList (nsub3,i3,"sub-part(control_points_list)",ach,nsi3)) {
+	    Standard_Integer nsi3temp;
+	    if (data->ReadSubList (nsub3,i3,"sub-part(control_points_list)",ach,nsi3temp)) {
 	      Standard_Integer nsi3 = data->ParamNumber(nsub3,i3);
 	      for (Standard_Integer j3 =1; j3 <= nbj3; j3 ++) {
 		//szv#4:S4163:12Mar99 `Standard_Boolean stat3 =` not needed
@@ -151,7 +145,7 @@ void RWStepGeom_RWBSplineSurfaceWithKnotsAndRationalBSplineSurface::ReadStep
 	data->ReadLogical (num,7,"self_intersect",ach,aSelfIntersect);
 
 //	num = data->NextForComplex(num);
-	data->NamedForComplex("B_SPLINE_SURFACE_WITH_KNOTS BSSWK",num0,num,ach);
+	data->NamedForComplex("B_SPLINE_SURFACE_WITH_KNOTS", "BSSWK",num0,num,ach);
 
 	// --- Instance of plex componant BSplineSurfaceWithKnots ---
 
@@ -231,14 +225,10 @@ void RWStepGeom_RWBSplineSurfaceWithKnotsAndRationalBSplineSurface::ReadStep
 	else ach->AddFail("Parameter #5 (knot_spec) is not an enumeration");
 
 //	num = data->NextForComplex(num);
-	data->NamedForComplex("GEOMETRIC_REPRESENTATION_ITEM GMRPIT",num0,num,ach);
-
-	// --- Instance of plex componant GeometricRepresentationItem ---
-
-	if (!data->CheckNbParams(num,0,ach,"geometric_representation_item")) return;
+	data->NamedForComplex("GEOMETRIC_REPRESENTATION_ITEM", "GMRPIT",num0,num,ach);
 
 //	num = data->NextForComplex(num);
-	data->NamedForComplex("RATIONAL_B_SPLINE_SURFACE RBSS",num0,num,ach);
+	data->NamedForComplex("RATIONAL_B_SPLINE_SURFACE", "RBSS",num0,num,ach);
 
 	// --- Instance of plex componant RationalBSplineSurface ---
 
@@ -254,8 +244,8 @@ void RWStepGeom_RWBSplineSurfaceWithKnotsAndRationalBSplineSurface::ReadStep
 	  Standard_Integer nbj13 = data->NbParams(data->ParamNumber(nsub13,1));
 	  aWeightsData = new TColStd_HArray2OfReal (1,nbi13,1,nbj13);
 	  for (Standard_Integer i13 = 1; i13 <= nbi13; i13 ++) {
-	    Standard_Integer nsi13;
-	    if (data->ReadSubList (nsub13,i13,"sub-part(weights_data)",ach,nsi13)) {
+	    Standard_Integer nsi13temp;
+	    if (data->ReadSubList (nsub13,i13,"sub-part(weights_data)",ach,nsi13temp)) {
 	      Standard_Integer nsi13 = data->ParamNumber(nsub13,i13);
 	      for (Standard_Integer j13 =1; j13 <= nbj13; j13 ++) {
 		//szv#4:S4163:12Mar99 `Standard_Boolean stat13 =` not needed
@@ -267,7 +257,7 @@ void RWStepGeom_RWBSplineSurfaceWithKnotsAndRationalBSplineSurface::ReadStep
 	}
 
 //	num = data->NextForComplex(num);
-	data->NamedForComplex("REPRESENTATION_ITEM RPRITM",num0,num,ach);
+	data->NamedForComplex("REPRESENTATION_ITEM", "RPRITM",num0,num,ach);
 
 	// --- Instance of plex componant RepresentationItem ---
 
@@ -280,11 +270,7 @@ void RWStepGeom_RWBSplineSurfaceWithKnotsAndRationalBSplineSurface::ReadStep
 	data->ReadString (num,1,"name",ach,aName);
 
 //	num = data->NextForComplex(num);
-	data->NamedForComplex("SURFACE SRFC",num0,num,ach);
-
-	// --- Instance of plex componant Surface ---
-
-	if (!data->CheckNbParams(num,0,ach,"surface")) return;
+	data->NamedForComplex("SURFACE", "SRFC",num0,num,ach);
 
 	//--- Initialisation of the red entity ---
 
@@ -442,9 +428,7 @@ void RWStepGeom_RWBSplineSurfaceWithKnotsAndRationalBSplineSurface::Check
    const Interface_ShareTool& aShto,
    Handle(Interface_Check)& ach) const
 {
-  Handle(StepGeom_BSplineSurfaceWithKnotsAndRationalBSplineSurface) aRationalBSS =
-    Handle(StepGeom_BSplineSurfaceWithKnotsAndRationalBSplineSurface)
-      ::DownCast(ent);
+  Handle(StepGeom_BSplineSurfaceWithKnotsAndRationalBSplineSurface) aRationalBSS = ent;
   Handle(StepGeom_BSplineSurfaceWithKnots) aBSSWK =
     aRationalBSS->BSplineSurfaceWithKnots();
   RWStepGeom_RWBSplineSurfaceWithKnots t1;

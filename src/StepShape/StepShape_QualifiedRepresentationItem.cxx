@@ -11,7 +11,13 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepShape_QualifiedRepresentationItem.ixx>
+
+#include <Standard_Type.hxx>
+#include <StepShape_QualifiedRepresentationItem.hxx>
+#include <StepShape_ValueQualifier.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepShape_QualifiedRepresentationItem,StepRepr_RepresentationItem)
 
 StepShape_QualifiedRepresentationItem::StepShape_QualifiedRepresentationItem  ()    {  }
 

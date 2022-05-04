@@ -11,17 +11,15 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepShape_ShellBasedSurfaceModel.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepShape_Shell.hxx>
+#include <StepShape_ShellBasedSurfaceModel.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepShape_ShellBasedSurfaceModel,StepGeom_GeometricRepresentationItem)
 
 StepShape_ShellBasedSurfaceModel::StepShape_ShellBasedSurfaceModel ()  {}
-
-void StepShape_ShellBasedSurfaceModel::Init(
-	const Handle(TCollection_HAsciiString)& aName)
-{
-
-	StepRepr_RepresentationItem::Init(aName);
-}
 
 void StepShape_ShellBasedSurfaceModel::Init(
 	const Handle(TCollection_HAsciiString)& aName,

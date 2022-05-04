@@ -11,12 +11,15 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepData_FreeFormEntity.ixx>
-#include <Dico_DictionaryOfTransient.hxx>
-#include <Dico_IteratorOfDictionaryOfTransient.hxx>
+
 #include <Interface_Macros.hxx>
+#include <Standard_Type.hxx>
+#include <StepData_Field.hxx>
+#include <StepData_FreeFormEntity.hxx>
+#include <NCollection_DataMap.hxx>
+#include <Standard_Transient.hxx>
 
-
+IMPLEMENT_STANDARD_RTTIEXT(StepData_FreeFormEntity,Standard_Transient)
 
 void StepData_FreeFormEntity::SetStepType (const Standard_CString typenam)
       {  thetype.Clear();  thetype.AssignCat (typenam);  }
@@ -78,20 +81,20 @@ void StepData_FreeFormEntity::SetStepType (const Standard_CString typenam)
   if (!afr) return afr;
 //  remise en ordre avec un dictionnaire
   e1 = ent;  e2.Nullify();
-  Handle(Dico_DictionaryOfTransient) dic = new Dico_DictionaryOfTransient;
+  NCollection_DataMap<TCollection_AsciiString, Handle(Standard_Transient)> dic;
   while (!e1.IsNull()) {
-    dic->SetItem (e1->StepType(), e1);
+    dic.Bind(e1->StepType(), e1);
     e1 = e1->Next();
   }
 //  d abord effacer les next en cours ...
-  Dico_IteratorOfDictionaryOfTransient iter(dic);
-  for (iter.Start(); iter.More(); iter.Next()) {
+  NCollection_DataMap<TCollection_AsciiString, Handle(Standard_Transient)>::Iterator iter(dic);
+  for (; iter.More(); iter.Next()) {
     e1 = GetCasted(StepData_FreeFormEntity,iter.Value());
     if (!e1.IsNull()) e1->SetNext(e2);
   }
 //  ... puis les remettre dans l ordre
   e1.Nullify();
-  for (iter.Start(); iter.More(); iter.Next()) {
+  for (iter.Reset(); iter.More(); iter.Next()) {
     e2 = GetCasted(StepData_FreeFormEntity,iter.Value());
     if (!e1.IsNull()) e1->SetNext(e2);
     e1 = e2;

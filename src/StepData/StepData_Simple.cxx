@@ -11,8 +11,17 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepData_Simple.ixx>
+
+#include <Interface_Check.hxx>
+#include <Interface_EntityIterator.hxx>
 #include <Interface_InterfaceMismatch.hxx>
+#include <Standard_Type.hxx>
+#include <StepData_ESDescr.hxx>
+#include <StepData_Field.hxx>
+#include <StepData_FieldListN.hxx>
+#include <StepData_Simple.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepData_Simple,StepData_Described)
 
 StepData_Simple::StepData_Simple (const Handle(StepData_ESDescr)& descr)
     : StepData_Described (descr) , thefields (descr->NbFields())    {  }
@@ -47,14 +56,14 @@ StepData_Simple::StepData_Simple (const Handle(StepData_ESDescr)& descr)
     const StepData_Field&  StepData_Simple::Field (const Standard_CString name) const
 {
   Standard_Integer num = ESDescr()->Rank (name);
-  if (num == 0) Interface_InterfaceMismatch::Raise("StepData_Simple : Field");
+  if (num == 0) throw Interface_InterfaceMismatch("StepData_Simple : Field");
   return FieldNum (num);
 }
 
     StepData_Field&  StepData_Simple::CField (const Standard_CString name)
 {
   Standard_Integer num = ESDescr()->Rank (name);
-  if (num == 0) Interface_InterfaceMismatch::Raise("StepData_Simple : Field");
+  if (num == 0) throw Interface_InterfaceMismatch("StepData_Simple : Field");
   return CFieldNum (num);
 }
 

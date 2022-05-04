@@ -11,9 +11,16 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepData_ECDescr.ixx>
-#include <TCollection_AsciiString.hxx>
+
+#include <Standard_Type.hxx>
+#include <StepData_Described.hxx>
+#include <StepData_ECDescr.hxx>
+#include <StepData_ESDescr.hxx>
 #include <StepData_Plex.hxx>
+#include <StepData_Simple.hxx>
+#include <TCollection_AsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepData_ECDescr,StepData_EDescr)
 
 StepData_ECDescr::StepData_ECDescr  ()    {  }
 

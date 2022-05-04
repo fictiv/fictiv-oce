@@ -14,6 +14,10 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepBasic_VolumeUnit.ixx>
+
+#include <Standard_Type.hxx>
+#include <StepBasic_VolumeUnit.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepBasic_VolumeUnit,StepBasic_NamedUnit)
 
 StepBasic_VolumeUnit::StepBasic_VolumeUnit () {}

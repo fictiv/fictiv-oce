@@ -15,17 +15,26 @@
 
 // Generator:	ExpToCas (EXPRESS -> CASCADE/XSTEP Translator) V1.2
 
-#include <RWStepFEA_RWCurve3dElementRepresentation.ixx>
-#include <StepRepr_HArray1OfRepresentationItem.hxx>
-#include <StepRepr_RepresentationItem.hxx>
+#include <Interface_Check.hxx>
+#include <Interface_EntityIterator.hxx>
+#include <RWStepFEA_RWCurve3dElementRepresentation.hxx>
+#include <StepData_StepReaderData.hxx>
+#include <StepData_StepWriter.hxx>
+#include <StepElement_Curve3dElementDescriptor.hxx>
+#include <StepElement_ElementMaterial.hxx>
+#include <StepFEA_Curve3dElementProperty.hxx>
+#include <StepFEA_Curve3dElementRepresentation.hxx>
+#include <StepFEA_FeaModel3d.hxx>
 #include <StepFEA_HArray1OfNodeRepresentation.hxx>
 #include <StepFEA_NodeRepresentation.hxx>
+#include <StepRepr_HArray1OfRepresentationItem.hxx>
+#include <StepRepr_RepresentationContext.hxx>
+#include <StepRepr_RepresentationItem.hxx>
 
 //=======================================================================
 //function : RWStepFEA_RWCurve3dElementRepresentation
 //purpose  : 
 //=======================================================================
-
 RWStepFEA_RWCurve3dElementRepresentation::RWStepFEA_RWCurve3dElementRepresentation ()
 {
 }
@@ -118,7 +127,7 @@ void RWStepFEA_RWCurve3dElementRepresentation::WriteStep (StepData_StepWriter& S
   SW.Send (ent->StepRepr_Representation::Name());
 
   SW.OpenSub();
-  for (Standard_Integer i1=1; i1 <= ent->StepRepr_Representation::Items()->Length(); i1++ ) {
+  for (Standard_Integer i1=1; i1 <= ent->StepRepr_Representation::NbItems(); i1++ ) {
     Handle(StepRepr_RepresentationItem) Var0 = ent->StepRepr_Representation::Items()->Value(i1);
     SW.Send (Var0);
   }
@@ -157,7 +166,7 @@ void RWStepFEA_RWCurve3dElementRepresentation::Share (const Handle(StepFEA_Curve
 
   // Inherited fields of Representation
 
-  for (Standard_Integer i1=1; i1 <= ent->StepRepr_Representation::Items()->Length(); i1++ ) {
+  for (Standard_Integer i1=1; i1 <= ent->StepRepr_Representation::NbItems(); i1++ ) {
     Handle(StepRepr_RepresentationItem) Var0 = ent->StepRepr_Representation::Items()->Value(i1);
     iter.AddItem (Var0);
   }

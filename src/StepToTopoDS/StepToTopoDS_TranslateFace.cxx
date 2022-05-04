@@ -24,80 +24,78 @@
 //%19 pdn 17.04.99 using ShapeFix_Wire::FixEdgeCurves instead of ShapeFix_PCurves
 //    smh 31.01.01 Bad data in file : case of vertex loop on plane face
 // sln 01.10.2001 BUC61003. StepToTopoDS_TranslateFace::Init function is corrected (verifying  Handle(...).IsNull() is added)
-#include <StepToTopoDS_TranslateFace.ixx>
 
-#include <StepToTopoDS.hxx>
-
-#include <StepToGeom_MakeSurface.hxx>
-
-#include <StepToTopoDS_TranslateVertexLoop.hxx>
-#include <StepToTopoDS_TranslatePolyLoop.hxx>
-#include <StepToTopoDS_TranslateEdgeLoop.hxx>
-
-#include <StepShape_EdgeCurve.hxx>
-#include <StepShape_VertexLoop.hxx>
-#include <StepShape_EdgeLoop.hxx>
-#include <StepShape_PolyLoop.hxx>
-#include <StepGeom_Surface.hxx>
-#include <StepShape_FaceBound.hxx>
-#include <StepShape_FaceOuterBound.hxx>
-#include <StepShape_OrientedEdge.hxx>
-#include <StepShape_Edge.hxx>
-
-//#3 rln 16/02/98
+#include <BRep_Builder.hxx>
 #include <BRep_TEdge.hxx>
+#include <BRep_Tool.hxx>
 #include <BRep_TVertex.hxx>
-
+#include <BRepBuilderAPI_MakeFace.hxx>
+#include <BRepTools.hxx>
+#include <Geom2d_Curve.hxx>
 #include <Geom_BoundedSurface.hxx>
+#include <Geom_BSplineSurface.hxx>
 #include <Geom_Plane.hxx>
+#include <Geom_SphericalSurface.hxx>
 #include <Geom_Surface.hxx>
+#include <Geom_SurfaceOfRevolution.hxx>
+#include <Geom_ToroidalSurface.hxx>
 #include <GeomAbs_Shape.hxx>
 #include <GeomAdaptor_Surface.hxx>
-#include <GeomAdaptor_HSurface.hxx>
-//#include <GeomAdaptor_Curve.hxx>
-//#include <GeomAdaptor_CurveOnSurface.hxx>
-
-#include <Geom2d_Curve.hxx>
-
-#include <TopoDS.hxx>
-#include <TopoDS_Edge.hxx>//#3 rln 16/02/98
-#include <TopoDS_Face.hxx>
-#include <TopoDS_Vertex.hxx>
-
-#include <TopExp.hxx>
-#include <TopExp_Explorer.hxx>//rln 28/01/98
-
-#include <TopoDS_Wire.hxx>
-#include <BRepTools.hxx>
-#include <BRepBuilderAPI_MakeFace.hxx>
-#include <BRep_Builder.hxx>//rln 28/01/98
-#include <BRep_Tool.hxx>
-#include <Transfer_TransientProcess.hxx>
 #include <Precision.hxx>
+#include <ShapeAlgo.hxx>
+#include <ShapeAlgo_AlgoContainer.hxx>
+#include <StdFail_NotDone.hxx>
+#include <StepGeom_BSplineSurface.hxx>
+#include <StepGeom_BSplineSurfaceForm.hxx>
+#include <StepGeom_OffsetSurface.hxx>
+#include <StepGeom_Surface.hxx>
+#include <StepShape_Edge.hxx>
+#include <StepShape_EdgeCurve.hxx>
+#include <StepShape_EdgeLoop.hxx>
+#include <StepShape_FaceBound.hxx>
+#include <StepShape_FaceOuterBound.hxx>
+#include <StepShape_FaceSurface.hxx>
+#include <StepShape_OrientedEdge.hxx>
+#include <StepShape_PolyLoop.hxx>
+#include <StepShape_VertexLoop.hxx>
+#include <StepToGeom.hxx>
+#include <StepToTopoDS.hxx>
+#include <StepToTopoDS_NMTool.hxx>
+#include <StepToTopoDS_Tool.hxx>
+#include <StepToTopoDS_TranslateEdgeLoop.hxx>
+#include <StepToTopoDS_TranslateFace.hxx>
+#include <StepToTopoDS_TranslatePolyLoop.hxx>
+#include <StepToTopoDS_TranslateVertexLoop.hxx>
+#include <TCollection_HAsciiString.hxx>
+#include <TopExp.hxx>
+#include <TopExp_Explorer.hxx>
+#include <TopoDS.hxx>
+#include <TopoDS_Edge.hxx>
+#include <TopoDS_Face.hxx>
+#include <TopoDS_Iterator.hxx>
+#include <TopoDS_Shape.hxx>
+#include <TopoDS_Vertex.hxx>
+#include <TopoDS_Wire.hxx>
+#include <Transfer_TransientProcess.hxx>
 #include <StepGeom_RectangularTrimmedSurface.hxx>
 #include <StepGeom_ToroidalSurface.hxx>
 
+//#3 rln 16/02/98
+//#include <GeomAdaptor_Curve.hxx>
+//#include <GeomAdaptor_CurveOnSurface.hxx>
+//#3 rln 16/02/98
+//rln 28/01/98
+//rln 28/01/98
 //  Provisoire, pour VertexLoop
-#include <Geom_SphericalSurface.hxx>
-#include <Geom_ToroidalSurface.hxx>
-#include <StepGeom_OffsetSurface.hxx> //:d4
-#include <StepGeom_BSplineSurfaceForm.hxx>
-#include <StepGeom_BSplineSurface.hxx>
-#include <ShapeAlgo.hxx>
-#include <ShapeAlgo_AlgoContainer.hxx>
-#include <TopoDS_Iterator.hxx>
-
+//:d4
 // To proceed with I-DEAS-like STP (ssv; 15.11.2010)
-#include <TCollection_HAsciiString.hxx>
-
 //#define DEBUG
-
 // ============================================================================
 // Method  : StepToTopoDS_TranslateFace::StepToTopoDS_TranslateFace
 // Purpose : Empty Constructor
 // ============================================================================
-
 StepToTopoDS_TranslateFace::StepToTopoDS_TranslateFace()
+: myError(StepToTopoDS_TranslateFaceOther)
 {
   done = Standard_False;
 }
@@ -130,14 +128,19 @@ static inline Standard_Boolean isReversed(const Handle(StepGeom_Surface)& theSte
   return (!aStepTorSur.IsNull() && aStepTorSur->MajorRadius() < 0 ? Standard_True : Standard_False);
 }
 
+// ============================================================================
+// Method  : Init
+// Purpose : Init with a FaceSurface and a Tool
+// ============================================================================
+
 void StepToTopoDS_TranslateFace::Init
 (const Handle(StepShape_FaceSurface)& FS, StepToTopoDS_Tool& aTool, StepToTopoDS_NMTool& NMTool)
 {
   done = Standard_True;
   if (aTool.IsBound(FS)) {
     myResult = TopoDS::Face(aTool.Find(FS));
-    myError  = StepToTopoDS_TranslateFaceDone;
-    done     = Standard_True;
+    myError = StepToTopoDS_TranslateFaceDone;
+    done = Standard_True;
     return;
   }
   
@@ -171,8 +174,8 @@ void StepToTopoDS_TranslateFace::Init
 
   if (StepSurf->IsKind(STANDARD_TYPE(StepGeom_OffsetSurface))) //:d4 abv 12 Mar 98
     TP->AddWarning(StepSurf," Type OffsetSurface is out of scope of AP 214");
-  Handle(Geom_Surface) GeomSurf;
-  if (!StepToGeom_MakeSurface::Convert(StepSurf,GeomSurf))
+  Handle(Geom_Surface) GeomSurf = StepToGeom::MakeSurface (StepSurf);
+  if (GeomSurf.IsNull())
   {
     TP->AddFail(StepSurf," Surface has not been created");
     myError = StepToTopoDS_TranslateFaceOther;
@@ -182,22 +185,10 @@ void StepToTopoDS_TranslateFace::Init
   // pdn to force bsplsurf to be periodic
   Handle(StepGeom_BSplineSurface) sgbss = Handle(StepGeom_BSplineSurface)::DownCast(StepSurf);
   if (!sgbss.IsNull()) {
-/*
-    StepGeom_BSplineSurfaceForm form = sgbss->SurfaceForm();
-    if ((form == StepGeom_bssfCylindricalSurf)||
-	(form == StepGeom_bssfConicalSurf)||
-	(form == StepGeom_bssfSphericalSurf)||
-	(form == StepGeom_bssfToroidalSurf)||
-	(form == StepGeom_bssfSurfOfRevolution)||
-	(form == StepGeom_bssfGeneralisedCone)||
-        (form == StepGeom_bssfUnspecified))
-*/
-    {
-      Handle(Geom_Surface) periodicSurf = ShapeAlgo::AlgoContainer()->ConvertToPeriodic (GeomSurf);
-      if(!periodicSurf.IsNull()) {
-	TP->AddWarning(StepSurf,"Surface forced to be periodic");
-	GeomSurf = periodicSurf;
-      }
+    Handle(Geom_Surface) periodicSurf = ShapeAlgo::AlgoContainer()->ConvertToPeriodic(GeomSurf);
+    if (!periodicSurf.IsNull()) {
+      TP->AddWarning(StepSurf, "Surface forced to be periodic");
+      GeomSurf = periodicSurf;
     }
   }
     
@@ -235,20 +226,10 @@ void StepToTopoDS_TranslateFace::Init
   // Alors on peut dire : face a deux bords dont la couture manque
   // La couture est entre les deux vertex
 
-//  TopoDS_Wire W1,W2;
-//  Standard_Boolean fautcoudre =
-//    ( (NbBnd == 2) && (GeomSurf->IsUClosed() || GeomSurf->IsVClosed()) );
-
-  Standard_Boolean isExistOuter = Standard_False;
-  for (Standard_Integer i = 1; i <= NbBnd; i++) {
-    FaceBound = FS->BoundsValue(i);
-    if (FaceBound->IsKind(STANDARD_TYPE(StepShape_FaceOuterBound)))
-      isExistOuter = Standard_True;
-  }
   for (Standard_Integer i = 1; i <= NbBnd; i ++) {
 
 #ifdef OCCT_DEBUG
-    cout << "    Processing Wire : " << i << endl;
+    std::cout << "    Processing Wire : " << i << std::endl;
 #endif    
     FaceBound = FS->BoundsValue(i);
     Loop      = FaceBound->Bound();
@@ -266,40 +247,46 @@ void StepToTopoDS_TranslateFace::Init
 
       // abv 10.07.00 pr1sy.stp: vertex_loop can be wrong; so just make natural bounds
       if (GeomSurf->IsKind (STANDARD_TYPE(Geom_SphericalSurface)) ||
-          GeomSurf->IsKind (STANDARD_TYPE(Geom_BSplineSurface)) )
+          GeomSurf->IsKind (STANDARD_TYPE(Geom_BSplineSurface)) || 
+          GeomSurf->IsKind (STANDARD_TYPE(Geom_SurfaceOfRevolution)))
       {
-        if (!isExistOuter || FaceBound->IsKind(STANDARD_TYPE(StepShape_FaceOuterBound))) {
-          BRepBuilderAPI_MakeFace mf (GeomSurf, Precision());
-          for (TopoDS_Iterator it(mf); it.More(); it.Next()) 
-            B.Add (F, it.Value());
-        }
 
+        //  Modification to create natural bounds for face based on the spherical and Bspline surface and having only one bound represented by Vertex loop was made.
+        //  According to the specification of ISO - 10303 part 42:
+        //  "If the face has only one bound and this is of type vertex_loop, then the interior of the face is the domain of the face_surface.face_geometry.
+        //   In such a case the underlying surface shall be closed (e.g. a spherical_surface.)"
+        //  - natural bounds are applied only in case if VertexLoop is only the one  defined face bound.
+        if (NbBnd == 1) {
+          BRepBuilderAPI_MakeFace mf(GeomSurf, Precision());
+          for (TopoDS_Iterator it(mf); it.More(); it.Next())
+            B.Add(F, it.Value());
+
+        }
         continue;
+
       }
-      
-      if (//GeomSurf->IsKind(STANDARD_TYPE(Geom_SphericalSurface)) ||
-	  GeomSurf->IsKind(STANDARD_TYPE(Geom_ToroidalSurface)) ) {
-//	TP->AddWarning(VL," VertexLoop on Cone or Torus NOT YET IMPLEMENTED");
-	continue;
-      }
-      if (GeomSurf->IsKind(STANDARD_TYPE(Geom_Plane)) ) {
-	TP->AddWarning(VL,"VertexLoop on plane is ignored");
-	continue; //smh : BUC60809
-      }
-      myTranVL.SetPrecision(Precision());//gka
-      myTranVL.SetMaxTol(MaxTol());
-      myTranVL.Init(VL, aTool, NMTool);
-      if (myTranVL.IsDone()) {
-	B.Add ( F, myTranVL.Value() );
-      }
-      else {
-	TP->AddWarning(VL," a VertexLoop not mapped to TopoDS");
-      }
-    }
     
-    // ----------------------
-    // The Loop is a PolyLoop
-    // ----------------------
+    if (GeomSurf->IsKind(STANDARD_TYPE(Geom_ToroidalSurface))) {
+      continue;
+    }
+    if (GeomSurf->IsKind(STANDARD_TYPE(Geom_Plane))) {
+      TP->AddWarning(VL, "VertexLoop on plane is ignored");
+      continue; //smh : BUC60809
+    }
+    myTranVL.SetPrecision(Precision());//gka
+    myTranVL.SetMaxTol(MaxTol());
+    myTranVL.Init(VL, aTool, NMTool);
+    if (myTranVL.IsDone()) {
+      B.Add(F, myTranVL.Value());
+    }
+    else {
+      TP->AddWarning(VL, " a VertexLoop not mapped to TopoDS");
+    }
+  }
+    
+  // ----------------------
+  // The Loop is a PolyLoop
+  // ----------------------
     
     else if (Loop->IsKind(STANDARD_TYPE(StepShape_PolyLoop))) {
 //:S4136      STF.Closed() = Standard_False;
@@ -309,12 +296,12 @@ void StepToTopoDS_TranslateFace::Init
       myTranPL.SetMaxTol(MaxTol());
       myTranPL.Init(PL, aTool, GeomSurf, F);
       if (myTranPL.IsDone()) {
-	TopoDS_Wire W = TopoDS::Wire(myTranPL.Value());
-	W.Orientation ( FaceBound->Orientation()  ? TopAbs_FORWARD : TopAbs_REVERSED);
-	B.Add ( F, W );
+        TopoDS_Wire W = TopoDS::Wire(myTranPL.Value());
+        W.Orientation(FaceBound->Orientation() ? TopAbs_FORWARD : TopAbs_REVERSED);
+        B.Add(F, W);
       }
-      else { 
-	TP->AddWarning(PL," a PolyLoop not mapped to TopoDS");
+      else {
+        TP->AddWarning(PL, " a PolyLoop not mapped to TopoDS");
       }
     }
     
@@ -322,85 +309,62 @@ void StepToTopoDS_TranslateFace::Init
     // The Loop is an EdgeLoop
     // -----------------------
     
-    else if (Loop->IsKind(STANDARD_TYPE(StepShape_EdgeLoop))) {
-//:S4136      if (STF.Closed()) {
-//:S4136	Handle(StepShape_EdgeLoop) EL = 
-//:S4136	  Handle(StepShape_EdgeLoop)::DownCast(FaceBound->Bound());
-//:S4136	if (EL->NbEdgeList() != 1) STF.Closed() = Standard_False;
-//:S4136      }
+  else if (Loop->IsKind(STANDARD_TYPE(StepShape_EdgeLoop))) {
+    //:S4136      if (STF.Closed()) {
+    //:S4136	Handle(StepShape_EdgeLoop) EL = 
+    //:S4136	  Handle(StepShape_EdgeLoop)::DownCast(FaceBound->Bound());
+    //:S4136	if (EL->NbEdgeList() != 1) STF.Closed() = Standard_False;
+    //:S4136      }
 
-      TopoDS_Wire   W;
-      myTranEdgeLoop.SetPrecision(Precision());  //gka
-      myTranEdgeLoop.SetMaxTol(MaxTol());
-      myTranEdgeLoop.Init(FaceBound, F, GeomSurf, StepSurf, sameSense, aTool, NMTool);
+    TopoDS_Wire   W;
+    myTranEdgeLoop.SetPrecision(Precision());  //gka
+    myTranEdgeLoop.SetMaxTol(MaxTol());
+    myTranEdgeLoop.Init(FaceBound, F, GeomSurf, StepSurf, sameSense, aTool, NMTool);
 
-      if (myTranEdgeLoop.IsDone()) {
+    if (myTranEdgeLoop.IsDone()) {
+      W = TopoDS::Wire(myTranEdgeLoop.Value());
 
-	W = TopoDS::Wire(myTranEdgeLoop.Value());
-
- 	// STEP Face_Surface orientation :
- 	// if the topological orientation is opposite to the geometric
- 	// orientation of the surface => the underlying topological 
- 	// orientation are not implicitly reversed
- 	// this is the case in CAS.CADE => If the face_surface is reversed,
- 	// the wire orientation has to be explictly reversed
-	if (FaceBound->Orientation()) {
-// *DTH*	  if (sameSense || GeomSurf->IsKind(STANDARD_TYPE(Geom_Plane)))
-	  W.Orientation (sameSense ? TopAbs_FORWARD : TopAbs_REVERSED);
-	}
-	else {
-// *DTH*	  if (sameSense || GeomSurf->IsKind(STANDARD_TYPE(Geom_Plane)))
-	  W.Orientation (sameSense ? TopAbs_REVERSED : TopAbs_FORWARD);
-	}
-	// -----------------------------
-	// The Wire is added to the Face      
-	// -----------------------------
-	
-	B.Add ( F, W );
+      // STEP Face_Surface orientation :
+      // if the topological orientation is opposite to the geometric
+      // orientation of the surface => the underlying topological 
+      // orientation are not implicitly reversed
+      // this is the case in CAS.CADE => If the face_surface is reversed,
+      // the wire orientation has to be explictly reversed
+      if (FaceBound->Orientation()) {
+        // *DTH*	  if (sameSense || GeomSurf->IsKind(STANDARD_TYPE(Geom_Plane)))
+        W.Orientation(sameSense ? TopAbs_FORWARD : TopAbs_REVERSED);
       }
       else {
-	// Il y a eu un probleme dans le mapping : On perd la Face
-	// (facon de parler ...) Pas de moyen aujourd hui de recuperer
-	// au moins toutes les geometries (Points, Courbes 3D, Surface)
-	TP->AddFail(Loop," EdgeLoop not mapped to TopoDS");
-	//if(GeomSurf->IsKind(STANDARD_TYPE(Geom_BoundedSurface))) {
-	//Standard_Real su1, sv1, su2, sv2;
-	//GeomSurf->Bounds(su1, su2, sv1, sv2);
-	//if(sv1 == -Precision::Infinite()) sv1 = 0.;
-	//if(sv2 ==  Precision::Infinite()) sv2 = 1.;
-	//BRepBuilderAPI_MakeFace mkf(GeomSurf,su1,su2,sv1,sv2);
-	//if (mkf.IsDone()) {
-	// done shall be standard false but no recipient to
-	// to store uncompletally mapped topology
-	// see Improvment Resquest DPA/126/95
-	//myResult = mkf.Face();
-	//done = Standard_True;
-	//}
-	//}
-
-	// CKY JAN-97 : un Wire manque, eh bien on continue quand meme !!
-	//  sauf si OuterBound : la c est quand meme pas bien normal ...
-	if (FaceBound->IsKind(STANDARD_TYPE(StepShape_FaceOuterBound))) {
-	  TP->AddWarning(FS,"No Outer Bound : Face not done");
-//	return;
-	}
-	continue;
-//	myError = StepToTopoDS_TranslateFaceOther;
-//	done = Standard_False;
-//	return;
+        // *DTH*	  if (sameSense || GeomSurf->IsKind(STANDARD_TYPE(Geom_Plane)))
+        W.Orientation(sameSense ? TopAbs_REVERSED : TopAbs_FORWARD);
       }
+      // -----------------------------
+      // The Wire is added to the Face      
+      // -----------------------------
+
+      B.Add(F, W);
     }
-    
+    else {
+      // Il y a eu un probleme dans le mapping : On perd la Face
+      // (facon de parler ...) Pas de moyen aujourd hui de recuperer
+      // au moins toutes les geometries (Points, Courbes 3D, Surface)
+      TP->AddFail(Loop, " EdgeLoop not mapped to TopoDS");
+
+      // CKY JAN-97 : un Wire manque, eh bien on continue quand meme !!
+      //  sauf si OuterBound : la c est quand meme pas bien normal ...
+      if (FaceBound->IsKind(STANDARD_TYPE(StepShape_FaceOuterBound))) {
+        TP->AddWarning(FS, "No Outer Bound : Face not done");
+      }
+      continue;
+    }
+    }    
     else { 
       // Type not yet implemented or non sens
       TP->AddFail(Loop," Type of loop not yet implemented");
 #ifdef OCCT_DEBUG
-      cout << Loop->DynamicType() << endl;
+      std::cout << Loop->DynamicType() << std::endl;
 #endif
       continue;
-//      done    = Standard_False;
-//      myError = StepToTopoDS_TranslateFaceOther;
-//      return;
     }
   }
 
@@ -424,7 +388,7 @@ void StepToTopoDS_TranslateFace::Init
 
 const TopoDS_Shape& StepToTopoDS_TranslateFace::Value() const 
 {
-  StdFail_NotDone_Raise_if(!done,"");
+  StdFail_NotDone_Raise_if (!done, "StepToTopoDS_TranslateFace::Value() - no result");
   return myResult;
 }
 

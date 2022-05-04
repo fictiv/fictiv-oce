@@ -13,13 +13,19 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <STEPCAFControl_ExternFile.ixx>
+
+#include <Standard_Type.hxx>
+#include <STEPCAFControl_ExternFile.hxx>
+#include <TCollection_HAsciiString.hxx>
+#include <TDF_Label.hxx>
+#include <XSControl_WorkSession.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(STEPCAFControl_ExternFile,Standard_Transient)
 
 //=======================================================================
 //function : STEPCAFControl_ExternFile
 //purpose  : 
 //=======================================================================
-
 STEPCAFControl_ExternFile::STEPCAFControl_ExternFile ()
      : myLoadStatus(IFSelect_RetVoid), myTransferStatus(Standard_False),
        myWriteStatus(IFSelect_RetVoid)

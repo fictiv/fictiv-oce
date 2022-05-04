@@ -15,13 +15,15 @@
 
 // Generator:	ExpToCas (EXPRESS -> CASCADE/XSTEP Translator) V1.2
 
-#include <StepDimTol_StraightnessTolerance.ixx>
+#include <Standard_Type.hxx>
+#include <StepDimTol_StraightnessTolerance.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepDimTol_StraightnessTolerance,StepDimTol_GeometricTolerance)
 
 //=======================================================================
 //function : StepDimTol_StraightnessTolerance
 //purpose  : 
 //=======================================================================
-
 StepDimTol_StraightnessTolerance::StepDimTol_StraightnessTolerance ()
 {
 }

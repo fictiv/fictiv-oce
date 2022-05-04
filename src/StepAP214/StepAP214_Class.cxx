@@ -15,13 +15,15 @@
 
 // Generator:	ExpToCas (EXPRESS -> CASCADE/XSTEP Translator) V1.1
 
-#include <StepAP214_Class.ixx>
+#include <Standard_Type.hxx>
+#include <StepAP214_Class.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepAP214_Class,StepBasic_Group)
 
 //=======================================================================
 //function : StepAP214_Class
 //purpose  : 
 //=======================================================================
-
 StepAP214_Class::StepAP214_Class ()
 {
 }

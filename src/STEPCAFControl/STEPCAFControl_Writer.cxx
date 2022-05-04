@@ -20,154 +20,233 @@
 // (analysis of SDRs which the CDSR links should be done)
 // Names and validation props are supported for top-level shapes only
 
-#include <STEPCAFControl_Writer.ixx>
-#include <STEPControl_StepModelType.hxx>
-#include <XCAFDoc_ShapeTool.hxx>
-#include <TDF_LabelSequence.hxx>
-#include <TopoDS_Shape.hxx>
-#include <XCAFPrs_DataMapOfShapeStyle.hxx>
-#include <XCAFPrs.hxx>
-#include <XCAFPrs_DataMapOfStyleShape.hxx>
-#include <XCAFPrs_Style.hxx>
-#include <XCAFPrs_DataMapIteratorOfDataMapOfStyleShape.hxx>
-#include <TopTools_SequenceOfShape.hxx>
-#include <TopoDS_Iterator.hxx>
-#include <STEPConstruct_Styles.hxx>
-#include <XCAFDoc_ColorTool.hxx>
-#include <STEPConstruct.hxx>
-#include <TopTools_MapOfShape.hxx>
-#include <XSControl_TransferWriter.hxx>
-#include <TDataStd_Name.hxx>
-#include <StepShape_ShapeDefinitionRepresentation.hxx>
-#include <TransferBRep_ShapeMapper.hxx>
-#include <TransferBRep.hxx>
-#include <StepRepr_PropertyDefinition.hxx>
-#include <StepBasic_ProductDefinition.hxx>
-#include <StepBasic_Product.hxx>
-#include <TCollection_HAsciiString.hxx>
-#include <TCollection_AsciiString.hxx>
-#include <Transfer_FinderProcess.hxx>
-#include <StepBasic_ProductDefinitionFormation.hxx>
-#include <XCAFDoc_DocumentTool.hxx>
-#include <TDF_Label.hxx>
-#include <STEPCAFControl_Controller.hxx>
-#include <STEPCAFControl_IteratorOfDictionaryOfExternFile.hxx>
-#include <STEPConstruct_ExternRefs.hxx>
-#include <Interface_Static.hxx>
-#include <TopoDS_Compound.hxx>
+#include <STEPCAFControl_Writer.hxx>
+
 #include <BRep_Builder.hxx>
-#include <Transfer_ActorOfFinderProcess.hxx>
-#include <STEPCAFControl_ActorWrite.hxx>
-#include <STEPConstruct_ValidationProps.hxx>
-#include <XCAFDoc_Area.hxx>
-#include <XCAFDoc_Volume.hxx>
-#include <XCAFDoc_Centroid.hxx>
-#include <StepShape_ContextDependentShapeRepresentation.hxx>
-#include <StepRepr_ProductDefinitionShape.hxx>
-#include <StepBasic_ProductDefinitionRelationship.hxx>
-#include <XCAFDoc_GraphNode.hxx>
-#include <XCAFDoc_LayerTool.hxx>
-#include <StepVisual_PresentationLayerAssignment.hxx>
-#include <XCAFDoc.hxx>
-#include <StepVisual_HArray1OfLayeredItem.hxx>
-#include <TColStd_HSequenceOfTransient.hxx>
-#include <TDF_Tool.hxx>
-#include <Message_Messenger.hxx>
-#include <TDF_ChildIterator.hxx>
-
-#include <Transfer_Binder.hxx>
-#include <Transfer_TransientListBinder.hxx>
-#include <StepVisual_InvisibleItem.hxx>
-#include <TDataStd_UAttribute.hxx>
-#include <StepVisual_Invisibility.hxx>
-#include <StepVisual_HArray1OfInvisibleItem.hxx>
+#include <GeomToStep_MakeAxis2Placement3d.hxx>
+#include <GeomToStep_MakeCartesianPoint.hxx>
 #include <HeaderSection_FileSchema.hxx>
-#include <StepData_StepModel.hxx>
-#include <StepAP214_Protocol.hxx>
-#include <OSD_Path.hxx>
-#include <XSControl_WorkSession.hxx>
-#include <StepRepr_HArray1OfRepresentationItem.hxx>
-#include <MoniTool_DataMapIteratorOfDataMapOfShapeTransient.hxx>
-#include <StepRepr_Representation.hxx>
-#include <StepVisual_MechanicalDesignGeometricPresentationRepresentation.hxx>
-#include <Quantity_TypeOfColor.hxx>
-#include <StepVisual_HArray1OfPresentationStyleAssignment.hxx>
-#include <StepVisual_PresentationStyleAssignment.hxx>
-#include <StepVisual_StyledItem.hxx>
-#include <StepVisual_PresentationStyleByContext.hxx>
-#include <StepVisual_HArray1OfPresentationStyleSelect.hxx>
-#include <TDF_AttributeSequence.hxx>
-#include <TColStd_MapOfTransient.hxx>
-// #include <TColStd_IndexedDataMapOfTransientTransient.hxx>
-#include <StepRepr_NextAssemblyUsageOccurrence.hxx>
 #include <Interface_EntityIterator.hxx>
-#include <StepRepr_SpecifiedHigherUsageOccurrence.hxx>
-
-// added by skl 15.01.2004 for D&GT writing
-#include <XCAFDoc_DimTolTool.hxx>
-#include <XCAFDoc_DimTol.hxx>
-#include <XCAFDoc_Datum.hxx>
+#include <Interface_Static.hxx>
+#include <Message_Messenger.hxx>
+#include <Message_ProgressScope.hxx>
+#include <MoniTool_DataMapIteratorOfDataMapOfShapeTransient.hxx>
+#include <OSD_Path.hxx>
+#include <Quantity_TypeOfColor.hxx>
+#include <StepAP214_Protocol.hxx>
+#include <StepAP242_DraughtingModelItemAssociation.hxx>
+#include <StepAP242_GeometricItemSpecificUsage.hxx>
+#include <StepBasic_ConversionBasedUnitAndLengthUnit.hxx>
+#include <StepBasic_ConversionBasedUnitAndPlaneAngleUnit.hxx>
+#include <StepBasic_DerivedUnit.hxx>
+#include <StepBasic_DerivedUnitElement.hxx>
+#include <StepBasic_HArray1OfDerivedUnitElement.hxx>
+#include <StepBasic_LengthMeasureWithUnit.hxx>
+#include <StepBasic_MeasureValueMember.hxx>
+#include <StepBasic_Product.hxx>
+#include <StepBasic_ProductDefinition.hxx>
+#include <StepBasic_ProductDefinitionFormation.hxx>
+#include <StepBasic_ProductDefinitionRelationship.hxx>
+#include <StepBasic_SiUnitAndLengthUnit.hxx>
+#include <StepBasic_SiUnitAndMassUnit.hxx>
+#include <StepBasic_SiUnitAndPlaneAngleUnit.hxx>
+#include <STEPCAFControl_ActorWrite.hxx>
+#include <STEPCAFControl_Controller.hxx>
+#include <STEPCAFControl_ExternFile.hxx>
+#include <STEPConstruct.hxx>
 #include <STEPConstruct_DataMapOfAsciiStringTransient.hxx>
 #include <STEPConstruct_DataMapOfPointTransient.hxx>
-#include <StepBasic_MeasureValueMember.hxx>
-#include <StepBasic_SiUnitAndLengthUnit.hxx>
-#include <StepGeom_GeometricRepresentationContextAndGlobalUnitAssignedContext.hxx>
-#include <StepGeom_GeomRepContextAndGlobUnitAssCtxAndGlobUncertaintyAssCtx.hxx>
-#include <StepBasic_LengthMeasureWithUnit.hxx>
-#include <StepShape_EdgeCurve.hxx>
-#include <StepShape_AdvancedFace.hxx>
-#include <StepShape_OrientedEdge.hxx>
-#include <StepShape_EdgeLoop.hxx>
-#include <StepShape_FaceBound.hxx>
-#include <StepShape_ConnectedFaceSet.hxx>
-#include <StepShape_ShapeRepresentation.hxx>
-#include <StepShape_DimensionalSize.hxx>
-#include <StepShape_ShapeDimensionRepresentation.hxx>
-#include <StepShape_DimensionalCharacteristicRepresentation.hxx>
-#include <StepRepr_ShapeAspect.hxx>
-#include <StepRepr_ShapeAspectRelationship.hxx>
-#include <StepRepr_ReprItemAndLengthMeasureWithUnit.hxx>
-//#include <StepRepr_CompoundItemDefinition.hxx>
-//#include <StepRepr_CompoundItemDefinitionMember.hxx>
-#include <StepRepr_ValueRange.hxx>
+#include <STEPConstruct_ExternRefs.hxx>
+#include <STEPCAFControl_GDTProperty.hxx>
+#include <STEPConstruct_Styles.hxx>
+#include <STEPConstruct_ValidationProps.hxx>
+#include <STEPControl_StepModelType.hxx>
 #include <StepData_Logical.hxx>
-#include <StepDimTol_DatumFeature.hxx>
-#include <StepDimTol_Datum.hxx>
-#include <StepDimTol_DatumReference.hxx>
-#include <StepDimTol_HArray1OfDatumReference.hxx>
-#include <StepDimTol_GeoTolAndGeoTolWthDatRefAndModGeoTolAndPosTol.hxx>
-#include <StepDimTol_ModifiedGeometricTolerance.hxx>
-#include <StepDimTol_GeometricToleranceWithDatumReference.hxx>
+#include <StepData_StepModel.hxx>
 #include <StepDimTol_AngularityTolerance.hxx>
 #include <StepDimTol_CircularRunoutTolerance.hxx>
 #include <StepDimTol_CoaxialityTolerance.hxx>
 #include <StepDimTol_ConcentricityTolerance.hxx>
+#include <StepDimTol_CylindricityTolerance.hxx>
+#include <StepDimTol_Datum.hxx>
+#include <StepDimTol_DatumFeature.hxx>
+#include <StepDimTol_DatumReference.hxx>
+#include <StepDimTol_DatumReferenceElement.hxx>
+#include <StepDimTol_DatumSystem.hxx>
+#include <StepDimTol_DatumSystemOrReference.hxx>
+#include <StepDimTol_DatumTarget.hxx>
+#include <StepDimTol_FlatnessTolerance.hxx>
+#include <StepDimTol_GeometricToleranceType.hxx>
+#include <StepDimTol_GeometricToleranceWithDatumReference.hxx>
+#include <StepDimTol_GeometricToleranceWithModifiers.hxx>
+#include <StepDimTol_GeoTolAndGeoTolWthDatRef.hxx>
+#include <StepDimTol_GeoTolAndGeoTolWthDatRefAndGeoTolWthMaxTol.hxx>
+#include <StepDimTol_GeoTolAndGeoTolWthDatRefAndGeoTolWthMod.hxx>
+#include <StepDimTol_GeoTolAndGeoTolWthDatRefAndModGeoTolAndPosTol.hxx>
+#include <StepDimTol_GeoTolAndGeoTolWthMaxTol.hxx>
+#include <StepDimTol_GeoTolAndGeoTolWthMod.hxx>
+#include <StepDimTol_HArray1OfDatumReference.hxx>
+#include <StepDimTol_HArray1OfDatumReferenceElement.hxx>
+#include <StepDimTol_HArray1OfDatumReferenceModifier.hxx>
+#include <StepDimTol_HArray1OfDatumSystemOrReference.hxx>
+#include <StepDimTol_LineProfileTolerance.hxx>
+#include <StepDimTol_ModifiedGeometricTolerance.hxx>
 #include <StepDimTol_ParallelismTolerance.hxx>
 #include <StepDimTol_PerpendicularityTolerance.hxx>
-#include <StepDimTol_SymmetryTolerance.hxx>
-#include <StepDimTol_TotalRunoutTolerance.hxx>
-#include <StepDimTol_CylindricityTolerance.hxx>
-#include <StepDimTol_FlatnessTolerance.hxx>
-#include <StepDimTol_LineProfileTolerance.hxx>
+#include <StepDimTol_PlacedDatumTargetFeature.hxx>
 #include <StepDimTol_PositionTolerance.hxx>
 #include <StepDimTol_RoundnessTolerance.hxx>
+#include <StepDimTol_RunoutZoneDefinition.hxx>
+#include <StepDimTol_RunoutZoneOrientation.hxx>
 #include <StepDimTol_StraightnessTolerance.hxx>
 #include <StepDimTol_SurfaceProfileTolerance.hxx>
+#include <StepDimTol_SymmetryTolerance.hxx>
+#include <StepDimTol_ToleranceZone.hxx>
+#include <StepDimTol_ToleranceZoneForm.hxx>
+#include <StepDimTol_TotalRunoutTolerance.hxx>
+#include <StepGeom_Axis2Placement3d.hxx>
+#include <StepGeom_CartesianPoint.hxx>
+#include <StepGeom_Direction.hxx>
+#include <StepGeom_GeometricRepresentationContextAndGlobalUnitAssignedContext.hxx>
+#include <StepGeom_GeomRepContextAndGlobUnitAssCtxAndGlobUncertaintyAssCtx.hxx>
+#include <StepGeom_Plane.hxx>
+#include <StepGeom_Surface.hxx>
+#include <StepRepr_CompGroupShAspAndCompShAspAndDatumFeatAndShAsp.hxx>
+#include <StepRepr_CompositeShapeAspect.hxx>
+#include <StepRepr_ConstructiveGeometryRepresentation.hxx>
+#include <StepRepr_ConstructiveGeometryRepresentationRelationship.hxx>
+#include <StepRepr_DerivedShapeAspect.hxx>
+#include <StepRepr_DescriptiveRepresentationItem.hxx>
+#include <StepRepr_FeatureForDatumTargetRelationship.hxx>
+#include <StepRepr_HArray1OfRepresentationItem.hxx>
+#include <StepRepr_MeasureRepresentationItem.hxx>
+#include <StepRepr_NextAssemblyUsageOccurrence.hxx>
+#include <StepRepr_ProductDefinitionShape.hxx>
+#include <StepRepr_PropertyDefinition.hxx>
+#include <StepRepr_RepresentedDefinition.hxx>
+#include <StepRepr_Representation.hxx>
+#include <StepRepr_RepresentationItem.hxx>
+#include <StepRepr_ReprItemAndLengthMeasureWithUnit.hxx>
+#include <StepRepr_ReprItemAndLengthMeasureWithUnitAndQRI.hxx>
+#include <StepRepr_ReprItemAndPlaneAngleMeasureWithUnit.hxx>
+#include <StepRepr_ReprItemAndPlaneAngleMeasureWithUnitAndQRI.hxx>
+#include <StepRepr_ShapeAspect.hxx>
+#include <StepRepr_ShapeAspectDerivingRelationship.hxx>
+#include <StepRepr_ShapeAspectRelationship.hxx>
+#include <StepRepr_SpecifiedHigherUsageOccurrence.hxx>
+#include <StepRepr_ValueRange.hxx>
+#include <StepShape_AdvancedFace.hxx>
+#include <StepShape_AngleRelator.hxx>
+#include <StepShape_AngularLocation.hxx>
+#include <StepShape_AngularSize.hxx>
+#include <StepShape_ConnectedFaceSet.hxx>
+#include <StepShape_ContextDependentShapeRepresentation.hxx>
+#include <StepShape_DimensionalCharacteristic.hxx>
+#include <StepShape_DimensionalCharacteristicRepresentation.hxx>
+#include <StepShape_DimensionalLocation.hxx>
+#include <StepShape_DimensionalLocationWithPath.hxx>
+#include <StepShape_DimensionalSize.hxx>
+#include <StepShape_DimensionalSizeWithPath.hxx>
+#include <StepShape_EdgeCurve.hxx>
+#include <StepShape_EdgeLoop.hxx>
+#include <StepShape_FaceBound.hxx>
+#include <StepShape_LimitsAndFits.hxx>
+#include <StepShape_OrientedEdge.hxx>
+#include <StepShape_PlusMinusTolerance.hxx>
+#include <StepShape_QualifiedRepresentationItem.hxx>
+#include <StepShape_ShapeDefinitionRepresentation.hxx>
+#include <StepShape_ShapeDimensionRepresentation.hxx>
+#include <StepShape_ShapeRepresentation.hxx>
+#include <StepShape_ShapeRepresentationWithParameters.hxx>
+#include <StepShape_ToleranceValue.hxx>
+#include <StepShape_TypeQualifier.hxx>
+#include <StepShape_ValueFormatTypeQualifier.hxx>
+#include <StepVisual_AnnotationPlane.hxx>
+#include <StepVisual_CurveStyle.hxx>
+#include <StepVisual_DraughtingCallout.hxx>
+#include <StepVisual_DraughtingModel.hxx>
+#include <StepVisual_HArray1OfInvisibleItem.hxx>
+#include <StepVisual_HArray1OfLayeredItem.hxx>
+#include <StepVisual_HArray1OfPresentationStyleAssignment.hxx>
+#include <StepVisual_HArray1OfPresentationStyleSelect.hxx>
+#include <StepVisual_Invisibility.hxx>
+#include <StepVisual_InvisibleItem.hxx>
+#include <StepVisual_MechanicalDesignGeometricPresentationRepresentation.hxx>
+#include <StepVisual_NullStyleMember.hxx>
+#include <StepVisual_PointStyle.hxx>
+#include <StepVisual_PresentationLayerAssignment.hxx>
+#include <StepVisual_PresentationRepresentation.hxx>
+#include <StepVisual_PresentationStyleAssignment.hxx>
+#include <StepVisual_PresentationStyleByContext.hxx>
+#include <StepVisual_StyledItem.hxx>
+#include <StepVisual_SurfaceStyleUsage.hxx>
+#include <StepVisual_TessellatedAnnotationOccurrence.hxx>
+#include <StepVisual_TessellatedGeometricSet.hxx>
+#include <TCollection_AsciiString.hxx>
+#include <TCollection_HAsciiString.hxx>
 #include <TColStd_HArray1OfReal.hxx>
 #include <TColStd_HArray1OfTransient.hxx>
-
-// added by skl 12.02.2004 for writing materials
-#include <XCAFDoc_MaterialTool.hxx>
-#include <XCAFDoc_Material.hxx>
+#include <TColStd_HSequenceOfTransient.hxx>
+#include <TColStd_MapOfAsciiString.hxx>
+#include <TColStd_MapOfTransient.hxx>
+#include <TDataStd_Name.hxx>
 #include <TDataStd_TreeNode.hxx>
-#include <StepRepr_DescriptiveRepresentationItem.hxx>
-#include <StepBasic_SiUnitAndMassUnit.hxx>
-#include <StepBasic_DerivedUnitElement.hxx>
-#include <StepBasic_HArray1OfDerivedUnitElement.hxx>
-#include <StepBasic_DerivedUnit.hxx>
-#include <StepRepr_MeasureRepresentationItem.hxx>
-#include <StepBasic_ProductDefinition.hxx>
+#include <TDataStd_UAttribute.hxx>
+#include <TDF_AttributeSequence.hxx>
+#include <TDF_ChildIterator.hxx>
+#include <TDF_Label.hxx>
+#include <TDF_LabelSequence.hxx>
+#include <TDF_Tool.hxx>
+#include <TDocStd_Document.hxx>
+#include <TopoDS_Compound.hxx>
+#include <TopoDS_Iterator.hxx>
+#include <TopoDS_Shape.hxx>
+#include <TopTools_MapOfShape.hxx>
+#include <TopTools_SequenceOfShape.hxx>
+#include <Transfer_ActorOfFinderProcess.hxx>
+#include <Transfer_Binder.hxx>
+#include <Transfer_FinderProcess.hxx>
+#include <Transfer_TransientListBinder.hxx>
+#include <TransferBRep.hxx>
+#include <TransferBRep_ShapeMapper.hxx>
+#include <XCAFDimTolObjects_DatumObject.hxx>
+#include <XCAFDimTolObjects_DimensionFormVariance.hxx>
+#include <XCAFDimTolObjects_DimensionGrade.hxx>
+#include <XCAFDimTolObjects_DimensionObject.hxx>
+#include <XCAFDimTolObjects_DimensionModif.hxx>
+#include <XCAFDimTolObjects_DimensionModifiersSequence.hxx>
+#include <XCAFDimTolObjects_DimensionQualifier.hxx>
+#include <XCAFDimTolObjects_GeomToleranceObject.hxx>
+#include <XCAFDoc.hxx>
+#include <XCAFDoc_Area.hxx>
+#include <XCAFDoc_Centroid.hxx>
+#include <XCAFDoc_ColorTool.hxx>
+#include <XCAFDoc_Datum.hxx>
+#include <XCAFDoc_Dimension.hxx>
+#include <XCAFDoc_DimTol.hxx>
+#include <XCAFDoc_DimTolTool.hxx>
+#include <XCAFDoc_DocumentTool.hxx>
+#include <XCAFDoc_GeomTolerance.hxx>
+#include <XCAFDoc_GraphNode.hxx>
+#include <XCAFDoc_LayerTool.hxx>
+#include <XCAFDoc_Material.hxx>
+#include <XCAFDoc_MaterialTool.hxx>
+#include <XCAFDoc_ShapeTool.hxx>
+#include <XCAFDoc_Volume.hxx>
+#include <XCAFDoc_VisMaterial.hxx>
+#include <XCAFDoc_VisMaterialTool.hxx>
+#include <XCAFPrs.hxx>
+#include <XCAFPrs_DataMapIteratorOfDataMapOfStyleShape.hxx>
+#include <XCAFPrs_IndexedDataMapOfShapeStyle.hxx>
+#include <XCAFPrs_DataMapOfStyleShape.hxx>
+#include <XCAFPrs_Style.hxx>
+#include <XSControl_TransferWriter.hxx>
+#include <XSControl_WorkSession.hxx>
 
+// added by skl 15.01.2004 for D&GT writing
+//#include <StepRepr_CompoundItemDefinition.hxx>
+//#include <StepRepr_CompoundItemDefinitionMember.hxx>
+// added by skl 12.02.2004 for writing materials
 //=======================================================================
 //function : GetLabelName
 //purpose  : auxilary function: take name of label and append it to str
@@ -179,11 +258,10 @@ static Standard_Boolean GetLabelName (const TDF_Label &L, Handle(TCollection_HAs
   TCollection_ExtendedString name = N->Get();
   if ( name.Length() <=0 ) return Standard_False;
 
-  // set name, converting it to Ascii and removing spaces
-  TCollection_AsciiString buf ( name, '?' );
+  // set name, removing spaces around it
+  TCollection_AsciiString buf(name);
   buf.LeftAdjust();
   buf.RightAdjust();
-  buf.ChangeAll(' ','_');
   str->AssignCat ( buf.ToCString() );
   return Standard_True;
 }
@@ -200,7 +278,7 @@ STEPCAFControl_Writer::STEPCAFControl_Writer () :
        myLayerMode( Standard_True ),
        myPropsMode( Standard_True ),
        mySHUOMode ( Standard_True ),
-       myDGTMode  ( Standard_True ),
+       myGDTMode  ( Standard_True ),
        myMatMode  ( Standard_True )
 {
   STEPCAFControl_Controller::Init();
@@ -215,15 +293,17 @@ STEPCAFControl_Writer::STEPCAFControl_Writer () :
 //=======================================================================
 
 STEPCAFControl_Writer::STEPCAFControl_Writer (const Handle(XSControl_WorkSession)& WS,
-					      const Standard_Boolean scratch)
+                                              const Standard_Boolean scratch) :
+  myColorMode(Standard_True),
+  myNameMode(Standard_True),
+  myLayerMode(Standard_True),
+  myPropsMode(Standard_True),
+  mySHUOMode(Standard_True),
+  myGDTMode(Standard_True),
+  myMatMode(Standard_True)
 {
   STEPCAFControl_Controller::Init();
   Init ( WS, scratch );
-  myColorMode = Standard_True;
-  myNameMode = Standard_True;
-  myLayerMode = Standard_True;
-  myPropsMode = Standard_True;
-  mySHUOMode = Standard_True;
 }
 
 
@@ -237,9 +317,11 @@ void STEPCAFControl_Writer::Init (const Handle(XSControl_WorkSession)& WS,
 {
   WS->SelectNorm ( "STEP" );
   myWriter.SetWS (WS,scratch);
-  myFiles = new STEPCAFControl_DictionaryOfExternFile;
+  myFiles.Clear();
   myLabEF.Clear();
   myLabels.Clear();
+  myGDTPresentationDM = new StepVisual_DraughtingModel();
+  myGDTPrsCurveStyle = new StepVisual_HArray1OfPresentationStyleAssignment(1, 1);
 }
 
 
@@ -259,7 +341,7 @@ IFSelect_ReturnStatus STEPCAFControl_Writer::Write (const Standard_CString filen
   TCollection_AsciiString dpath;
   mainfile.SystemName ( dpath );
 
-  STEPCAFControl_IteratorOfDictionaryOfExternFile it ( myFiles );
+  NCollection_DataMap<TCollection_AsciiString, Handle(STEPCAFControl_ExternFile)>::Iterator it(myFiles);
   for ( ; it.More(); it.Next() ) {
     Handle(STEPCAFControl_ExternFile) EF = it.Value();
     if ( EF->GetWriteStatus() != IFSelect_RetVoid ) continue;
@@ -268,7 +350,7 @@ IFSelect_ReturnStatus STEPCAFControl_Writer::Write (const Standard_CString filen
     TCollection_AsciiString fname = OSD_Path::AbsolutePath ( dpath, EF->GetName()->String() );
     if ( fname.Length() <= 0 ) fname = EF->GetName()->String();
 #ifdef OCCT_DEBUG
-    cout << "Writing external file: " << fname.ToCString() << endl;
+    std::cout << "Writing external file: " << fname.ToCString() << std::endl;
 #endif
     
     EF->SetWriteStatus ( EF->GetWS()->SendAll ( fname.ToCString() ) );
@@ -283,16 +365,17 @@ IFSelect_ReturnStatus STEPCAFControl_Writer::Write (const Standard_CString filen
 //purpose  :
 //=======================================================================
 
-Standard_Boolean STEPCAFControl_Writer::Transfer (const Handle(TDocStd_Document) &doc,
-						  const STEPControl_StepModelType mode,
-						  const Standard_CString multi)
+Standard_Boolean STEPCAFControl_Writer::Transfer(const Handle(TDocStd_Document) &doc,
+                                                 const STEPControl_StepModelType mode,
+                                                 const Standard_CString multi,
+                                                 const Message_ProgressRange& theProgress)
 {
   Handle(XCAFDoc_ShapeTool) STool = XCAFDoc_DocumentTool::ShapeTool( doc->Main() );
   if ( STool.IsNull() ) return Standard_False;
 
   TDF_LabelSequence labels;
   STool->GetFreeShapes ( labels );
-  return Transfer ( myWriter, labels, mode, multi );
+  return Transfer(myWriter, labels, mode, multi, Standard_False, theProgress);
 }
 
 
@@ -301,15 +384,28 @@ Standard_Boolean STEPCAFControl_Writer::Transfer (const Handle(TDocStd_Document)
 //purpose  :
 //=======================================================================
 
-Standard_Boolean STEPCAFControl_Writer::Transfer (const TDF_Label &L,
-						  const STEPControl_StepModelType mode,
-						  const Standard_CString multi)
+Standard_Boolean STEPCAFControl_Writer::Transfer(const TDF_Label& L,
+                                                 const STEPControl_StepModelType mode,
+                                                 const Standard_CString multi,
+                                                 const Message_ProgressRange& theProgress)
 {
   TDF_LabelSequence labels;
   labels.Append ( L );
-  return Transfer ( myWriter, labels, mode, multi );
+  return Transfer(myWriter, labels, mode, multi, Standard_False, theProgress);
 }
 
+//=======================================================================
+//function : Transfer
+//purpose  :
+//=======================================================================
+
+Standard_Boolean STEPCAFControl_Writer::Transfer(const TDF_LabelSequence& labels,
+                                                 const STEPControl_StepModelType mode,
+                                                 const Standard_CString multi,
+                                                 const Message_ProgressRange& theProgress)
+{
+  return Transfer(myWriter, labels, mode, multi, Standard_False, theProgress);
+}
 
 //=======================================================================
 //function : Perform
@@ -317,9 +413,10 @@ Standard_Boolean STEPCAFControl_Writer::Transfer (const TDF_Label &L,
 //=======================================================================
 
 Standard_Boolean STEPCAFControl_Writer::Perform (const Handle(TDocStd_Document) &doc,
-						 const Standard_CString filename)
+                                                 const Standard_CString filename,
+                                                 const Message_ProgressRange& theProgress)
 {
-  if ( ! Transfer ( doc ) ) return Standard_False;
+  if (!Transfer(doc, STEPControl_AsIs, 0L, theProgress)) return Standard_False;
   return Write ( filename ) == IFSelect_RetDone;
 }
 
@@ -330,9 +427,10 @@ Standard_Boolean STEPCAFControl_Writer::Perform (const Handle(TDocStd_Document) 
 //=======================================================================
 
 Standard_Boolean STEPCAFControl_Writer::Perform (const Handle(TDocStd_Document) &doc,
-						 const TCollection_AsciiString &filename)
+                                                 const TCollection_AsciiString &filename,
+                                                 const Message_ProgressRange& theProgress)
 {
-  if ( ! Transfer ( doc ) ) return Standard_False;
+  if ( ! Transfer ( doc, STEPControl_AsIs, 0L, theProgress ) ) return Standard_False;
   return Write ( filename.ToCString() ) == IFSelect_RetDone;
 }
 
@@ -342,7 +440,7 @@ Standard_Boolean STEPCAFControl_Writer::Perform (const Handle(TDocStd_Document) 
 //purpose  :
 //=======================================================================
 
-const Handle(STEPCAFControl_DictionaryOfExternFile) &STEPCAFControl_Writer::ExternFiles () const
+const NCollection_DataMap<TCollection_AsciiString, Handle(STEPCAFControl_ExternFile)>& STEPCAFControl_Writer::ExternFiles () const
 {
   return myFiles;
 }
@@ -372,9 +470,9 @@ Standard_Boolean STEPCAFControl_Writer::ExternFile (const Standard_CString name,
 						    Handle(STEPCAFControl_ExternFile) &ef) const
 {
   ef.Nullify();
-  if ( ! myFiles.IsNull() || ! myFiles->HasItem ( name ) )
+  if ( ! myFiles.IsEmpty() || ! myFiles.IsBound ( name ) )
     return Standard_False;
-  ef = myFiles->Item ( name );
+  ef = myFiles.Find( name );
   return Standard_True;
 }
 
@@ -407,10 +505,11 @@ const STEPControl_Writer &STEPCAFControl_Writer::Writer () const
 //=======================================================================
 
 Standard_Boolean STEPCAFControl_Writer::Transfer (STEPControl_Writer &writer,
-						  const TDF_LabelSequence &labels,
-						  const STEPControl_StepModelType mode,
-						  const Standard_CString multi,
-                                                  const Standard_Boolean isExternFile)
+                                                  const TDF_LabelSequence &labels,
+                                                  const STEPControl_StepModelType mode,
+                                                  const Standard_CString multi,
+                                                  const Standard_Boolean isExternFile,
+                                                  const Message_ProgressRange& theProgress)
 {
   if ( labels.Length() <=0 ) return Standard_False;
 
@@ -420,44 +519,81 @@ Standard_Boolean STEPCAFControl_Writer::Transfer (STEPControl_Writer &writer,
   // translate free top-level shapes of the DECAF document
   Standard_Integer ap = Interface_Static::IVal ("write.step.schema");
   TDF_LabelSequence sublabels;
-  for ( Standard_Integer i=1; i <= labels.Length(); i++ ) {
+  Message_ProgressScope aPS(theProgress, "Labels", labels.Length());
+  for ( Standard_Integer i=1; i <= labels.Length() && aPS.More(); i++)
+  {
+    Message_ProgressRange aRange = aPS.Next();
     TDF_Label L = labels.Value(i);
-    TopoDS_Shape dummy;
     if ( myLabels.IsBound ( L ) ) continue; // already processed
 
     TopoDS_Shape shape = XCAFDoc_ShapeTool::GetShape ( L );
     if ( shape.IsNull() ) continue;
-    
+
     // write shape either as a whole, or as multifile (with extern refs)
-    if ( ! multi /* || ! XCAFDoc_ShapeTool::IsAssembly ( L ) */ ) {
+    if ( ! multi  ) {
       Actor->SetStdMode ( Standard_False );
 
-      // fill sequence of (sub) shapes for which attributes should be written
-      // and set actor to handle assemblies in a proper way
       TDF_LabelSequence comp;
-      XCAFDoc_ShapeTool::GetComponents ( L, comp, Standard_True );
+
+      //For case when only part of assemby structure should be written in the document
+      //if specified label is component of the assembly then
+      //in order to save location of this component in the high-level assembly
+      //and save name of high-level assembly it is necessary to represent structure of high-level assembly 
+      //as assembly with one component specified by current label. 
+      //For that compound containing only specified component is binded to the label of the high-level assembly.
+      //The such way full structure of high-level assembly was replaced on the assembly contaning one component.
+      //For case when free shape reference is (located root) also create an auxiliary assembly.
+      if ( XCAFDoc_ShapeTool::IsReference ( L ) )
+      {
+        TopoDS_Compound aComp;
+        BRep_Builder aB;
+        aB.MakeCompound(aComp);
+        aB.Add(aComp, shape);
+        shape = aComp; 
+        comp.Append(L);
+        TDF_Label ref;
+        if ( XCAFDoc_ShapeTool::GetReferredShape ( L, ref ) )
+        {
+          if(XCAFDoc_ShapeTool::IsAssembly ( ref))
+            XCAFDoc_ShapeTool::GetComponents ( ref, comp, Standard_True );
+        }
+        if ( !XCAFDoc_ShapeTool::IsFree ( L ) )
+          L = L.Father();
+      }
+      else
+      {
+        // fill sequence of (sub) shapes for which attributes should be written
+        // and set actor to handle assemblies in a proper way
+        if(XCAFDoc_ShapeTool::IsAssembly ( L ))
+          XCAFDoc_ShapeTool::GetComponents ( L, comp, Standard_True );
+      }
+      
       for ( Standard_Integer k=1; k <= comp.Length(); k++ ) {
-	TDF_Label ref;
-	if ( ! XCAFDoc_ShapeTool::GetReferredShape ( comp(k), ref ) ) continue;
-	if ( ! myLabels.IsBound ( ref ) ) {
-	  TopoDS_Shape refS = XCAFDoc_ShapeTool::GetShape ( ref );
-	  myLabels.Bind ( ref, refS );
-	  sublabels.Append ( ref );
-	  if ( XCAFDoc_ShapeTool::IsAssembly ( ref ) )
-	    Actor->RegisterAssembly ( refS );
-	}
+        TDF_Label ref;
+        if ( ! XCAFDoc_ShapeTool::GetReferredShape ( comp(k), ref ) ) continue;
+        if ( ! myLabels.IsBound ( ref ) ) {
+          TopoDS_Shape refS = XCAFDoc_ShapeTool::GetShape ( ref );
+          myLabels.Bind ( ref, refS );
+          sublabels.Append ( ref );
+          if ( XCAFDoc_ShapeTool::IsAssembly ( ref ) )
+            Actor->RegisterAssembly ( refS );
+        }
       }
       myLabels.Bind ( L, shape );
       sublabels.Append ( L );
-      if ( XCAFDoc_ShapeTool::IsAssembly ( L ) )
-	Actor->RegisterAssembly ( shape );
 
-      writer.Transfer(shape,mode,Standard_False);
+      if ( XCAFDoc_ShapeTool::IsAssembly ( L ) || XCAFDoc_ShapeTool::IsReference ( L ) )
+        Actor->RegisterAssembly ( shape );
+
+      writer.Transfer(shape, mode, Standard_False, aRange);
       Actor->SetStdMode ( Standard_True ); // restore default behaviour
     }
     else {
       // translate final solids
-      TopoDS_Shape Sass = TransferExternFiles ( L, mode, sublabels, multi );
+      Message_ProgressScope aPS1 (aRange, NULL, 2);
+      TopoDS_Shape Sass = TransferExternFiles(L, mode, sublabels, multi, aPS1.Next());
+      if (aPS1.UserBreak())
+        return Standard_False;
 
       // translate main assembly structure
 /*
@@ -479,11 +615,13 @@ Standard_Boolean STEPCAFControl_Writer::Transfer (STEPControl_Writer &writer,
 */      
       Standard_Integer assemblymode = Interface_Static::IVal ("write.step.assembly");
       Interface_Static::SetCVal ("write.step.assembly", "On");
-      writer.Transfer ( Sass, STEPControl_AsIs );
+      writer.Transfer ( Sass, STEPControl_AsIs, Standard_True, aPS1.Next());
       Interface_Static::SetIVal ("write.step.assembly", assemblymode);
       Interface_Static::SetIVal ("write.step.schema", ap);
     }
   }
+  if (aPS.UserBreak())
+    return Standard_False;
 
   writer.WS()->ComputeGraph(Standard_True );// added by skl 03.11.2003 since we use
                                             // writer.Transfer() wihtout compute graph
@@ -507,19 +645,24 @@ Standard_Boolean STEPCAFControl_Writer::Transfer (STEPControl_Writer &writer,
       WriteSHUOs (  writer.WS(), sublabels );
     
     // write G&DTs
-    if(GetDimTolMode())
-      WriteDGTs(writer.WS(),sublabels);
+    if(GetDimTolMode()) {
+      if (ap == 5) {
+        WriteDGTsAP242(writer.WS(), sublabels);
+      }
+      else {
+        WriteDGTs(writer.WS(), sublabels);
+      }
+    }
 
     // write Materials
     if(GetMaterialMode())
       WriteMaterials(writer.WS(),sublabels);
 
     // register all MDGPRs in model
+    const Handle(Interface_InterfaceModel) &Model = writer.WS()->Model();
     MoniTool_DataMapIteratorOfDataMapOfShapeTransient anItr(myMapCompMDGPR);
-    for (; anItr.More(); anItr.Next()) {
-      Handle(Interface_InterfaceModel) Model = writer.WS()->Model();
+    for (; anItr.More(); anItr.Next())
       Model->AddWithRefs( anItr.Value() );
-    }
   }
   
   if ( multi ) { // external refs
@@ -542,14 +685,14 @@ Standard_Boolean STEPCAFControl_Writer::Transfer (STEPControl_Writer &writer,
     *  Write names for the sub-shapes
     * ================================ */
 
-  if ( Interface_Static::IVal("write.stepcaf.subshapes.name") )
+  if (Interface_Static::IVal("write.stepcaf.subshapes.name") != 0)
   {
-    Handle(XSControl_TransferWriter) TW = this->ChangeWriter().WS()->TransferWriter();
-    Handle(Transfer_FinderProcess) FP = TW->FinderProcess();
+    const Handle(XSControl_TransferWriter) &TW = this->ChangeWriter().WS()->TransferWriter();
+    const Handle(Transfer_FinderProcess) &FP = TW->FinderProcess();
 
-    for ( int i = 1; i <= labels.Length(); i++ )
+    for ( int i = 1; i <= sublabels.Length(); i++ )
     {
-      TDF_Label L = labels.Value(i);
+      TDF_Label L = sublabels.Value(i);
 
       for ( TDF_ChildIterator it(L, Standard_True); it.More(); it.Next() )
       {
@@ -587,9 +730,10 @@ Standard_Boolean STEPCAFControl_Writer::Transfer (STEPControl_Writer &writer,
 //=======================================================================
 
 TopoDS_Shape STEPCAFControl_Writer::TransferExternFiles (const TDF_Label &L,
-							 const STEPControl_StepModelType mode,
-							 TDF_LabelSequence &labels,
-							 const Standard_CString prefix)
+                                                         const STEPControl_StepModelType mode,
+                                                         TDF_LabelSequence &labels,
+                                                         const Standard_CString prefix,
+                                                         const Message_ProgressRange& theProgress)
 {
   // if label already translated, just return the shape
   if ( myLabels.IsBound ( L ) ) {
@@ -599,11 +743,10 @@ TopoDS_Shape STEPCAFControl_Writer::TransferExternFiles (const TDF_Label &L,
   TopoDS_Compound C;
   BRep_Builder B;
   B.MakeCompound ( C );
-  labels.Append ( L );
-
+  //labels.Append ( L ); 
   // if not assembly, write to separate file
-  if ( ! XCAFDoc_ShapeTool::IsAssembly ( L ) ) {
-
+  if ( ! XCAFDoc_ShapeTool::IsAssembly ( L ) && !XCAFDoc_ShapeTool::IsComponent ( L )) {
+    labels.Append ( L );
     // prepare for transfer
     Handle(XSControl_WorkSession) newWS = new XSControl_WorkSession;
     newWS->SelectNorm ( "STEP" );
@@ -617,13 +760,13 @@ TopoDS_Shape STEPCAFControl_Writer::TransferExternFiles (const TDF_Label &L,
     GetLabelName ( L, basename );
     Handle(TCollection_HAsciiString) name = new TCollection_HAsciiString ( basename );
     name->AssignCat ( ".stp" );
-    if ( myFiles->HasItem ( name->ToCString() ) ) { // avoid confusions
+    if ( myFiles.IsBound( name->ToCString() ) ) { // avoid confusions
       for ( Standard_Integer k=1; k < 32000; k++ ) {
-	name = new TCollection_HAsciiString ( basename );
-	name->AssignCat ( "_" );
-	name->AssignCat ( TCollection_AsciiString ( k ).ToCString() );
-	name->AssignCat ( ".stp" );
-	if ( ! myFiles->HasItem ( name->ToCString() ) ) break;
+        name = new TCollection_HAsciiString ( basename );
+        name->AssignCat ( "_" );
+        name->AssignCat ( TCollection_AsciiString ( k ).ToCString() );
+        name->AssignCat ( ".stp" );
+        if ( ! myFiles.IsBound ( name->ToCString() ) ) break;
       }
     }
 
@@ -635,29 +778,40 @@ TopoDS_Shape STEPCAFControl_Writer::TransferExternFiles (const TDF_Label &L,
     Standard_Integer assemblymode = Interface_Static::IVal ("write.step.assembly");
     Interface_Static::SetCVal ("write.step.assembly", "Off");
     const Standard_CString multi = 0;
-    EF->SetTransferStatus ( Transfer ( sw, Lseq, mode, multi, Standard_True ) );
+    EF->SetTransferStatus ( Transfer ( sw, Lseq, mode, multi, Standard_True, theProgress) );
     Interface_Static::SetIVal ("write.step.assembly", assemblymode);
     myLabEF.Bind ( L, EF );
-    myFiles->SetItem ( name->ToCString(), EF );
+    myFiles.Bind ( name->ToCString(), EF );
 
     // return empty compound as replacement for the shape
     myLabels.Bind ( L, C );
     return C;
   }
-
+  TDF_LabelSequence comp;
+  TDF_Label aCurL = L;
+  //if specified shape is component then high-level assembly is considered
+  //to get valid structure with location
+  if ( XCAFDoc_ShapeTool::IsComponent ( L ) )
+  {
+    comp.Append(L);
+    aCurL = L.Father();
+  }
   // else iterate on components add create structure of empty compounds
   // representing the assembly
-  TDF_LabelSequence comp;
-  XCAFDoc_ShapeTool::GetComponents ( L, comp, Standard_False );
-  for ( Standard_Integer k=1; k <= comp.Length(); k++ ) {
+  else if (XCAFDoc_ShapeTool::IsAssembly ( L ))
+    XCAFDoc_ShapeTool::GetComponents ( L, comp, Standard_False );
+
+  labels.Append ( aCurL );
+  Message_ProgressScope aPS(theProgress, NULL, comp.Length());
+  for ( Standard_Integer k=1; k <= comp.Length() && aPS.More(); k++ ) {
     TDF_Label lab = comp(k);
     TDF_Label ref;
     if ( ! XCAFDoc_ShapeTool::GetReferredShape ( lab, ref ) ) continue;
-    TopoDS_Shape Scomp = TransferExternFiles ( ref, mode, labels, prefix );
+    TopoDS_Shape Scomp = TransferExternFiles(ref, mode, labels, prefix, aPS.Next());
     Scomp.Location ( XCAFDoc_ShapeTool::GetLocation ( lab ) );
     B.Add ( C, Scomp );
   }
-  myLabels.Bind ( L, C );
+  myLabels.Bind ( aCurL, C );
   return C;
 }
 
@@ -672,8 +826,8 @@ Standard_Boolean STEPCAFControl_Writer::WriteExternRefs (const Handle(XSControl_
 {
   if ( labels.Length() <=0 ) return Standard_False;
 
-  Handle(XSControl_TransferWriter) TW = WS->TransferWriter();
-  Handle(Transfer_FinderProcess) FP = TW->FinderProcess();
+  const Handle(XSControl_TransferWriter) &TW = WS->TransferWriter();
+  const Handle(Transfer_FinderProcess) &FP = TW->FinderProcess();
   STEPConstruct_ExternRefs EFTool ( WS );
   Standard_Integer schema = Interface_Static::IVal("write.step.schema");
   for ( Standard_Integer k=1; k <= labels.Length(); k++ ) {
@@ -692,19 +846,19 @@ Standard_Boolean STEPCAFControl_Writer::WriteExternRefs (const Handle(XSControl_
     Handle(TransferBRep_ShapeMapper) mapper = TransferBRep::ShapeMapper ( FP, S );
     if ( ! FP->FindTypedTransient ( mapper, STANDARD_TYPE(StepShape_ShapeDefinitionRepresentation), SDR ) ) {
 #ifdef OCCT_DEBUG
-      cout << "Warning: Cannot find SDR for " << S.TShape()->DynamicType()->Name() << endl;
+      std::cout << "Warning: Cannot find SDR for " << S.TShape()->DynamicType()->Name() << std::endl;
 #endif
       continue;
     }
 
     // add extern ref
-    const Standard_CString format = (const Standard_CString) ( schema == 3 ? "STEP AP203" : "STEP AP214" );
+    const char* format = (schema == 3 ? "STEP AP203" : "STEP AP214");
     // try to get PD from SDR
     StepRepr_RepresentedDefinition RD = SDR->Definition();
     Handle(StepRepr_PropertyDefinition) aPropDef = RD.PropertyDefinition();
     if (aPropDef.IsNull()) {
 #ifdef OCCT_DEBUG
-      cout << "Warning: STEPCAFControl_Writer::WriteExternRefs StepRepr_PropertyDefinition is null for " << S.TShape()->DynamicType()->Name() << endl;
+      std::cout << "Warning: STEPCAFControl_Writer::WriteExternRefs StepRepr_PropertyDefinition is null for " << S.TShape()->DynamicType()->Name() << std::endl;
 #endif
       continue;
     }
@@ -712,7 +866,7 @@ Standard_Boolean STEPCAFControl_Writer::WriteExternRefs (const Handle(XSControl_
     Handle(StepBasic_ProductDefinition) PD = CharDef.ProductDefinition();
     if (PD.IsNull()) {
 #ifdef OCCT_DEBUG
-      cout << "Warning: STEPCAFControl_Writer::WriteExternRefs StepBasic_ProductDefinition is null for " << S.TShape()->DynamicType()->Name() << endl;
+      std::cout << "Warning: STEPCAFControl_Writer::WriteExternRefs StepBasic_ProductDefinition is null for " << S.TShape()->DynamicType()->Name() << std::endl;
 #endif
       continue;
     }
@@ -751,14 +905,15 @@ static Standard_Integer FindEntities (const Handle(Transfer_FinderProcess) &FP,
   if ( TransientListBinder.IsNull() && S.ShapeType() == TopAbs_COMPOUND) 
   {
     for ( TopoDS_Iterator it(S); it.More(); it.Next() ) {
-      Handle(StepRepr_RepresentationItem) item = STEPConstruct::FindEntity ( FP, it.Value(), L );
-      if ( item.IsNull() ) continue;
+      Handle(StepRepr_RepresentationItem) aLocalItem = STEPConstruct::FindEntity ( FP, it.Value(), L );
+      if (aLocalItem.IsNull() ) continue;
       nres++;
-      seqRI.Append ( item );
+      seqRI.Append (aLocalItem);
     }
   }
-  else
+  else if(!TransientListBinder.IsNull())
   {
+
     const Standard_Integer nb = TransientListBinder->NbTransients();
     for (Standard_Integer i=1; i<=nb; i++) {
       Handle(Standard_Transient) t = TransientListBinder->Transient(i);
@@ -803,7 +958,9 @@ static Standard_Boolean getStyledItem(const TopoDS_Shape& S,
     // search for PSA of Monifold solid
     if ( !anSelItmHArr.IsNull() )
     {
-      for (Standard_Integer si = 1; si <= anSelItmHArr->Length(); si++) {
+      TColStd_SequenceOfTransient aNewseqRI;
+      Standard_Boolean isFilled = Standard_False;
+      for (Standard_Integer si = 1; si <= anSelItmHArr->Length() && !found; si++) {
         Handle(StepVisual_StyledItem) aSelItm =
           Handle(StepVisual_StyledItem)::DownCast(anSelItmHArr->Value(si));
 
@@ -811,13 +968,16 @@ static Standard_Boolean getStyledItem(const TopoDS_Shape& S,
           continue;
 
         // check that it is a stiled item for monifold solid brep
-        TopLoc_Location Loc;
-        TColStd_SequenceOfTransient aNewseqRI;
-        FindEntities ( Styles.FinderProcess(), aTopLevSh, Loc, aNewseqRI );
+        if (!isFilled)
+        {
+          TopLoc_Location Loc;
+          FindEntities(Styles.FinderProcess(), aTopLevSh, Loc, aNewseqRI);
+          isFilled = Standard_True;
+        }
         if ( aNewseqRI.Length() > 0 )
         {
           
-          Handle(StepRepr_RepresentationItem) anItem = aSelItm->Item();
+          const Handle(StepRepr_RepresentationItem)& anItem = aSelItm->Item();
           Standard_Boolean isSameMonSolBR = Standard_False;
           for (Standard_Integer mi = 1; mi <= aNewseqRI.Length(); mi++) {
             if ( !anItem.IsNull() && anItem == aNewseqRI.Value( mi ) ) {
@@ -831,8 +991,7 @@ static Standard_Boolean getStyledItem(const TopoDS_Shape& S,
         
         
         for (Standard_Integer jsi = 1; jsi <= aSelItm->NbStyles() && !found; jsi++) {
-          Handle(StepVisual_PresentationStyleAssignment) aFatherPSA =
-            Handle(StepVisual_PresentationStyleAssignment)::DownCast(aSelItm->StylesValue(jsi));
+          const Handle(StepVisual_PresentationStyleAssignment)& aFatherPSA = aSelItm->StylesValue(jsi);
           // check for PSA for top-level (not Presentation style by contex for NAUO)
           if (aFatherPSA.IsNull() || aFatherPSA->IsKind(STANDARD_TYPE(StepVisual_PresentationStyleByContext)))
             continue;
@@ -855,8 +1014,7 @@ static Standard_Boolean setDefaultInstanceColor (const Handle(StepVisual_StyledI
 {
    Standard_Boolean found = Standard_False;
   for (Standard_Integer jsi = 1; jsi <= aSelItm->NbStyles() && !found; jsi++) {
-    Handle(StepVisual_PresentationStyleAssignment) aFatherPSA =
-    Handle(StepVisual_PresentationStyleAssignment)::DownCast(aSelItm->StylesValue(jsi));
+    Handle(StepVisual_PresentationStyleAssignment) aFatherPSA = aSelItm->StylesValue(jsi);
   // check for PSA for top-level (not Presentation style by contex for NAUO)
   if (aFatherPSA.IsNull() || aFatherPSA->IsKind(STANDARD_TYPE(StepVisual_PresentationStyleByContext))) 
     return Standard_False;
@@ -899,7 +1057,7 @@ static Standard_Boolean setDefaultInstanceColor (const Handle(StepVisual_StyledI
 //=======================================================================
 static void MakeSTEPStyles (STEPConstruct_Styles &Styles,
 			    const TopoDS_Shape &S,
-			    const XCAFPrs_DataMapOfShapeStyle &settings,
+			    const XCAFPrs_IndexedDataMapOfShapeStyle &settings,
 			    Handle(StepVisual_StyledItem) &override,
 			    TopTools_MapOfShape &Map,
                             const MoniTool_DataMapOfShapeTransient& myMapCompMDGPR,
@@ -915,17 +1073,21 @@ static void MakeSTEPStyles (STEPConstruct_Styles &Styles,
   // check if shape has its own style (r inherits from ancestor)
   XCAFPrs_Style style;
   if ( inherit ) style = *inherit;
-  if ( settings.IsBound(S) ) {
-    XCAFPrs_Style own = settings.Find(S);
+  if ( settings.Contains(S) ) {
+    XCAFPrs_Style own = settings.FindFromKey(S);
     if ( !own.IsVisible() ) style.SetVisibility ( Standard_False );
     if ( own.IsSetColorCurv() ) style.SetColorCurv ( own.GetColorCurv() );
-    if ( own.IsSetColorSurf() ) style.SetColorSurf ( own.GetColorSurf() );
+    if ( own.IsSetColorSurf() ) style.SetColorSurf ( own.GetColorSurfRGBA() );
   }
 
   // translate colors to STEP
   Handle(StepVisual_Colour) surfColor, curvColor;
-  if ( style.IsSetColorSurf() )
-    surfColor = Styles.EncodeColor(style.GetColorSurf(),DPDCs,ColRGBs);
+  Standard_Real RenderTransp = 0.0;
+  if ( style.IsSetColorSurf() ) {
+    Quantity_ColorRGBA sCol = style.GetColorSurfRGBA();
+    RenderTransp = 1.0 - sCol.Alpha();
+    surfColor = Styles.EncodeColor(sCol.GetRGB(),DPDCs,ColRGBs);
+  }
   if ( style.IsSetColorCurv() )
     curvColor = Styles.EncodeColor(style.GetColorCurv(),DPDCs,ColRGBs);
   
@@ -941,7 +1103,7 @@ static void MakeSTEPStyles (STEPConstruct_Styles &Styles,
       TColStd_SequenceOfTransient seqRI;
       Standard_Integer nb = FindEntities ( Styles.FinderProcess(), S, L, seqRI );
 #ifdef OCCT_DEBUG
-      if ( nb <=0 ) cout << "Warning: Cannot find RI for " << S.TShape()->DynamicType()->Name() << endl;
+      if ( nb <=0 ) std::cout << "Warning: Cannot find RI for " << S.TShape()->DynamicType()->Name() << std::endl;
 #endif
       //Get overridden style gka 10.06.03
       if ( isComponent && nb) 
@@ -953,12 +1115,12 @@ static void MakeSTEPStyles (STEPConstruct_Styles &Styles,
           Handle(StepRepr_RepresentationItem)::DownCast(seqRI(i));
         Handle(StepVisual_PresentationStyleAssignment) PSA;
         if ( style.IsVisible() || !surfColor.IsNull() || !curvColor.IsNull() ) {
-          PSA = Styles.MakeColorPSA ( item, surfColor, curvColor, isComponent );
+          PSA = Styles.MakeColorPSA ( item, surfColor, curvColor, surfColor, RenderTransp, isComponent );
         }
         else {
           // default white color
-          surfColor = Styles.EncodeColor(Quantity_Color(1,1,1,Quantity_TOC_RGB),DPDCs,ColRGBs);
-          PSA = Styles.MakeColorPSA ( item, surfColor, curvColor, isComponent );
+          surfColor = Styles.EncodeColor(Quantity_Color(Quantity_NOC_WHITE),DPDCs,ColRGBs);
+          PSA = Styles.MakeColorPSA ( item, surfColor, curvColor, surfColor, 0.0, isComponent );
           if ( isComponent ) 
             setDefaultInstanceColor( override, PSA);
           
@@ -1022,6 +1184,7 @@ Standard_Boolean STEPCAFControl_Writer::WriteColors (const Handle(XSControl_Work
 
   // Iterate on shapes in the document
   Handle(XCAFDoc_ColorTool) CTool = XCAFDoc_DocumentTool::ColorTool( labels(1) );
+  Handle(XCAFDoc_VisMaterialTool) aMatTool = XCAFDoc_DocumentTool::VisMaterialTool( labels(1) );
   if ( CTool.IsNull() ) return Standard_False;
 
   STEPConstruct_Styles Styles ( WS );
@@ -1035,8 +1198,8 @@ Standard_Boolean STEPCAFControl_Writer::WriteColors (const Handle(XSControl_Work
     // are not supported (it is not clear how to encode that in STEP)
     if ( XCAFDoc_ShapeTool::IsAssembly ( L ) ) {
 #ifdef OCCT_DEBUG
-      cout << "Warning: Cannot write color  for Assembly" << endl;
-      cout << "Info: Check for colors assigned to components in assembly" << endl;
+      std::cout << "Warning: Cannot write color  for Assembly" << std::endl;
+      std::cout << "Info: Check for colors assigned to components in assembly" << std::endl;
 #endif
       // PTV 22.01.2003 Write color for instances.
       TDF_LabelSequence compLabels;
@@ -1067,7 +1230,7 @@ Standard_Boolean STEPCAFControl_Writer::WriteColors (const Handle(XSControl_Work
         continue;
     
     // collect settings set on that label
-    XCAFPrs_DataMapOfShapeStyle settings;
+    XCAFPrs_IndexedDataMapOfShapeStyle settings;
     TDF_LabelSequence seq;
     seq.Append ( L );
     XCAFDoc_ShapeTool::GetSubShapes ( L, seq );
@@ -1075,7 +1238,7 @@ Standard_Boolean STEPCAFControl_Writer::WriteColors (const Handle(XSControl_Work
     for ( Standard_Integer j = 1; j <= seq.Length(); j++ ) {
       TDF_Label lab = seq.Value(j);
       XCAFPrs_Style style;
-      Quantity_Color C;
+      Quantity_ColorRGBA C;
       if ( lab == L ) {
         // check for invisible status of object on label
         if ( !CTool->IsVisible( lab ) ) {
@@ -1084,13 +1247,23 @@ Standard_Boolean STEPCAFControl_Writer::WriteColors (const Handle(XSControl_Work
         }
       }
       if ( CTool->GetColor ( lab, XCAFDoc_ColorGen, C ) ) {
-        style.SetColorCurv ( C );
+        style.SetColorCurv ( C.GetRGB() );
         style.SetColorSurf ( C );
       }
       if ( CTool->GetColor ( lab, XCAFDoc_ColorSurf, C ) )
         style.SetColorSurf ( C );
       if ( CTool->GetColor ( lab, XCAFDoc_ColorCurv, C ) )
-        style.SetColorCurv ( C );
+        style.SetColorCurv ( C.GetRGB() );
+      if (!style.IsSetColorSurf())
+      {
+        Handle(XCAFDoc_VisMaterial) aVisMat = aMatTool->GetShapeMaterial (lab);
+        if (!aVisMat.IsNull()
+         && !aVisMat->IsEmpty())
+        {
+          // only color can be stored in STEP
+          style.SetColorSurf (aVisMat->BaseColor());
+        }
+      }
       
       // commented, cause we are need to take reference from 
 //       if ( isComponent && lab == L && !isVisible)
@@ -1100,7 +1273,11 @@ Standard_Boolean STEPCAFControl_Writer::WriteColors (const Handle(XSControl_Work
       if ( ! style.IsSetColorCurv() && ! style.IsSetColorSurf() && isVisible ) continue;
 
       TopoDS_Shape sub = XCAFDoc_ShapeTool::GetShape ( lab );
-      settings.Bind ( sub, style );
+      XCAFPrs_Style* aMapStyle = settings.ChangeSeek (sub);
+      if (aMapStyle == NULL)
+        settings.Add ( sub, style );
+      else
+        *aMapStyle = style;
     }
     
     if ( settings.Extent() <=0 ) continue;
@@ -1117,7 +1294,7 @@ Standard_Boolean STEPCAFControl_Writer::WriteColors (const Handle(XSControl_Work
     if (!isComponent) {
       if ( myMapCompMDGPR.IsBound( aTopSh )) {
 #ifdef OCCT_DEBUG
-        cerr << "Error: Current Top-Level shape have MDGPR already " << endl;
+        std::cerr << "Error: Current Top-Level shape have MDGPR already " << std::endl;
 #endif
       }
       Styles.CreateMDGPR ( Context, aMDGPR );
@@ -1126,8 +1303,8 @@ Standard_Boolean STEPCAFControl_Writer::WriteColors (const Handle(XSControl_Work
     }
     else {
       // create SDR and add to model.
-      Handle(XSControl_TransferWriter) TW = WS->TransferWriter();
-      Handle(Transfer_FinderProcess) FP = TW->FinderProcess();
+      const Handle(XSControl_TransferWriter) &TW = WS->TransferWriter();
+      const Handle(Transfer_FinderProcess) &FP = TW->FinderProcess();
       Handle(TransferBRep_ShapeMapper) mapper = TransferBRep::ShapeMapper ( FP, S );
       Handle(StepShape_ContextDependentShapeRepresentation) CDSR;
       if ( FP->FindTypedTransient(mapper, 
@@ -1161,8 +1338,7 @@ Standard_Boolean STEPCAFControl_Writer::WriteColors (const Handle(XSControl_Work
         for ( si=1; si <= oldLengthlen; si++ )
           newItems->SetValue( el++, oldItems->Value( si ) );
         for ( si=1; si <= Styles.NbStyles(); si++ ) {
-          newItems->SetValue( el++, Handle(StepRepr_RepresentationItem)::DownCast(Styles.Style(si)));
-//           WP->Model()->AddWithRefs ( Handle(StepRepr_RepresentationItem)::DownCast (Styles.Style(si)));
+          newItems->SetValue( el++, Styles.Style(si));
         }
        
         if (newItems->Length() > 0)
@@ -1176,8 +1352,7 @@ Standard_Boolean STEPCAFControl_Writer::WriteColors (const Handle(XSControl_Work
         new StepVisual_HArray1OfInvisibleItem (1,Styles.NbStyles());
       // put all style item into the harray
       for ( Standard_Integer si=1; si <= Styles.NbStyles(); si++ ) {
-        Handle(StepRepr_RepresentationItem) styledItm =
-          Handle(StepRepr_RepresentationItem)::DownCast(Styles.Style(si));
+        Handle(StepRepr_RepresentationItem) styledItm = Styles.Style(si);
         StepVisual_InvisibleItem anInvItem;
         anInvItem.SetValue( styledItm );
         HInvsblItm->SetValue( si, anInvItem );
@@ -1203,11 +1378,8 @@ Standard_Boolean STEPCAFControl_Writer::WriteNames (const Handle(XSControl_WorkS
   if ( labels.Length() <=0 ) return Standard_False;
 
   // get working data
-  Handle(Interface_InterfaceModel) Model = WS->Model();
-  Handle(XSControl_TransferWriter) TW = WS->TransferWriter();
-  Handle(Transfer_FinderProcess) FP = TW->FinderProcess();
-//  Handle(XCAFDoc_ShapeTool) STool = XCAFDoc_DocumentTool::ShapeTool( labels(1) );
-//  if ( STool.IsNull() ) return Standard_False;
+  const Handle(XSControl_TransferWriter) &TW = WS->TransferWriter();
+  const Handle(Transfer_FinderProcess) &FP = TW->FinderProcess();
 
   // Iterate on requested shapes
   for ( Standard_Integer i=1; i <= labels.Length(); i++ ) {
@@ -1231,7 +1403,7 @@ Standard_Boolean STEPCAFControl_Writer::WriteNames (const Handle(XSControl_WorkS
     Handle(TransferBRep_ShapeMapper) mapper = TransferBRep::ShapeMapper ( FP, S );
     if ( ! FP->FindTypedTransient ( mapper, STANDARD_TYPE(StepShape_ShapeDefinitionRepresentation), SDR ) ) {
 #ifdef OCCT_DEBUG
-      cout << "Warning: Cannot find SDR for " << S.TShape()->DynamicType()->Name() << endl;
+      std::cout << "Warning: Cannot find SDR for " << S.TShape()->DynamicType()->Name() << std::endl;
 #endif
       continue;
     }
@@ -1420,9 +1592,9 @@ Standard_Boolean STEPCAFControl_Writer::WriteLayers (const Handle(XSControl_Work
   if ( labels.Length() <=0 ) return Standard_False;
 
   // get working data
-  Handle(Interface_InterfaceModel) Model = WS->Model();
-  Handle(XSControl_TransferWriter) TW = WS->TransferWriter();
-  Handle(Transfer_FinderProcess) FP = TW->FinderProcess();
+  const Handle(Interface_InterfaceModel) &Model = WS->Model();
+  const Handle(XSControl_TransferWriter) &TW = WS->TransferWriter();
+  const Handle(Transfer_FinderProcess) &FP = TW->FinderProcess();
   Handle(XCAFDoc_LayerTool) LTool = XCAFDoc_DocumentTool::LayerTool( labels(1) );
   if (LTool.IsNull() ) return Standard_False;
 
@@ -1467,7 +1639,7 @@ Standard_Boolean STEPCAFControl_Writer::WriteLayers (const Handle(XSControl_Work
       Standard_Integer nb = 
 	FindEntities ( FP, oneShape, Loc, seqRI );
       if ( nb <=0 ) 
-	FP->Messenger() << "Warning: Cannot find RI for " << oneShape.TShape()->DynamicType()->Name() << endl;
+	FP->Messenger()->SendInfo() << "Warning: Cannot find RI for " << oneShape.TShape()->DynamicType()->Name() << std::endl;
     }
     if ( seqRI.Length() <= 0 ) continue;
 
@@ -1479,7 +1651,7 @@ Standard_Boolean STEPCAFControl_Writer::WriteLayers (const Handle(XSControl_Work
     if (L.FindAttribute(XCAFDoc::InvisibleGUID(), aUAttr)) {
       descr = new TCollection_HAsciiString ("invisible");
 #ifdef OCCT_DEBUG
-      FP->Messenger() << "\tLayer \"" << hName->String().ToCString() << "\" is invisible"<<endl;
+      std::cout << "\tLayer \"" << hName->String().ToCString() << "\" is invisible"<<std::endl;
 #endif
       isLinv = Standard_True;
     }
@@ -1519,6 +1691,7 @@ Standard_Boolean STEPCAFControl_Writer::WriteLayers (const Handle(XSControl_Work
 //=======================================================================
 static Standard_Boolean getSHUOstyle(const TDF_Label& aSHUOlab,
                                      const Handle(XCAFDoc_ColorTool)& CTool,
+                                     const Handle(XCAFDoc_VisMaterialTool)& theMatTool,
                                      XCAFPrs_Style& SHUOstyle)
 {
   Quantity_Color C;
@@ -1533,6 +1706,16 @@ static Standard_Boolean getSHUOstyle(const TDF_Label& aSHUOlab,
       SHUOstyle.SetColorSurf ( C );
     if ( CTool->GetColor ( aSHUOlab, XCAFDoc_ColorCurv, C ) )
       SHUOstyle.SetColorCurv ( C );
+    if (!SHUOstyle.IsSetColorSurf())
+    {
+      Handle(XCAFDoc_VisMaterial) aVisMat = theMatTool->GetShapeMaterial (aSHUOlab);
+      if (!aVisMat.IsNull()
+       && !aVisMat->IsEmpty())
+      {
+        // only color can be stored in STEP
+        SHUOstyle.SetColorSurf (aVisMat->BaseColor());
+      }
+    }
   }
   if ( !SHUOstyle.IsSetColorCurv() && 
       !SHUOstyle.IsSetColorSurf() &&
@@ -1555,8 +1738,8 @@ static Standard_Boolean getProDefinitionOfNAUO(const Handle(XSControl_WorkSessio
   if ( theShape.IsNull() )
     return Standard_False;
   // get CDSR
-  Handle(XSControl_TransferWriter) TW = WS->TransferWriter();
-  Handle(Transfer_FinderProcess) FP = TW->FinderProcess();
+  const Handle(XSControl_TransferWriter) &TW = WS->TransferWriter();
+  const Handle(Transfer_FinderProcess) &FP = TW->FinderProcess();
   Handle(StepShape_ContextDependentShapeRepresentation) CDSR;
   Handle(TransferBRep_ShapeMapper) mapper = TransferBRep::ShapeMapper ( FP, theShape );
   if (!FP->FindTypedTransient(mapper, 
@@ -1648,7 +1831,7 @@ static Standard_Boolean writeSHUO (const Handle(XCAFDoc_GraphNode)& theSHUO,
     // store SHUO recursive
 #ifdef OCCT_DEBUG
     if ( aNextUsageLabs.Length() > 1 )
-      cout << "Warning: store only one next_usage of current SHUO"  << endl;
+      std::cout << "Warning: store only one next_usage of current SHUO"  << std::endl;
 #endif    
     theSTool->GetSHUO( aNextUsageLabs.Value(1), NuSHUO );
     Handle(StepRepr_SpecifiedHigherUsageOccurrence) aNUEntSHUO =
@@ -1667,7 +1850,7 @@ static Standard_Boolean writeSHUO (const Handle(XCAFDoc_GraphNode)& theSHUO,
     if (!getProDefinitionOfNAUO( WS, aUUSh, nullPD, UUNAUO, Standard_True ) ||
         !getProDefinitionOfNAUO( WS, aNUSh, aRelatedPD, NUNAUO, Standard_False )) {
 #ifdef OCCT_DEBUG
-      cout << "Warning: cannot get related or relating PD" << endl;
+      std::cout << "Warning: cannot get related or relating PD" << std::endl;
 #endif
       return Standard_False;
     }
@@ -1708,8 +1891,12 @@ static Standard_Boolean createSHUOStyledItem (const XCAFPrs_Style& style,
   STEPConstruct_Styles Styles( WS );
   // translate colors to STEP
   Handle(StepVisual_Colour) surfColor, curvColor;
-  if ( style.IsSetColorSurf() )
-    surfColor = Styles.EncodeColor ( style.GetColorSurf() );
+  Standard_Real RenderTransp = 0.0;
+  if ( style.IsSetColorSurf() ) {
+    Quantity_ColorRGBA sCol = style.GetColorSurfRGBA();
+    RenderTransp = 1.0 - sCol.Alpha();
+    surfColor = Styles.EncodeColor ( sCol.GetRGB() );
+  }
   if ( style.IsSetColorCurv() )
     curvColor = Styles.EncodeColor ( style.GetColorCurv() );
   Standard_Boolean isComponent = Standard_True;// cause need to get PSBC
@@ -1717,16 +1904,16 @@ static Standard_Boolean createSHUOStyledItem (const XCAFPrs_Style& style,
   // set default color for invisible SHUO.
   Standard_Boolean isSetDefaultColor = Standard_False;
   if (surfColor.IsNull() && curvColor.IsNull() && !style.IsVisible() ) {
-    surfColor = Styles.EncodeColor ( Quantity_Color( 1, 1, 1, Quantity_TOC_RGB ) );
+    surfColor = Styles.EncodeColor ( Quantity_Color(Quantity_NOC_WHITE) );
     isSetDefaultColor = Standard_True;
   }
   Handle(StepVisual_PresentationStyleAssignment) PSA =
-    Styles.MakeColorPSA ( item, surfColor, curvColor, isComponent );
+    Styles.MakeColorPSA ( item, surfColor, curvColor, surfColor, RenderTransp, isComponent );
   Handle(StepVisual_StyledItem) override; //null styled item
   
   // find the repr item of the shape
-  Handle(XSControl_TransferWriter) TW = WS->TransferWriter();
-  Handle(Transfer_FinderProcess) FP = TW->FinderProcess();
+  const Handle(XSControl_TransferWriter) &TW = WS->TransferWriter();
+  const Handle(Transfer_FinderProcess) &FP = TW->FinderProcess();
   Handle(TransferBRep_ShapeMapper) mapper = TransferBRep::ShapeMapper ( FP, Sh );
   Handle(StepShape_ContextDependentShapeRepresentation) CDSR;
   FP->FindTypedTransient(mapper, 
@@ -1752,7 +1939,7 @@ static Standard_Boolean createSHUOStyledItem (const XCAFPrs_Style& style,
   FindEntities ( FP, Sh, L, seqRI );
 #ifdef OCCT_DEBUG
   if ( seqRI.Length() <=0 ) 
-    FP->Messenger() << "Warning: Cannot find RI for " << Sh.TShape()->DynamicType()->Name() << endl;
+    std::cout << "Warning: Cannot find RI for " << Sh.TShape()->DynamicType()->Name() << std::endl;
 #endif
   item = Handle(StepRepr_RepresentationItem)::DownCast(seqRI(1));
   //get overridden styled item
@@ -1768,7 +1955,7 @@ static Standard_Boolean createSHUOStyledItem (const XCAFPrs_Style& style,
   if ( !aTopSh.IsNull() &&  !myMapCompMDGPR.IsBound( aTopSh ) ) {
     // create MDGPR and record it in model
 #ifdef OCCT_DEBUG
-    cout << "Warning: " << __FILE__ << ": Create new MDGPR for SHUO instance"  << endl;
+    std::cout << "Warning: " << __FILE__ << ": Create new MDGPR for SHUO instance"  << std::endl;
 #endif
     Handle(StepVisual_MechanicalDesignGeometricPresentationRepresentation) aMDGPR;
     Styles.CreateMDGPR ( Context, aMDGPR );
@@ -1791,7 +1978,7 @@ static Standard_Boolean createSHUOStyledItem (const XCAFPrs_Style& style,
     Standard_Integer el = 1;
     for ( si=1; si <= oldLengthlen; si++ )
       newItems->SetValue( el++, oldItems->Value( si ) );
-    newItems->SetValue( el++, Handle(StepRepr_RepresentationItem)::DownCast(STEPstyle) );
+    newItems->SetValue (el++, STEPstyle);
     // init MDGPR be new array of styled items
     if (newItems->Length() > 0)
       aMDGPR->SetItems( newItems );
@@ -1799,7 +1986,7 @@ static Standard_Boolean createSHUOStyledItem (const XCAFPrs_Style& style,
   else {
     WS->Model()->AddWithRefs ( STEPstyle ); // add as root to the model, but it is not good
 #ifdef OCCT_DEBUG
-    cout << "Warning: " << __FILE__ << ": adds styled item of SHUO as root, casue cannot find MDGPR" << endl;
+    std::cout << "Warning: " << __FILE__ << ": adds styled item of SHUO as root, casue cannot find MDGPR" << std::endl;
 #endif
   }
   // create invisibility item for the styled item
@@ -1836,20 +2023,16 @@ Standard_Boolean STEPCAFControl_Writer::WriteSHUOs (const Handle(XSControl_WorkS
   if ( labels.Length() <=0 ) return Standard_False;
 
   // get working data
-  Handle(Interface_InterfaceModel) Model = WS->Model();
-  Handle(XSControl_TransferWriter) TW = WS->TransferWriter();
-  Handle(Transfer_FinderProcess) FP = TW->FinderProcess();
   Handle(XCAFDoc_ColorTool) CTool = XCAFDoc_DocumentTool::ColorTool( labels(1) );
+  Handle(XCAFDoc_VisMaterialTool) aMatTool = XCAFDoc_DocumentTool::VisMaterialTool( labels(1) );
   if (CTool.IsNull() )
     return Standard_False;
   // map of transfered SHUO
   TColStd_MapOfTransient aMapOfMainSHUO;
-//   TColStd_IndexedDataMapOfTransientTransient aIndxMapOfSHUOEnt;
   // Iterate on requested shapes
   for ( Standard_Integer i=1; i <= labels.Length(); i++ ) {
     TDF_Label L = labels.Value(i);
     if ( ! myLabels.IsBound ( L ) ) continue; // not recorded as translated, skip
-//     TopoDS_Shape S = myLabels.Find ( L );
     if ( XCAFDoc_ShapeTool::IsAssembly ( L ) ) {
       TDF_LabelSequence seq;
       XCAFDoc_ShapeTool::GetComponents ( L, seq );
@@ -1874,9 +2057,9 @@ Standard_Boolean STEPCAFControl_Writer::WriteSHUOs (const Handle(XSControl_WorkS
           aMapOfMainSHUO.Add( aSHUO );
           // check if it is styled SHUO
           XCAFPrs_Style SHUOstyle;
-          if ( !getSHUOstyle ( aSHUOlab, CTool, SHUOstyle ) ) {
+          if ( !getSHUOstyle ( aSHUOlab, CTool, aMatTool, SHUOstyle ) ) {
 #ifdef OCCT_DEBUG
-            cout << "Warning: " << __FILE__ << ": do not store SHUO without any style to the STEP model" << endl;
+            std::cout << "Warning: " << __FILE__ << ": do not store SHUO without any style to the STEP model" << std::endl;
 #endif
             continue;
           }
@@ -1889,13 +2072,13 @@ Standard_Boolean STEPCAFControl_Writer::WriteSHUOs (const Handle(XSControl_WorkS
           writeSHUO( aSHUO, CTool->ShapeTool(), WS, anEntOfSHUO, NAUOShape, aRelatingPD, isDeepest );
           if ( anEntOfSHUO.IsNull() || NAUOShape.IsNull() ) {
 #ifdef OCCT_DEBUG
-            cout << "Warning: " << __FILE__ << ": Cannot store SHUO" << endl;
+            std::cout << "Warning: " << __FILE__ << ": Cannot store SHUO" << std::endl;
 #endif
             continue;
           }
           // create new Product Definition Shape for TOP SHUO
 #ifdef OCCT_DEBUG
-            cout << "Info: " << __FILE__ << ": Create NEW PDS for current SHUO " << endl;
+            std::cout << "Info: " << __FILE__ << ": Create NEW PDS for current SHUO " << std::endl;
 #endif
           Handle(StepRepr_ProductDefinitionShape) PDS = new StepRepr_ProductDefinitionShape;
           Handle(TCollection_HAsciiString) aPDSname = new TCollection_HAsciiString("SHUO");
@@ -1929,12 +2112,14 @@ static Standard_Boolean FindPDSforDGT(const Interface_Graph &aGraph,
                                       Handle(StepShape_AdvancedFace) &AF,
                                       Handle(StepShape_EdgeCurve) &EC)
 {
+  if (ent.IsNull())
+    return Standard_False;
   if( !ent->IsKind(STANDARD_TYPE(StepShape_EdgeCurve)) && 
       !ent->IsKind(STANDARD_TYPE(StepShape_AdvancedFace)) ) 
     return Standard_False;
 
   AF = Handle(StepShape_AdvancedFace)::DownCast(ent);
-  if( ent->IsKind(STANDARD_TYPE(StepShape_EdgeCurve)) ) {
+  if( AF.IsNull() ) {
     EC = Handle(StepShape_EdgeCurve)::DownCast(ent);
     Interface_EntityIterator subs = aGraph.Sharings(EC);
     for(subs.Start(); subs.More() && AF.IsNull(); subs.Next()) {
@@ -1990,22 +2175,1254 @@ static Standard_Boolean FindPDSforDGT(const Interface_Graph &aGraph,
   return Standard_True;
 }
 
+//=======================================================================
+//function : FindPDS
+//purpose  : auxilary: find Product_definition_shape entity for given entity
+//=======================================================================
+static Handle(StepRepr_ProductDefinitionShape) FindPDS(const Interface_Graph &theGraph,
+                                                       const Handle(Standard_Transient) &theEnt,
+                                                       Handle(StepRepr_RepresentationContext) &theRC)
+{
+  if (theEnt.IsNull())
+    return NULL;
+  Handle(StepRepr_ProductDefinitionShape) aPDS;
+
+  // try to find shape_representation in sharings
+  Interface_EntityIterator anIter = theGraph.Sharings(theEnt);
+  for (anIter.Start(); anIter.More() && aPDS.IsNull(); anIter.Next()) {
+    Handle(StepShape_ShapeRepresentation) aSR = Handle(StepShape_ShapeRepresentation)::DownCast(anIter.Value());
+    if (aSR.IsNull())
+      continue;
+    theRC = aSR->ContextOfItems();
+    Interface_EntityIterator aSDRIt = theGraph.Sharings(aSR);
+    for (aSDRIt.Start(); aSDRIt.More() && aPDS.IsNull(); aSDRIt.Next()) {
+      Handle(StepShape_ShapeDefinitionRepresentation) aSDR =
+        Handle(StepShape_ShapeDefinitionRepresentation)::DownCast(aSDRIt.Value());
+      if (aSDR.IsNull()) continue;
+      Handle(StepRepr_PropertyDefinition) aPropD = aSDR->Definition().PropertyDefinition();
+      if (aPropD.IsNull()) continue;
+      aPDS = Handle(StepRepr_ProductDefinitionShape)::DownCast(aPropD);
+    }
+  }
+  if (!aPDS.IsNull())
+    return aPDS;
+
+  anIter = theGraph.Sharings(theEnt);
+  for (anIter.Start(); anIter.More(); anIter.Next()) {
+    if (anIter.Value()->IsKind(STANDARD_TYPE(StepShape_TopologicalRepresentationItem)) ||
+      anIter.Value()->IsKind(STANDARD_TYPE(StepGeom_GeometricRepresentationItem)))
+    {
+      aPDS = FindPDS(theGraph, anIter.Value(), theRC);
+      if (!aPDS.IsNull())
+        return aPDS;
+    }
+  }
+
+  return aPDS;
+}
+
+//=======================================================================
+//function : GetUnit
+//purpose  : auxiliary
+//=======================================================================
+static StepBasic_Unit GetUnit(const Handle(StepRepr_RepresentationContext)& theRC,
+                              const Standard_Boolean isAngle = Standard_False)
+{
+  StepBasic_Unit aUnit;
+  Handle(StepBasic_NamedUnit) aCurrentUnit;
+  if (isAngle) {
+    Handle(StepGeom_GeometricRepresentationContextAndGlobalUnitAssignedContext) aCtx =
+      Handle(StepGeom_GeometricRepresentationContextAndGlobalUnitAssignedContext)::DownCast(theRC);
+    if(!aCtx.IsNull()) {
+      for(Standard_Integer j = 1; j <= aCtx->NbUnits(); j++) {
+        if (aCtx->UnitsValue(j)->IsKind(STANDARD_TYPE(StepBasic_SiUnitAndPlaneAngleUnit)) ||
+            aCtx->UnitsValue(j)->IsKind(STANDARD_TYPE(StepBasic_ConversionBasedUnitAndPlaneAngleUnit))) {
+          aCurrentUnit = aCtx->UnitsValue(j);
+          break;
+        }
+      }
+    }
+    if (aCurrentUnit.IsNull()) {
+      Handle(StepGeom_GeomRepContextAndGlobUnitAssCtxAndGlobUncertaintyAssCtx) aCtx1 =
+        Handle(StepGeom_GeomRepContextAndGlobUnitAssCtxAndGlobUncertaintyAssCtx)::DownCast(theRC);
+      if(!aCtx1.IsNull()) {
+        for(Standard_Integer j = 1; j <= aCtx1->NbUnits(); j++) {
+          if (aCtx1->UnitsValue(j)->IsKind(STANDARD_TYPE(StepBasic_SiUnitAndPlaneAngleUnit)) ||
+              aCtx1->UnitsValue(j)->IsKind(STANDARD_TYPE(StepBasic_ConversionBasedUnitAndPlaneAngleUnit))) {
+            aCurrentUnit = aCtx1->UnitsValue(j);
+            break;
+          }
+        }
+      }
+    }
+    if (aCurrentUnit.IsNull())
+      aCurrentUnit = new StepBasic_SiUnitAndPlaneAngleUnit;
+  }
+  else {
+    Handle(StepGeom_GeometricRepresentationContextAndGlobalUnitAssignedContext) aCtx =
+      Handle(StepGeom_GeometricRepresentationContextAndGlobalUnitAssignedContext)::DownCast(theRC);
+    if(!aCtx.IsNull()) {
+      for(Standard_Integer j = 1; j <= aCtx->NbUnits(); j++) {
+        if (aCtx->UnitsValue(j)->IsKind(STANDARD_TYPE(StepBasic_SiUnitAndLengthUnit)) ||
+            aCtx->UnitsValue(j)->IsKind(STANDARD_TYPE(StepBasic_ConversionBasedUnitAndLengthUnit))) {
+          aCurrentUnit = aCtx->UnitsValue(j);
+          break;
+        }
+      }
+    }
+    if (aCurrentUnit.IsNull()) {
+      Handle(StepGeom_GeomRepContextAndGlobUnitAssCtxAndGlobUncertaintyAssCtx) aCtx1 =
+        Handle(StepGeom_GeomRepContextAndGlobUnitAssCtxAndGlobUncertaintyAssCtx)::DownCast(theRC);
+      if(!aCtx1.IsNull()) {
+        for(Standard_Integer j = 1; j <= aCtx1->NbUnits(); j++) {
+          if (aCtx1->UnitsValue(j)->IsKind(STANDARD_TYPE(StepBasic_SiUnitAndLengthUnit)) ||
+              aCtx1->UnitsValue(j)->IsKind(STANDARD_TYPE(StepBasic_ConversionBasedUnitAndLengthUnit))) {
+            aCurrentUnit = aCtx1->UnitsValue(j);
+            break;
+          }
+        }
+      }
+    }
+    if (aCurrentUnit.IsNull())
+      aCurrentUnit = new StepBasic_SiUnitAndLengthUnit;
+  }
+
+  aUnit.SetValue(aCurrentUnit);
+  return aUnit;
+}
+
+//=======================================================================
+//function : CreateDimValue
+//purpose  : auxiliary
+//======================================================================
+static Handle(StepRepr_ReprItemAndMeasureWithUnit) CreateDimValue(const Standard_Real theValue,
+                                                                  const StepBasic_Unit theUnit,
+                                                                  const Handle(TCollection_HAsciiString)& theName,
+                                                                  const Standard_CString theMeasureName,
+                                                                  const Standard_Boolean isAngle,
+                                                                  const Standard_Boolean isQualified = Standard_False,
+                                                                  const Handle(StepShape_QualifiedRepresentationItem)& theQRI = NULL)
+{
+  Handle(StepRepr_RepresentationItem) aReprItem = new StepRepr_RepresentationItem();
+  aReprItem->Init(new TCollection_HAsciiString(theName));
+  Handle(StepBasic_MeasureWithUnit) aMWU = new StepBasic_MeasureWithUnit();
+  Handle(StepBasic_MeasureValueMember) aValueMember = new StepBasic_MeasureValueMember();
+  aValueMember->SetName(theMeasureName);
+  aValueMember->SetReal(theValue);
+  aMWU->Init(aValueMember, theUnit);
+  if (isQualified) {
+    if (isAngle) {
+      // Angle & with qualifiers
+      Handle(StepRepr_ReprItemAndPlaneAngleMeasureWithUnitAndQRI) anItem = 
+        new StepRepr_ReprItemAndPlaneAngleMeasureWithUnitAndQRI();
+      anItem->Init(aMWU, aReprItem, theQRI);
+      return anItem;
+    }
+    else {
+      // Length & with qualifiers
+      Handle(StepRepr_ReprItemAndLengthMeasureWithUnitAndQRI) anItem = 
+        new StepRepr_ReprItemAndLengthMeasureWithUnitAndQRI();
+      anItem->Init(aMWU, aReprItem, theQRI);
+      return anItem;
+    }
+  }
+  else {
+    if (isAngle) {
+      // Angle & without qualifiers
+      Handle(StepRepr_ReprItemAndPlaneAngleMeasureWithUnit) anItem = 
+        new StepRepr_ReprItemAndPlaneAngleMeasureWithUnit();
+      anItem->Init(aMWU, aReprItem);
+      return anItem;
+    }
+    else {
+      // Length & without qualifiers
+      Handle(StepRepr_ReprItemAndLengthMeasureWithUnit) anItem = 
+        new StepRepr_ReprItemAndLengthMeasureWithUnit();
+      anItem->Init(aMWU, aReprItem);
+      return anItem;
+    }
+  }
+}
+
+//=======================================================================
+//function : WriteShapeAspect
+//purpose  : auxiliary (write Shape_Aspect entity for given shape)
+//=======================================================================
+
+Handle(StepRepr_ShapeAspect) STEPCAFControl_Writer::WriteShapeAspect (const Handle(XSControl_WorkSession) &WS,
+                                                                      const TDF_Label theLabel,
+                                                                      const TopoDS_Shape theShape,
+                                                                      Handle(StepRepr_RepresentationContext)& theRC,
+                                                                      Handle(StepAP242_GeometricItemSpecificUsage)& theGISU)
+{
+  // Get working data
+  const Handle(Interface_InterfaceModel) &Model = WS->Model();
+  const Handle(XSControl_TransferWriter) &TW = WS->TransferWriter();
+  const Handle(Transfer_FinderProcess) &FP = TW->FinderProcess();
+  const Handle(Interface_HGraph) aHGraph = WS->HGraph();
+  if (aHGraph.IsNull())
+    return NULL;
+  Interface_Graph aGraph = aHGraph->Graph();
+
+  TopLoc_Location aLoc;
+  TColStd_SequenceOfTransient aSeqRI;
+  FindEntities( FP, theShape, aLoc, aSeqRI );
+  if ( aSeqRI.Length() <= 0 ) {
+    FP->Messenger()->SendInfo() << "Warning: Cannot find RI for "<<theShape.TShape()->DynamicType()->Name()<<std::endl;
+    return NULL;
+  }
+
+  Handle(StepRepr_ProductDefinitionShape) aPDS;
+  Handle(StepRepr_RepresentationContext) aRC;
+  Handle(Standard_Transient) anEnt = aSeqRI.Value(1);
+  aPDS = FindPDS(aGraph, anEnt, aRC);
+  if(aPDS.IsNull()) 
+    return NULL;
+
+  theRC = aRC;
+  // Shape_Aspect
+  Handle(TCollection_HAsciiString) aName = new TCollection_HAsciiString();
+  Handle(TDataStd_Name) aNameAttr;
+  if (theLabel.FindAttribute(TDataStd_Name::GetID(), aNameAttr)) {
+    aName = new TCollection_HAsciiString(TCollection_AsciiString(aNameAttr->Get()));
+    Standard_Integer aFirstSpace = aName->Search(" ");
+    if (aFirstSpace != -1)
+      aName = aName->SubString(aFirstSpace + 1, aName->Length());
+    else
+      aName = new TCollection_HAsciiString();
+  }
+  Handle(TCollection_HAsciiString) aDescription = new TCollection_HAsciiString();
+  Handle(StepRepr_ShapeAspect) aSA = new StepRepr_ShapeAspect;
+  aSA->Init(aName, aDescription, aPDS, StepData_LTrue);
+
+  // Geometric_Item_Specific_Usage
+  Handle(StepAP242_GeometricItemSpecificUsage) aGISU = new StepAP242_GeometricItemSpecificUsage();
+  StepAP242_ItemIdentifiedRepresentationUsageDefinition aDefinition;
+  aDefinition.SetValue(aSA);
+  Handle(StepRepr_HArray1OfRepresentationItem) anReprItems = new StepRepr_HArray1OfRepresentationItem(1, 1);
+  Handle(StepRepr_RepresentationItem) anIdentifiedItem = Handle(StepRepr_RepresentationItem)::DownCast(anEnt);
+  anReprItems->SetValue(1, anIdentifiedItem);
+  Interface_EntityIterator subs = aGraph.Sharings(aPDS);
+  Handle(StepShape_ShapeDefinitionRepresentation) aSDR;
+  for (subs.Start(); subs.More() && aSDR.IsNull(); subs.Next()) {
+    Handle(Standard_Transient) anEntity = subs.Value();
+    aSDR = Handle(StepShape_ShapeDefinitionRepresentation)::DownCast(anEntity);
+  }
+  if (aSDR.IsNull())
+    return NULL;
+
+  // Set entities to model
+  aGISU->Init(aName, aDescription, aDefinition, aSDR->UsedRepresentation(), anReprItems);
+  Model->AddWithRefs(aSA);
+  Model->AddWithRefs(aGISU);
+  theGISU = aGISU;
+  return aSA;
+}
+
+//=======================================================================
+//function : WritePresentation
+//purpose  : auxiliary (write annotation plane and presentation)
+//======================================================================
+void STEPCAFControl_Writer::WritePresentation(const Handle(XSControl_WorkSession) &WS,
+                                              const TopoDS_Shape thePresentation,
+                                              const Handle(TCollection_HAsciiString)& thePrsName,
+                                              const Standard_Boolean hasSemantic,
+                                              const Standard_Boolean hasPlane,
+                                              const gp_Ax2 theAnnotationPlane,
+                                              const gp_Pnt theTextPosition,
+                                              const Handle(Standard_Transient) theDimension)
+{
+  if (thePresentation.IsNull())
+    return;
+  // Get working data
+  const Handle(Interface_InterfaceModel) &aModel = WS->Model();
+
+  // Presentation
+  Handle(StepVisual_TessellatedGeometricSet) aGeomSet = STEPCAFControl_GDTProperty::GetTessellation(thePresentation);
+  Handle(StepVisual_TessellatedAnnotationOccurrence) aTAO = new StepVisual_TessellatedAnnotationOccurrence();
+  aTAO->Init(new TCollection_HAsciiString(), myGDTPrsCurveStyle, aGeomSet);
+  StepVisual_DraughtingCalloutElement aDCElement;
+  aDCElement.SetValue(aTAO);
+  Handle(StepVisual_HArray1OfDraughtingCalloutElement) aTAOs = new StepVisual_HArray1OfDraughtingCalloutElement(1, 1);
+  aTAOs->SetValue(1, aDCElement);
+  Handle(StepVisual_DraughtingCallout) aDCallout = new StepVisual_DraughtingCallout();
+  Handle(TCollection_HAsciiString) aPrsName = thePrsName.IsNull() ? new TCollection_HAsciiString() : thePrsName;
+  aDCallout->Init(aPrsName, aTAOs);
+  Handle(StepRepr_HArray1OfRepresentationItem) aDCsForDMIA = new StepRepr_HArray1OfRepresentationItem(1, 1);
+  aDCsForDMIA->SetValue(1, aDCallout);
+  myGDTAnnotations.Append(aDCallout);
+  StepAP242_ItemIdentifiedRepresentationUsageDefinition aDimension;
+  aDimension.SetValue(theDimension);
+  Handle(TCollection_HAsciiString) aDMIAName;
+  if (hasSemantic)
+    aDMIAName = new TCollection_HAsciiString("PMI representation to presentation link");
+  else
+    aDMIAName = new TCollection_HAsciiString();
+  Handle(StepAP242_DraughtingModelItemAssociation) aDMIA =
+    new StepAP242_DraughtingModelItemAssociation();
+  aDMIA->Init(aDMIAName, new TCollection_HAsciiString(), aDimension, myGDTPresentationDM, aDCsForDMIA);
+  aModel->AddWithRefs(aDMIA);
+
+  if (!hasPlane)
+    return;
+
+  // Annotation plane
+  // Presentation Style
+  Handle(StepVisual_NullStyleMember) aNullStyle = new StepVisual_NullStyleMember();
+  aNullStyle->SetEnumText(0, ".NULL.");
+  StepVisual_PresentationStyleSelect aStyleItem;
+  aStyleItem.SetValue(aNullStyle);
+  Handle(StepVisual_HArray1OfPresentationStyleSelect) aStyles = new StepVisual_HArray1OfPresentationStyleSelect(1, 1);
+  aStyles->SetValue(1, aStyleItem);
+  Handle(StepVisual_PresentationStyleAssignment) aPrsStyle = new StepVisual_PresentationStyleAssignment();
+  aPrsStyle->Init(aStyles);
+  Handle(StepVisual_HArray1OfPresentationStyleAssignment) aPrsStyles =
+    new StepVisual_HArray1OfPresentationStyleAssignment(1, 1);
+  aPrsStyles->SetValue(1, aPrsStyle);
+  // Plane
+  Handle(StepGeom_Plane) aPlane = new StepGeom_Plane();
+  GeomToStep_MakeAxis2Placement3d anAxisMaker(theAnnotationPlane);
+  Handle(StepGeom_Axis2Placement3d) anAxis = anAxisMaker.Value();
+  // Set text position to plane origin
+  Handle(StepGeom_CartesianPoint) aTextPos = new StepGeom_CartesianPoint();
+  Handle(TColStd_HArray1OfReal) aCoords = new TColStd_HArray1OfReal(1, 3);
+  for (Standard_Integer i = 1; i <= 3; i++)
+    aCoords->SetValue(i, theTextPosition.Coord(i));
+  aTextPos->Init(new TCollection_HAsciiString(), aCoords);
+  anAxis->SetLocation(aTextPos);
+  aPlane->Init(new TCollection_HAsciiString(), anAxis);
+  // Annotation plane element
+  StepVisual_AnnotationPlaneElement aPlaneElement;
+  aPlaneElement.SetValue(aDCallout);
+  Handle(StepVisual_HArray1OfAnnotationPlaneElement) aDCsForAnnPln = new StepVisual_HArray1OfAnnotationPlaneElement(1, 1);
+  aDCsForAnnPln->SetValue(1, aPlaneElement);
+  // Init AnnotationPlane entity
+  Handle(StepVisual_AnnotationPlane) anAnnPlane = new StepVisual_AnnotationPlane();
+  anAnnPlane->Init(new TCollection_HAsciiString(), aPrsStyles, aPlane, aDCsForAnnPln);
+  myGDTAnnotations.Append(anAnnPlane);
+  aModel->AddWithRefs(anAnnPlane);
+}
+
+//=======================================================================
+//function : WriteDatumAP242
+//purpose  : auxiliary (write Datum entity for given shape or write all 
+//           necessary entities and link them to already written datum 
+//           in case of multiple features association)
+//=======================================================================
+Handle(StepDimTol_Datum) STEPCAFControl_Writer::WriteDatumAP242(const Handle(XSControl_WorkSession) &WS,
+                                                                const TDF_LabelSequence theShapeL,
+                                                                const TDF_Label theDatumL,
+                                                                const Standard_Boolean isFirstDTarget,
+                                                                const Handle(StepDimTol_Datum) theWrittenDatum)
+{
+  // Get working data
+  const Handle(Interface_InterfaceModel) &Model = WS->Model();
+  const Handle(XSControl_TransferWriter) &TW = WS->TransferWriter();
+  const Handle(Transfer_FinderProcess) &FP = TW->FinderProcess();
+  const Handle(Interface_HGraph) aHGraph = WS->HGraph();
+  if (aHGraph.IsNull())
+    return NULL;
+  Interface_Graph aGraph = aHGraph->Graph();
+
+  Handle(StepRepr_ShapeAspect) aSA;
+  Handle(StepRepr_RepresentationContext) aRC;
+  Handle(StepRepr_ProductDefinitionShape) aPDS;
+  NCollection_Sequence<Handle(StepRepr_ShapeAspect)> aSASeq;
+  Handle(StepAP242_GeometricItemSpecificUsage) aGISU;
+  Standard_Integer aSANum = 0, aGISUNum = 0;
+  // Link with datum feature
+  for (Standard_Integer i = 1; i <= theShapeL.Length(); i++) {
+    Handle(Standard_Transient) anEnt;
+    TopoDS_Shape aShape;
+    TopLoc_Location aLoc;
+    TColStd_SequenceOfTransient aSeqRI;
+
+    aShape = XCAFDoc_ShapeTool::GetShape(theShapeL.Value(i));
+    FindEntities(FP, aShape, aLoc, aSeqRI);
+    if (aSeqRI.Length() <= 0) {
+      FP->Messenger()->SendInfo() << "Warning: Cannot find RI for " << aShape.TShape()->DynamicType()->Name() << std::endl;
+      continue;
+    }
+    anEnt = aSeqRI.Value(1);
+    aPDS = FindPDS(aGraph, anEnt, aRC);
+    if (aPDS.IsNull())
+      continue;
+
+    Handle(StepRepr_ShapeAspect) aCurrentSA = WriteShapeAspect(WS, theDatumL, aShape, aRC, aGISU);
+    if (aCurrentSA.IsNull())
+      continue;
+    aSASeq.Append(aCurrentSA);
+    aSANum = Model->Number(aCurrentSA);
+    aGISUNum = Model->Number(aGISU);
+  }
+  if (aPDS.IsNull()) {
+    // Workaround for datums without shape
+    aPDS = myGDTCommonPDS;
+    Interface_EntityIterator aSDRIt = aGraph.Sharings(aPDS);
+    Handle(StepShape_ShapeDefinitionRepresentation) aSDR;
+    for (aSDRIt.Start(); aSDRIt.More() && aSDR.IsNull(); aSDRIt.Next())
+      aSDR = Handle(StepShape_ShapeDefinitionRepresentation)::DownCast(aSDRIt.Value());
+    if (!aSDR.IsNull()) {
+      Handle(StepRepr_Representation) aRepr = aSDR->UsedRepresentation();
+      if (!aRepr.IsNull())
+        aRC = aRepr->ContextOfItems();
+    }
+  }
+
+
+  // Find if datum has datum targets and get common datum attributes
+  Handle(XCAFDoc_Datum) aDatumAttr;
+  if (!theDatumL.FindAttribute(XCAFDoc_Datum::GetID(), aDatumAttr)) 
+    return NULL;
+  Handle(XCAFDimTolObjects_DatumObject) anObject = aDatumAttr->GetObject();
+  if (anObject.IsNull())
+    return NULL;
+  Standard_Boolean isSimpleDatum = !anObject->IsDatumTarget();
+  Handle(TCollection_HAsciiString) anIdentifier = anObject->GetName();
+  Handle(TCollection_HAsciiString) aTargetId = (anObject->GetDatumTargetNumber() == 0 ? 
+    new TCollection_HAsciiString() : new TCollection_HAsciiString(anObject->GetDatumTargetNumber()));
+
+  // If datum type is area, but there is no area in object, write as simple datum
+  if (anObject->GetDatumTargetType() == XCAFDimTolObjects_DatumTargetType_Area &&
+    anObject->GetDatumTarget().IsNull())
+    isSimpleDatum = Standard_True;
+
+  // Simple datum
+  if (isSimpleDatum) {
+    if (aSASeq.Length() == 0) {
+      // Create empty datum with name and presentation only
+      Handle(StepDimTol_DatumFeature) aDF = new StepDimTol_DatumFeature();
+      aDF->Init(new TCollection_HAsciiString(), new TCollection_HAsciiString(), aPDS, StepData_LTrue);
+      aSA = aDF;
+      Model->AddWithRefs(aDF);
+    }
+    else if (aSASeq.Length() == 1) {
+      Handle(StepDimTol_DatumFeature) aDF = new StepDimTol_DatumFeature();
+      aDF->Init(new TCollection_HAsciiString(), new TCollection_HAsciiString(), aPDS, StepData_LTrue);
+      Model->ReplaceEntity(aSANum, aDF);
+      aSA = aDF;
+      StepAP242_ItemIdentifiedRepresentationUsageDefinition aDefinition;
+      aDefinition.SetValue(aDF);
+      aGISU->SetDefinition(aDefinition);
+      Model->ReplaceEntity(aGISUNum, aGISU);
+    }
+    else if (aSASeq.Length() > 1) {
+      Handle(StepRepr_CompShAspAndDatumFeatAndShAsp) aDF = new StepRepr_CompShAspAndDatumFeatAndShAsp();
+      aDF->Init(new TCollection_HAsciiString(), new TCollection_HAsciiString(), aPDS, StepData_LTrue);
+      for (Standard_Integer i = 1; i <= aSASeq.Length(); i++) {
+        Handle(StepRepr_ShapeAspectRelationship) aSAR = new StepRepr_ShapeAspectRelationship();
+        aSAR->Init(new TCollection_HAsciiString(), Standard_False, new TCollection_HAsciiString(), aDF, aSASeq.Value(i));
+        Model->AddWithRefs(aSAR);
+      }
+      aSA = aDF;
+      Model->AddWithRefs(aDF);
+    }
+  }
+  // Datum with datum targets
+  else {
+    XCAFDimTolObjects_DatumTargetType aDatumType = anObject->GetDatumTargetType();
+    Handle(StepDimTol_DatumTarget) aDatumTarget;
+    // Note: the given way to write such datum type may be incorrect (too little information)
+    if (aDatumType == XCAFDimTolObjects_DatumTargetType_Area) {
+      TopoDS_Shape aDTShape = anObject->GetDatumTarget();
+      Handle(StepAP242_GeometricItemSpecificUsage) anAreaGISU;
+      Handle(StepRepr_ShapeAspect) anAreaSA = WriteShapeAspect(WS, theDatumL, aDTShape, aRC, anAreaGISU);
+      aSANum = Model->Number(anAreaSA);
+      aGISUNum = Model->Number(anAreaGISU);
+      Handle(StepDimTol_DatumTarget) aDT = new StepDimTol_DatumTarget();
+      aDT->Init(new TCollection_HAsciiString(), new TCollection_HAsciiString("area"), anAreaSA->OfShape(),
+        StepData_LTrue, aTargetId);
+      Model->ReplaceEntity(aSANum, aDT);
+      StepAP242_ItemIdentifiedRepresentationUsageDefinition aDefinition;
+      aDefinition.SetValue(aDT);
+      anAreaGISU->SetDefinition(aDefinition);
+      Model->ReplaceEntity(aGISUNum, anAreaGISU);
+    }
+    else {
+      Handle(StepDimTol_PlacedDatumTargetFeature) aPDTF = new StepDimTol_PlacedDatumTargetFeature();
+      aPDTF->Init(new TCollection_HAsciiString(), STEPCAFControl_GDTProperty::GetDatumTargetName(aDatumType),
+        aPDS, StepData_LTrue, aTargetId);
+      Model->AddWithRefs(aPDTF);
+      aDatumTarget = aPDTF;
+      // Datum targets
+      Handle(StepRepr_PropertyDefinition) aPD = new StepRepr_PropertyDefinition();
+      StepRepr_CharacterizedDefinition aCDefinition;
+      aCDefinition.SetValue(aPDTF);
+      aPD->Init(new TCollection_HAsciiString(), Standard_False, NULL, aCDefinition);
+      if (anObject->HasDatumTargetParams()) {
+        // write all parameters of datum target
+        Handle(StepShape_ShapeRepresentationWithParameters) aSRWP = new StepShape_ShapeRepresentationWithParameters();
+        // Common for all datum targets
+        StepBasic_Unit aUnit = GetUnit(aRC);
+        gp_Ax2 aDTAxis = anObject->GetDatumTargetAxis();
+        GeomToStep_MakeAxis2Placement3d anAxisMaker(aDTAxis);
+        Handle(StepGeom_Axis2Placement3d) anA2P3D = anAxisMaker.Value();
+        anA2P3D->SetName(new TCollection_HAsciiString("orientation"));
+        Handle(StepRepr_HArray1OfRepresentationItem) anItems;
+        // Process each datum target type
+        if (aDatumType == XCAFDimTolObjects_DatumTargetType_Point) {
+          anItems = new StepRepr_HArray1OfRepresentationItem(1, 1);
+        }
+        else  {
+          Handle(TCollection_HAsciiString) aTargetValueName;
+          if (aDatumType == XCAFDimTolObjects_DatumTargetType_Line) {
+            anItems = new StepRepr_HArray1OfRepresentationItem(1, 2);
+            aTargetValueName = new TCollection_HAsciiString("target length");
+          }
+          else if (aDatumType == XCAFDimTolObjects_DatumTargetType_Rectangle) {
+            anItems = new StepRepr_HArray1OfRepresentationItem(1, 3);
+            aTargetValueName = new TCollection_HAsciiString("target length");
+            // Additional value
+            Handle(StepRepr_ReprItemAndMeasureWithUnit) aTargetValue = CreateDimValue(anObject->GetDatumTargetWidth(),
+              aUnit, new TCollection_HAsciiString("target width"), "POSITIVE_LENGTH_MEASURE", Standard_False);
+            anItems->SetValue(2, aTargetValue);
+            Model->AddWithRefs(aTargetValue);
+          }
+          else if (aDatumType == XCAFDimTolObjects_DatumTargetType_Circle) {
+            anItems = new StepRepr_HArray1OfRepresentationItem(1, 2);
+            aTargetValueName = new TCollection_HAsciiString("target diameter");
+          }
+          // Value
+          Handle(StepRepr_ReprItemAndMeasureWithUnit) aTargetValue = CreateDimValue(anObject->GetDatumTargetLength(),
+            aUnit, aTargetValueName, "POSITIVE_LENGTH_MEASURE", Standard_False);
+          anItems->SetValue(1, aTargetValue);
+          Model->AddWithRefs(aTargetValue);
+        }
+        anItems->SetValue(anItems->Length(), anA2P3D);
+        aSRWP->Init(new TCollection_HAsciiString(), anItems, aRC);
+        // Create and write auxiliary entities
+        Handle(StepShape_ShapeDefinitionRepresentation) aSDR = new StepShape_ShapeDefinitionRepresentation();
+        StepRepr_RepresentedDefinition aRDefinition;
+        aRDefinition.SetValue(aPD);
+        aSDR->Init(aRDefinition, aSRWP);
+        Model->AddWithRefs(aPD);
+        Model->AddWithRefs(aSRWP);
+        Model->AddWithRefs(aSDR);
+      }
+    }
+    // Link datum target to datum feature
+    // if aSASeq.Length() == 0 nothing to do
+    if (aSASeq.Length() == 1) {
+      Handle(StepRepr_FeatureForDatumTargetRelationship) aFFDTR = new StepRepr_FeatureForDatumTargetRelationship();
+      aFFDTR->Init(new TCollection_HAsciiString(), Standard_False, NULL, aSASeq.Value(1), aDatumTarget);
+      Model->AddWithRefs(aFFDTR);
+    }
+    else if (aSASeq.Length() > 1) {
+      Handle(StepRepr_CompositeShapeAspect) aCompSA = new StepRepr_CompositeShapeAspect();
+      aCompSA->Init(new TCollection_HAsciiString(), new TCollection_HAsciiString(), aPDS, aSASeq.Value(1)->ProductDefinitional());
+      for (Standard_Integer i = 1; i <= aSASeq.Length(); i++) {
+        Handle(StepRepr_ShapeAspectRelationship) aSAR = new StepRepr_ShapeAspectRelationship();
+        aSAR->Init(new TCollection_HAsciiString(), Standard_False, new TCollection_HAsciiString(), aCompSA, aSASeq.Value(i));
+        Model->AddWithRefs(aSAR);
+      }
+      Handle(StepRepr_FeatureForDatumTargetRelationship) aFFDTR = new StepRepr_FeatureForDatumTargetRelationship();
+      aFFDTR->Init(new TCollection_HAsciiString(), Standard_False, NULL, aCompSA, aDatumTarget);
+      Model->AddWithRefs(aFFDTR);
+    }
+    aSA = aDatumTarget;
+  }
+
+  // Datum
+  Handle(StepDimTol_Datum) aDatum = theWrittenDatum;
+  if (isFirstDTarget) {
+    aDatum = new StepDimTol_Datum();
+    aDatum->Init(new TCollection_HAsciiString(), new TCollection_HAsciiString(), aPDS, StepData_LFalse, anIdentifier);
+    Model->AddWithRefs(aDatum);
+  }
+
+  // Shape_Aspect_Relationship
+  if (!aSA.IsNull()) {
+    Handle(StepRepr_ShapeAspectRelationship) aSAR = new StepRepr_ShapeAspectRelationship();
+    aSAR->Init(new TCollection_HAsciiString(), Standard_False, NULL, aSA, aDatum);
+    Model->AddWithRefs(aSAR);
+  }
+
+  //Annotation plane and Presentation
+  WritePresentation(WS, anObject->GetPresentation(), anObject->GetPresentationName(), Standard_True, anObject->HasPlane(),
+    anObject->GetPlane(), anObject->GetPointTextAttach(), aSA);
+
+  return aDatum;
+}
+
+//=======================================================================
+//function : WriteDimValues
+//purpose  : auxiliary (write all data for given dimension: values, 
+//           qualifiers, modifiers, orientation and tolerance class)
+//======================================================================
+static void WriteDimValues(const Handle(XSControl_WorkSession) &WS,
+                           const Handle(XCAFDimTolObjects_DimensionObject) theObject,
+                           const Handle(StepRepr_RepresentationContext) theRC,
+                           const StepShape_DimensionalCharacteristic theDimension)
+{
+  // Get working data
+  const Handle(Interface_InterfaceModel) &aModel = WS->Model();
+  XCAFDimTolObjects_DimensionModifiersSequence aModifiers = theObject->GetModifiers();
+  Handle(Standard_Transient) aDim = theDimension.Value();
+  Standard_Boolean isAngle = aDim->IsKind(STANDARD_TYPE(StepShape_AngularLocation)) ||
+                             aDim->IsKind(STANDARD_TYPE(StepShape_AngularSize));
+
+  // Unit
+  StepBasic_Unit aUnit = GetUnit(theRC, isAngle);
+  Standard_CString aMeasureName;
+  if (isAngle)
+    aMeasureName = "POSITIVE_PLANE_ANGLE_MEASURE";
+  else
+    aMeasureName = "POSITIVE_LENGTH_MEASURE";
+
+  // Values
+  Handle(StepRepr_HArray1OfRepresentationItem) aValues;
+  Standard_Integer aNbItems = 1, aValIt = 1;
+  if (theObject->IsDimWithRange())
+    aNbItems += 2;
+  if (aModifiers.Length() > 0)
+    aNbItems++;
+  if (theObject->GetType() == XCAFDimTolObjects_DimensionType_Location_Oriented)
+    aNbItems++;
+  aNbItems += theObject->NbDescriptions();
+  aValues = new StepRepr_HArray1OfRepresentationItem(1, aNbItems);
+
+  // Nominal value
+  Standard_Real aNominal = theObject->GetValue();
+  Standard_Integer aLeftNbDigits, aRightNbDigits;
+  theObject->GetNbOfDecimalPlaces(aLeftNbDigits, aRightNbDigits);
+  Standard_Integer aNbQualifiers = 0;
+  if (theObject->HasQualifier() && !isAngle)
+    aNbQualifiers++;
+  if (aLeftNbDigits > 0 || aRightNbDigits > 0)
+    aNbQualifiers++;
+  // With qualifiers
+  if (aNbQualifiers > 0) {
+    Handle(StepShape_QualifiedRepresentationItem) aQRI = new StepShape_QualifiedRepresentationItem();
+    Handle(StepShape_HArray1OfValueQualifier) aQualifiers = new StepShape_HArray1OfValueQualifier(1, aNbQualifiers);
+    // Type qualifier
+    if (theObject->HasQualifier() && !isAngle) {
+      StepShape_ValueQualifier anItem;
+      Handle(StepShape_TypeQualifier) aType = new StepShape_TypeQualifier();
+      XCAFDimTolObjects_DimensionQualifier aQualifier = theObject->GetQualifier();
+      aType->Init(STEPCAFControl_GDTProperty::GetDimQualifierName(aQualifier));
+      aModel->AddWithRefs(aType);
+      anItem.SetValue(aType);
+      aQualifiers->SetValue(1, anItem);
+    }
+    // Number of decimal places
+    if (aLeftNbDigits > 0 || aRightNbDigits > 0) {
+      StepShape_ValueQualifier anItem;
+      Handle(StepShape_ValueFormatTypeQualifier) aType = new StepShape_ValueFormatTypeQualifier();
+      Handle(TCollection_HAsciiString) aFormatType = new TCollection_HAsciiString("NR2 ");
+      aFormatType->AssignCat(new TCollection_HAsciiString(aLeftNbDigits));
+      aFormatType->AssignCat(new TCollection_HAsciiString("."));
+      aFormatType->AssignCat(new TCollection_HAsciiString(aRightNbDigits));
+      aType->Init(aFormatType);
+      aModel->AddWithRefs(aType);
+      anItem.SetValue(aType);
+      aQualifiers->SetValue(aNbQualifiers, anItem);
+    }
+    // Set qualifiers
+    aQRI->SetQualifiers(aQualifiers);
+    Handle(StepRepr_ReprItemAndMeasureWithUnit) anItem = CreateDimValue(aNominal, aUnit,
+      new TCollection_HAsciiString("nominal value"), aMeasureName, isAngle, Standard_True, aQRI);
+    aValues->SetValue(aValIt, anItem);
+    aValIt++;
+  }
+  // Without qualifiers
+  else {
+    Handle(StepRepr_ReprItemAndMeasureWithUnit) anItem = CreateDimValue(aNominal, aUnit,
+      new TCollection_HAsciiString("nominal value"), aMeasureName, isAngle);
+    aValues->SetValue(aValIt, anItem);
+    aValIt++;
+  }
+
+  // Ranges
+  if (theObject->IsDimWithRange()) {
+    Handle(StepRepr_ReprItemAndMeasureWithUnit) aLowerItem = CreateDimValue(theObject->GetLowerBound(), aUnit,
+      new TCollection_HAsciiString("lower limit"), aMeasureName, isAngle);
+    Handle(StepRepr_ReprItemAndMeasureWithUnit) anUpperItem = CreateDimValue(theObject->GetUpperBound(), aUnit,
+      new TCollection_HAsciiString("upper limit"), aMeasureName, isAngle);
+    aValues->SetValue(aValIt, aLowerItem);
+    aValIt++;
+    aValues->SetValue(aValIt, anUpperItem);
+    aValIt++;
+  }
+
+  // Modifiers
+  if (aModifiers.Length() > 0) {
+    Handle(StepRepr_CompoundRepresentationItem) aCompoundRI = new StepRepr_CompoundRepresentationItem();
+    Handle (StepRepr_HArray1OfRepresentationItem) aModifItems = 
+      new StepRepr_HArray1OfRepresentationItem(1, aModifiers.Length());
+    for (Standard_Integer i = 1; i <= aModifiers.Length(); i++) {
+      XCAFDimTolObjects_DimensionModif aModif = aModifiers.Value(i);
+      Handle(StepRepr_DescriptiveRepresentationItem) aModifItem = 
+        new StepRepr_DescriptiveRepresentationItem();
+      aModifItem->Init(new TCollection_HAsciiString(), STEPCAFControl_GDTProperty::GetDimModifierName(aModif));
+      aModel->AddWithRefs(aModifItem);
+      aModifItems->SetValue(i, aModifItem);
+    }
+    aCompoundRI->Init(new TCollection_HAsciiString(), aModifItems);
+    aValues->SetValue(aValIt, aCompoundRI);
+    aValIt++;
+  }
+
+  // Orientation
+  if (theObject->GetType() == XCAFDimTolObjects_DimensionType_Location_Oriented) {
+    Handle(StepGeom_Axis2Placement3d) anOrientation = new StepGeom_Axis2Placement3d();
+    gp_Dir aDir;
+    theObject->GetDirection(aDir);
+    GeomToStep_MakeCartesianPoint MkPoint(gp_Pnt(0, 0, 0));
+    Handle(StepGeom_CartesianPoint) aLoc = MkPoint.Value();
+    Handle(StepGeom_Direction) anAxis = new StepGeom_Direction();
+    Handle(TColStd_HArray1OfReal) aCoords = new TColStd_HArray1OfReal(1, 3);
+    aCoords->SetValue(1, aDir.X());
+    aCoords->SetValue(2, aDir.Y());
+    aCoords->SetValue(3, aDir.Z());
+    anAxis->Init(new TCollection_HAsciiString(), aCoords);
+    anOrientation->Init(new TCollection_HAsciiString("orientation"), aLoc, Standard_True, anAxis, Standard_False, NULL);
+    aValues->SetValue(aValIt, anOrientation);
+    aValIt++;
+  }
+
+  // Descriptions
+  if (theObject->HasDescriptions()) {
+    for (Standard_Integer i = 0; i < theObject->NbDescriptions(); i++) {
+      Handle(StepRepr_DescriptiveRepresentationItem) aDRI = new StepRepr_DescriptiveRepresentationItem();
+      aDRI->Init(theObject->GetDescriptionName(i), theObject->GetDescription(i));
+      aValues->SetValue(aValIt, aDRI);
+      aValIt++;
+    }
+  }
+
+  for (Standard_Integer i = 1; i <= aValues->Length(); i++)
+    aModel->AddWithRefs(aValues->Value(i));
+
+  // Create resulting Shape_Dimension_Representation
+  Handle(StepShape_ShapeDimensionRepresentation) aSDR = new StepShape_ShapeDimensionRepresentation();
+  aSDR->Init(new TCollection_HAsciiString(), aValues, theRC);
+  aModel->AddWithRefs(aSDR);
+  Handle(StepShape_DimensionalCharacteristicRepresentation) aDCR = new StepShape_DimensionalCharacteristicRepresentation();
+  aDCR->Init(theDimension, aSDR);
+  aModel->AddWithRefs(aDCR);
+
+  // Plus_Minus_Tolerance
+  if (theObject->IsDimWithPlusMinusTolerance()) {
+    Handle(TCollection_HAsciiString) aDummyName = new TCollection_HAsciiString(aMeasureName);
+    aDummyName = aDummyName->SubString(9, aDummyName->Length()); //delete "POSITIVE_"
+    aMeasureName = aDummyName->ToCString();
+    Standard_Real aLowerTolValue = -theObject->GetLowerTolValue(),
+                  anUpperTolValue = theObject->GetUpperTolValue();
+    // Upper
+    Handle(StepBasic_MeasureWithUnit) anUpperMWU = new StepBasic_MeasureWithUnit();
+    Handle(StepBasic_MeasureValueMember) anUpperValue = new StepBasic_MeasureValueMember();
+    anUpperValue->SetName(aMeasureName);
+    anUpperValue->SetReal(anUpperTolValue);
+    anUpperMWU->Init(anUpperValue, aUnit);
+    aModel->AddWithRefs(anUpperMWU);
+    // Lower
+    Handle(StepBasic_MeasureWithUnit) aLowerMWU = new StepBasic_MeasureWithUnit();
+    Handle(StepBasic_MeasureValueMember) aLowerValue = new StepBasic_MeasureValueMember();
+    aLowerValue->SetName(aMeasureName);
+    aLowerValue->SetReal(aLowerTolValue);
+    aLowerMWU->Init(aLowerValue, aUnit);
+    aModel->AddWithRefs(aLowerMWU);
+    // Tolerance
+    Handle(StepShape_ToleranceValue) aTolValue = new StepShape_ToleranceValue();
+    aTolValue->Init(aLowerMWU, anUpperMWU);
+    aModel->AddWithRefs(aTolValue);
+    StepShape_ToleranceMethodDefinition aMethod;
+    aMethod.SetValue(aTolValue);
+    Handle(StepShape_PlusMinusTolerance) aPlusMinusTol = new StepShape_PlusMinusTolerance();
+    aPlusMinusTol->Init(aMethod, theDimension);
+    aModel->AddWithRefs(aPlusMinusTol);
+  }
+  // Tolerance class
+  if (theObject->IsDimWithClassOfTolerance()) {
+    Standard_Boolean isHole;
+    XCAFDimTolObjects_DimensionFormVariance aFormVariance;
+    XCAFDimTolObjects_DimensionGrade aGrade;
+    if (!theObject->GetClassOfTolerance(isHole, aFormVariance, aGrade))
+      return;
+    Handle(StepShape_LimitsAndFits) aLAF = STEPCAFControl_GDTProperty::GetLimitsAndFits(isHole, aFormVariance, aGrade);
+    aModel->AddWithRefs(aLAF);
+    StepShape_ToleranceMethodDefinition aMethod;
+    aMethod.SetValue(aLAF);
+    Handle(StepShape_PlusMinusTolerance) aPlusMinusTol = new StepShape_PlusMinusTolerance();
+    aPlusMinusTol->Init(aMethod, theDimension);
+    aModel->AddWithRefs(aPlusMinusTol);
+  }
+}
+
+//=======================================================================
+//function : WriteDerivedGeometry
+//purpose  : auxiliary (write connection point for dimensions)
+//======================================================================
+static void WriteDerivedGeometry (const Handle(XSControl_WorkSession) &WS,
+                                  const Handle(XCAFDimTolObjects_DimensionObject)& theObject,
+                                  const Handle(StepRepr_ConstructiveGeometryRepresentation) theRepr,
+                                  Handle(StepRepr_ShapeAspect)& theFirstSA,
+                                  Handle(StepRepr_ShapeAspect)& theSecondSA,
+                                  NCollection_Vector<Handle(StepGeom_CartesianPoint)>& thePnts)
+{
+  const Handle(Interface_InterfaceModel) &aModel = WS->Model();
+  // First point
+  if (theObject->HasPoint()) {
+    GeomToStep_MakeCartesianPoint aPointMaker(theObject->GetPoint());
+    Handle(StepGeom_CartesianPoint) aPoint = aPointMaker.Value();
+    thePnts.Append(aPoint);
+    Handle(StepRepr_DerivedShapeAspect) aDSA = new StepRepr_DerivedShapeAspect();
+    aDSA->Init(new TCollection_HAsciiString(), new TCollection_HAsciiString(), theFirstSA->OfShape(), StepData_LFalse);
+    Handle(StepAP242_GeometricItemSpecificUsage) aGISU = new StepAP242_GeometricItemSpecificUsage();
+    StepAP242_ItemIdentifiedRepresentationUsageDefinition aDefinition;
+    aDefinition.SetValue(aDSA);
+    Handle(StepRepr_HArray1OfRepresentationItem) anItem = new StepRepr_HArray1OfRepresentationItem(1, 1);
+    anItem->SetValue(1, aPoint);
+    aGISU->Init(new TCollection_HAsciiString(), new TCollection_HAsciiString(), aDefinition, theRepr, anItem);
+    Handle(StepRepr_ShapeAspectDerivingRelationship) aSADR = new StepRepr_ShapeAspectDerivingRelationship();
+    aSADR->Init(new TCollection_HAsciiString(), Standard_False, new TCollection_HAsciiString(), aDSA, theFirstSA);
+    theFirstSA = aDSA;
+    aModel->AddWithRefs(aGISU);
+    aModel->AddWithRefs(aSADR);
+  }
+  
+  // Second point (for locations)
+  if (theObject->HasPoint2()) {
+    GeomToStep_MakeCartesianPoint aPointMaker(theObject->GetPoint2());
+    Handle(StepGeom_CartesianPoint) aPoint = aPointMaker.Value();
+    thePnts.Append(aPoint);
+    Handle(StepRepr_DerivedShapeAspect) aDSA = new StepRepr_DerivedShapeAspect();
+    aDSA->Init(new TCollection_HAsciiString(), new TCollection_HAsciiString(), theFirstSA->OfShape(), StepData_LFalse);
+    Handle(StepAP242_GeometricItemSpecificUsage) aGISU = new StepAP242_GeometricItemSpecificUsage();
+    StepAP242_ItemIdentifiedRepresentationUsageDefinition aDefinition;
+    aDefinition.SetValue(aDSA);
+    Handle(StepRepr_HArray1OfRepresentationItem) anItem = new StepRepr_HArray1OfRepresentationItem(1, 1);
+    anItem->SetValue(1, aPoint);
+    aGISU->Init(new TCollection_HAsciiString(), new TCollection_HAsciiString(), aDefinition, theRepr, anItem);
+    Handle(StepRepr_ShapeAspectDerivingRelationship) aSADR = new StepRepr_ShapeAspectDerivingRelationship();
+    aSADR->Init(new TCollection_HAsciiString(), Standard_False, new TCollection_HAsciiString(), aDSA, theSecondSA);
+    theSecondSA = aDSA;
+    aModel->AddWithRefs(aGISU);
+    aModel->AddWithRefs(aSADR);
+  }
+}
+
+//=======================================================================
+//function : WriteDatumSystem
+//purpose  : auxiliary (write Write datum system for given
+//           geometric_tolerance)
+//======================================================================
+static Handle(StepDimTol_HArray1OfDatumSystemOrReference) WriteDatumSystem(const Handle(XSControl_WorkSession) &WS,
+                                                                           const TDF_Label theGeomTolL,
+                                                                           const TDF_LabelSequence theDatumSeq,
+                                                                           const STEPConstruct_DataMapOfAsciiStringTransient theDatumMap,
+                                                                           const Handle(StepRepr_RepresentationContext)& theRC)
+{
+  // Get working data
+  const Handle(Interface_InterfaceModel) &Model = WS->Model();
+  const Handle(Interface_HGraph) aHGraph = WS->HGraph();
+  if (aHGraph.IsNull())
+    return NULL;
+  Interface_Graph aGraph = aHGraph->Graph();
+  Handle(XCAFDoc_GeomTolerance) aGTAttr;
+  if (!theGeomTolL.FindAttribute(XCAFDoc_GeomTolerance::GetID(), aGTAttr)) 
+    return NULL;
+  Handle(XCAFDimTolObjects_GeomToleranceObject) anObject = aGTAttr->GetObject();
+  if (anObject.IsNull())
+    return NULL;
+
+  // Unit
+  StepBasic_Unit aUnit = GetUnit(theRC);
+
+  XCAFDimTolObjects_DatumObjectSequence aDatums;
+  Standard_Integer aMaxDatumNum = 0;
+  for (Standard_Integer i = 1; i <= theDatumSeq.Length(); i++) {
+    Handle(XCAFDoc_Datum) aDatumAttr;
+    if (!theDatumSeq.Value(i).FindAttribute(XCAFDoc_Datum::GetID(), aDatumAttr)) 
+      continue;
+    Handle(XCAFDimTolObjects_DatumObject) aDatumObj = aDatumAttr->GetObject();
+    if (aDatumObj.IsNull())
+      continue;
+    aDatums.Append(aDatumObj);
+    aMaxDatumNum = Max(aMaxDatumNum, aDatumObj->GetPosition());
+  }
+  if (aMaxDatumNum == 0)
+    return NULL;
+
+  Handle(StepDimTol_HArray1OfDatumReferenceCompartment) aConstituents =
+    new StepDimTol_HArray1OfDatumReferenceCompartment(1, aMaxDatumNum);
+  // Auxiliary datum to initialize attributes in Datum_System
+  Handle(StepDimTol_Datum) aFirstDatum;
+  Standard_Integer aConstituentsNum = 0;
+  for (Standard_Integer i = 1; i <= aMaxDatumNum; i++) {
+    // Collect datums with i-th position
+    XCAFDimTolObjects_DatumObjectSequence aDatumSeqPos;
+    for (Standard_Integer j = 1; j <= aDatums.Length(); j++)
+      if (aDatums.Value(j)->GetPosition() == i)
+        aDatumSeqPos.Append(aDatums.Value(j));
+    if (aDatumSeqPos.Length() < 1)
+      continue;
+
+    aConstituentsNum++;
+    // Initialize Datum_Reference_Compartment
+    StepDimTol_DatumOrCommonDatum aDatumRef;
+    Handle(StepDimTol_DatumReferenceCompartment) aCompartment =
+      new StepDimTol_DatumReferenceCompartment();
+    Handle(StepDimTol_HArray1OfDatumReferenceModifier) aModifiers;
+    if (aDatumSeqPos.Length() == 1) {
+      // Datum entity
+      Handle(Standard_Transient) aFDValue;
+      if (theDatumMap.Find(aDatumSeqPos.Value(1)->GetName()->String(), aFDValue) && !aFDValue.IsNull())
+        aFirstDatum = Handle(StepDimTol_Datum)::DownCast (aFDValue);
+      aDatumRef.SetValue(aFirstDatum);
+      // Modifiers
+      XCAFDimTolObjects_DatumModifiersSequence aSimpleModifiers = aDatumSeqPos.Value(1)->GetModifiers();
+      XCAFDimTolObjects_DatumModifWithValue aModifWithVal;
+      Standard_Real aValue = 0;
+      aDatumSeqPos.Value(1)->GetModifierWithValue(aModifWithVal, aValue);
+      aModifiers = STEPCAFControl_GDTProperty::GetDatumRefModifiers(aSimpleModifiers, aModifWithVal, aValue, aUnit);
+      // Add Datum_Reference_Modifier_With_Value
+      if (!aModifiers.IsNull()) {
+        Handle(StepDimTol_DatumReferenceModifierWithValue) aDRMWV = 
+          aModifiers->Value(aModifiers->Length()).DatumReferenceModifierWithValue();
+        if (!aDRMWV.IsNull()) {
+          Model->AddWithRefs(aDRMWV);
+        }
+      }
+    }
+    else {
+      Handle(StepDimTol_HArray1OfDatumReferenceElement) aCommonDatumList = new StepDimTol_HArray1OfDatumReferenceElement(1, aDatumSeqPos.Length());
+      for (Standard_Integer j = 1; j <= aDatumSeqPos.Length(); j++) {
+        // Datum entity
+        Handle(StepDimTol_Datum) aDatum;
+        Handle(Standard_Transient) aDValue;
+        if (theDatumMap.Find(aDatumSeqPos.Value(j)->GetName()->String(), aDValue))
+          aDatum = Handle(StepDimTol_Datum)::DownCast (aDValue);
+        StepDimTol_DatumOrCommonDatum anElemDatumRef;
+        anElemDatumRef.SetValue(aDatum);
+        if (aFirstDatum.IsNull())
+          aFirstDatum = aDatum;
+        // Modifiers
+        XCAFDimTolObjects_DatumModifiersSequence aSimpleModifiers = aDatumSeqPos.Value(j)->GetModifiers();
+        XCAFDimTolObjects_DatumModifWithValue aModifWithVal;
+        Standard_Real aValue = 0;
+        aDatumSeqPos.Value(j)->GetModifierWithValue(aModifWithVal, aValue);
+        Handle(StepDimTol_HArray1OfDatumReferenceModifier) anElemModifiers =
+          STEPCAFControl_GDTProperty::GetDatumRefModifiers(aSimpleModifiers, aModifWithVal, aValue, aUnit);
+        // Add Datum_Reference_Modifier_With_Value
+        if (!anElemModifiers.IsNull()) {
+          Handle(StepDimTol_DatumReferenceModifierWithValue) aDRMWV = 
+            anElemModifiers->Value(anElemModifiers->Length()).DatumReferenceModifierWithValue();
+          if (!aDRMWV.IsNull()) {
+            Model->AddWithRefs(aDRMWV);
+          }
+        }
+        // Datum_Reference_Element
+        Handle(StepDimTol_DatumReferenceElement) anElement = new StepDimTol_DatumReferenceElement();
+        anElement->Init(new TCollection_HAsciiString(), new TCollection_HAsciiString(), aDatum->OfShape(),
+          aDatum->ProductDefinitional(), anElemDatumRef, !anElemModifiers.IsNull(), anElemModifiers);
+        Model->AddWithRefs(anElement);
+        aCommonDatumList->SetValue(j, anElement);
+      }
+      aDatumRef.SetValue(aCommonDatumList);
+    }
+    aCompartment->Init(new TCollection_HAsciiString(), new TCollection_HAsciiString(), aFirstDatum->OfShape(),
+      aFirstDatum->ProductDefinitional(), aDatumRef, !aModifiers.IsNull(), aModifiers);
+    Model->AddWithRefs(aCompartment);
+    aConstituents->SetValue(aConstituentsNum, aCompartment);
+  }
+  // Remove null elements from aConstituents
+  Standard_Integer aNbConstituents = 0;
+  for (Standard_Integer i = 1; i <= aConstituents->Length(); i++)
+    if (!aConstituents->Value(i).IsNull())
+      aNbConstituents++;
+  Handle(StepDimTol_HArray1OfDatumReferenceCompartment) aResConstituents =
+    new StepDimTol_HArray1OfDatumReferenceCompartment(1, aNbConstituents);
+  Standard_Integer aConstituentsIt = 0;
+  for (Standard_Integer i = 1; i <= aConstituents->Length(); i++)
+    if (!aConstituents->Value(i).IsNull()) {
+      aConstituentsIt++;
+      aResConstituents->SetValue(aConstituentsIt, aConstituents->Value(i));
+    }
+
+  Handle(StepDimTol_HArray1OfDatumSystemOrReference) aDatumSystem;
+  Handle(StepDimTol_DatumSystem) aDS = new StepDimTol_DatumSystem();
+  aDS->Init(new TCollection_HAsciiString(), new TCollection_HAsciiString(), aFirstDatum->OfShape(),
+    aFirstDatum->ProductDefinitional(), aResConstituents);
+  Model->AddWithRefs(aDS);
+  StepDimTol_DatumSystemOrReference anArrayValue;
+  anArrayValue.SetValue(aDS);
+  aDatumSystem = new StepDimTol_HArray1OfDatumSystemOrReference(1, 1);
+  aDatumSystem->SetValue(1, anArrayValue);
+
+  // Axis
+  if (anObject->HasAxis()) {
+    GeomToStep_MakeAxis2Placement3d anAxisMaker(anObject->GetAxis());
+    Handle(StepGeom_Axis2Placement3d) anAxis = anAxisMaker.Value();
+    anAxis->SetName(new TCollection_HAsciiString("orientation"));
+    Handle(StepAP242_GeometricItemSpecificUsage) aGISU = new StepAP242_GeometricItemSpecificUsage();
+    StepAP242_ItemIdentifiedRepresentationUsageDefinition aDefinition;
+    aDefinition.SetValue(aDS);
+    Handle(StepRepr_HArray1OfRepresentationItem) anReprItems = new StepRepr_HArray1OfRepresentationItem(1, 1);
+    Handle(StepRepr_RepresentationItem) anIdentifiedItem = anAxis;
+    anReprItems->SetValue(1, anIdentifiedItem);
+    Interface_EntityIterator subs = aGraph.Sharings(aFirstDatum->OfShape());
+    Handle(StepShape_ShapeDefinitionRepresentation) aSDR;
+    for (subs.Start(); subs.More() && aSDR.IsNull(); subs.Next()) {
+      Handle(Standard_Transient) anEntity = subs.Value();
+      aSDR = Handle(StepShape_ShapeDefinitionRepresentation)::DownCast(anEntity);
+    }
+    if (aSDR.IsNull())
+      return aDatumSystem;
+    
+    aGISU->Init(new TCollection_HAsciiString(), new TCollection_HAsciiString(),
+      aDefinition, aSDR->UsedRepresentation(), anReprItems);
+    Model->AddWithRefs(anAxis);
+    Model->AddWithRefs(aGISU);
+  }
+
+  return aDatumSystem;
+}
+
+//=======================================================================
+//function : WriteToleranceZone
+//purpose  : auxiliary (write tolerace zones)
+//=======================================================================
+void STEPCAFControl_Writer::WriteToleranceZone (const Handle(XSControl_WorkSession) &WS,
+                                                const Handle(XCAFDimTolObjects_GeomToleranceObject)& theObject,
+                                                const Handle(StepDimTol_GeometricTolerance)& theEntity,
+                                                const Handle(StepRepr_RepresentationContext)& theRC)
+{
+  // Get working data
+  const Handle(Interface_InterfaceModel) &Model = WS->Model();
+  if (theEntity.IsNull() || theObject.IsNull())
+    return;
+
+  // Return if there is no tolerance zones
+  if (theObject->GetTypeOfValue() == XCAFDimTolObjects_GeomToleranceTypeValue_None &&
+      theObject->GetZoneModifier() != XCAFDimTolObjects_GeomToleranceZoneModif_Runout)
+    return;
+
+  // Create Tolerance_Zone
+  Handle(StepDimTol_ToleranceZoneForm) aForm = new StepDimTol_ToleranceZoneForm();
+  Model->AddWithRefs(aForm);
+  aForm->Init(STEPCAFControl_GDTProperty::GetTolValueType(theObject->GetTypeOfValue()));
+  Handle(StepDimTol_HArray1OfToleranceZoneTarget) aZoneTargetArray = new StepDimTol_HArray1OfToleranceZoneTarget(1, 1);
+  StepDimTol_ToleranceZoneTarget aTarget;
+  aTarget.SetValue(theEntity);
+  aZoneTargetArray->SetValue(1, aTarget);
+  Handle(StepDimTol_ToleranceZone) aZone = new StepDimTol_ToleranceZone();
+  aZone->Init(new TCollection_HAsciiString(), new TCollection_HAsciiString(),
+    theEntity->TolerancedShapeAspect().ShapeAspect()->OfShape(), StepData_LFalse,
+    aZoneTargetArray, aForm);
+  Model->AddWithRefs(aZone);
+
+  // Runout_Tolerance_Zone
+  Handle(StepBasic_PlaneAngleMeasureWithUnit) aPAMWU = new StepBasic_PlaneAngleMeasureWithUnit();
+  Handle(StepBasic_MeasureValueMember) aValueMember = new StepBasic_MeasureValueMember();
+  aValueMember->SetName("PLANE_ANGLE_MEASURE");
+  aValueMember->SetReal(theObject->GetValueOfZoneModifier());
+  aPAMWU->Init(aValueMember, GetUnit(theRC, Standard_True));
+  Handle(StepDimTol_RunoutZoneOrientation) anOrientation = new StepDimTol_RunoutZoneOrientation();
+  anOrientation->Init(aPAMWU);
+  Handle(StepDimTol_RunoutZoneDefinition) aDefinition = new StepDimTol_RunoutZoneDefinition();
+  aDefinition->Init(aZone, NULL, anOrientation);
+  Model->AddWithRefs(aDefinition);
+  Model->AddWithRefs(anOrientation);
+  Model->AddWithRefs(aPAMWU);
+}
+
+//=======================================================================
+//function : WriteGeomTolerance
+//purpose  : auxiliary (write Geometric_Tolerance entity for given shapes,
+//           label and datum system)
+//======================================================================
+void STEPCAFControl_Writer::WriteGeomTolerance (const Handle(XSControl_WorkSession) &WS,
+                                                const TDF_LabelSequence theShapeSeqL,
+                                                const TDF_Label theGeomTolL,
+                                                const Handle(StepDimTol_HArray1OfDatumSystemOrReference)& theDatumSystem,
+                                                const Handle(StepRepr_RepresentationContext)& theRC)
+{
+  // Get working data
+  const Handle(Interface_InterfaceModel) &Model = WS->Model();
+  Handle(XCAFDoc_GeomTolerance) aGTAttr;
+  if (!theGeomTolL.FindAttribute(XCAFDoc_GeomTolerance::GetID(), aGTAttr)) 
+    return;
+  Handle(XCAFDimTolObjects_GeomToleranceObject) anObject = aGTAttr->GetObject();
+  if (anObject.IsNull())
+    return;
+
+  // Value
+  Handle(StepBasic_LengthMeasureWithUnit) aLMWU = new StepBasic_LengthMeasureWithUnit();
+  StepBasic_Unit aUnit = GetUnit(theRC);
+  Handle(StepBasic_MeasureValueMember) aValueMember = new StepBasic_MeasureValueMember();
+  aValueMember->SetName("LENGTH_MEASURE");
+  aValueMember->SetReal(anObject->GetValue());
+  aLMWU->Init(aValueMember, aUnit);
+  Model->AddWithRefs(aLMWU);
+
+  // Geometric_Tolerance target
+  Handle(StepRepr_ShapeAspect) aMainSA;
+  Handle(StepRepr_RepresentationContext) dummyRC;
+  Handle(StepAP242_GeometricItemSpecificUsage) dummyGISU;
+  if (theShapeSeqL.Length() == 1) {
+    TopoDS_Shape aShape = XCAFDoc_ShapeTool::GetShape(theShapeSeqL.Value(1));
+    aMainSA = WriteShapeAspect(WS, theGeomTolL, aShape, dummyRC, dummyGISU);
+    Model->AddWithRefs(aMainSA);
+  }
+  else {
+    Handle(StepRepr_CompositeShapeAspect) aCSA;
+    for (Standard_Integer i = 1; i <= theShapeSeqL.Length(); i++) {
+      TopoDS_Shape aShape = XCAFDoc_ShapeTool::GetShape(theShapeSeqL.Value(i));
+      Handle(StepRepr_ShapeAspect) aSA = WriteShapeAspect(WS, theGeomTolL, aShape, dummyRC, dummyGISU);
+      if (aSA.IsNull())
+        continue;
+      if (aCSA.IsNull()) {
+        aCSA = new StepRepr_CompositeShapeAspect();
+        aCSA->Init(aSA->Name(), aSA->Description(), aSA->OfShape(), aSA->ProductDefinitional());
+        Model->AddWithRefs(aCSA);
+      }
+      Handle(StepRepr_ShapeAspectRelationship) aSAR = new StepRepr_ShapeAspectRelationship();
+      aSAR->Init(new TCollection_HAsciiString(), Standard_False, NULL, aCSA, aSA);
+      Model->AddWithRefs(aSAR);
+    }
+    aMainSA = aCSA;
+  }
+  StepDimTol_GeometricToleranceTarget aGTTarget;
+  aGTTarget.SetValue(aMainSA);
+
+  Standard_Boolean isWithModif = Standard_False,
+                   isWithDatRef = Standard_False,
+                   isWithMaxTol = Standard_False;
+  // Modifiers
+  // Simple modifiers
+  XCAFDimTolObjects_GeomToleranceModifiersSequence aModifiers = anObject->GetModifiers();
+  Handle(StepDimTol_HArray1OfGeometricToleranceModifier) aModifArray;
+  Handle(StepBasic_LengthMeasureWithUnit) aMaxLMWU;
+  Standard_Integer aModifNb = aModifiers.Length();
+  if (anObject->GetMaterialRequirementModifier() != XCAFDimTolObjects_GeomToleranceMatReqModif_None)
+      aModifNb++;
+  for (Standard_Integer i = 1; i <= aModifiers.Length(); i++)
+    if (aModifiers.Value(i) == XCAFDimTolObjects_GeomToleranceModif_All_Around ||
+        aModifiers.Value(i) == XCAFDimTolObjects_GeomToleranceModif_All_Over)
+        aModifNb--;
+  if (aModifNb > 0) {
+    isWithModif = Standard_True;
+    aModifArray = new StepDimTol_HArray1OfGeometricToleranceModifier(1, aModifNb);
+    Standard_Integer k = 1;
+    for (Standard_Integer i = 1; i <= aModifiers.Length(); i++) {
+      if (aModifiers.Value(i) == XCAFDimTolObjects_GeomToleranceModif_All_Around ||
+        aModifiers.Value(i) == XCAFDimTolObjects_GeomToleranceModif_All_Over)
+        continue;
+      StepDimTol_GeometricToleranceModifier aModif = 
+        STEPCAFControl_GDTProperty::GetGeomToleranceModifier(aModifiers.Value(i));
+      aModifArray->SetValue(k, aModif);
+      k++;
+    }
+    if (anObject->GetMaterialRequirementModifier() == XCAFDimTolObjects_GeomToleranceMatReqModif_L) {
+      aModifArray->SetValue(aModifNb, StepDimTol_GTMLeastMaterialRequirement);
+    }
+    else if (anObject->GetMaterialRequirementModifier() == XCAFDimTolObjects_GeomToleranceMatReqModif_M) {
+      aModifArray->SetValue(aModifNb, StepDimTol_GTMMaximumMaterialRequirement);
+    }
+    // Modifier with value
+    if (anObject->GetMaxValueModifier() != 0) {
+      isWithMaxTol = Standard_True;
+      aMaxLMWU = new StepBasic_LengthMeasureWithUnit();
+      Handle(StepBasic_MeasureValueMember) aModifierValueMember = new StepBasic_MeasureValueMember();
+      aModifierValueMember->SetName("LENGTH_MEASURE");
+      aModifierValueMember->SetReal(anObject->GetMaxValueModifier());
+      aMaxLMWU->Init(aModifierValueMember, aUnit);
+      Model->AddWithRefs(aMaxLMWU);
+    }
+  }
+
+  // Datum Reference
+  isWithDatRef = !theDatumSystem.IsNull();
+
+  // Collect all attributes
+  Handle(TCollection_HAsciiString) aName = new TCollection_HAsciiString(),
+                                  aDescription = new TCollection_HAsciiString();
+  Handle(StepDimTol_GeometricToleranceWithDatumReference) aGTWDR = 
+    new StepDimTol_GeometricToleranceWithDatumReference();
+  aGTWDR->SetDatumSystem(theDatumSystem);
+  Handle(StepDimTol_GeometricToleranceWithModifiers) aGTWM = 
+    new StepDimTol_GeometricToleranceWithModifiers();
+  aGTWM->SetModifiers(aModifArray);
+  StepDimTol_GeometricToleranceType aType = 
+    STEPCAFControl_GDTProperty::GetGeomToleranceType(anObject->GetType());
+
+  // Init and write necessary subtype of Geometric_Tolerance entity
+  Handle(StepDimTol_GeometricTolerance) aGeomTol;
+  if (isWithModif) {
+    if (isWithMaxTol) {
+      if (isWithDatRef) {
+        // Geometric_Tolerance & Geometric_Tolerance_With_Datum_Reference & 
+        //Geometric_Tolerance_With_Maximum_Tolerance & Geometric_Tolerance_With_Modifiers
+        Handle(StepDimTol_GeoTolAndGeoTolWthDatRefAndGeoTolWthMaxTol) aResult =
+          new StepDimTol_GeoTolAndGeoTolWthDatRefAndGeoTolWthMaxTol();
+        aResult->Init(aName, aDescription, aLMWU, aGTTarget, aGTWDR, aGTWM, aMaxLMWU, aType);
+        aGeomTol = aResult;
+      }
+      else {
+        // Geometric_Tolerance & Geometric_Tolerance_With_Maximum_Tolerance & Geometric_Tolerance_With_Modifiers
+        Handle(StepDimTol_GeoTolAndGeoTolWthMaxTol) aResult =
+          new StepDimTol_GeoTolAndGeoTolWthMaxTol();
+        aResult->Init(aName, aDescription, aLMWU, aGTTarget, aGTWM, aMaxLMWU, aType);
+        aGeomTol = aResult;
+      }
+    }
+    else {
+      if (isWithDatRef) {
+        // Geometric_Tolerance & Geometric_Tolerance_With_Datum_Reference & Geometric_Tolerance_With_Modifiers
+        Handle(StepDimTol_GeoTolAndGeoTolWthDatRefAndGeoTolWthMod) aResult =
+          new StepDimTol_GeoTolAndGeoTolWthDatRefAndGeoTolWthMod();
+        aResult->Init(aName, aDescription, aLMWU, aGTTarget, aGTWDR, aGTWM, aType);
+        aGeomTol = aResult;
+      }
+      else {
+        // Geometric_Tolerance & Geometric_Tolerance_With_Modifiers
+        Handle(StepDimTol_GeoTolAndGeoTolWthMod) aResult =
+          new StepDimTol_GeoTolAndGeoTolWthMod();
+        aResult->Init(aName, aDescription, aLMWU, aGTTarget, aGTWM, aType);
+        aGeomTol = aResult;
+      }
+    }
+  }
+  else {
+    if (isWithDatRef) {
+      // Geometric_Tolerance & Geometric_Tolerance_With_Datum_Reference
+      Handle(StepDimTol_GeoTolAndGeoTolWthDatRef) aResult =
+          new StepDimTol_GeoTolAndGeoTolWthDatRef();
+        aResult->Init(aName, aDescription, aLMWU, aGTTarget, aGTWDR, aType);
+        aGeomTol = aResult;
+    }
+    else {
+      // Geometric_Tolerance
+      Handle(StepDimTol_GeometricTolerance) aResult = 
+        STEPCAFControl_GDTProperty::GetGeomTolerance(anObject->GetType());
+      if (!aResult.IsNull()) {
+        aResult->Init(aName, aDescription, aLMWU, aGTTarget);
+        aGeomTol = aResult;
+      }
+    }
+  }
+  Model->AddWithRefs(aGeomTol);
+  WriteToleranceZone(WS, anObject, aGeomTol, theRC);
+  //Annotation plane and Presentation
+  WritePresentation(WS, anObject->GetPresentation(), anObject->GetPresentationName(), Standard_True, anObject->HasPlane(),
+    anObject->GetPlane(), anObject->GetPointTextAttach(), aGeomTol);
+}
 
 //=======================================================================
 //function : WriteDGTs
 //purpose  : 
 //=======================================================================
-
 Standard_Boolean STEPCAFControl_Writer::WriteDGTs (const Handle(XSControl_WorkSession) &WS,
                                                    const TDF_LabelSequence  &labels ) const
 {
   
   if ( labels.Length() <=0 ) return Standard_False;
-
+  
   // get working data
-  Handle(Interface_InterfaceModel) Model = WS->Model();
-  Handle(XSControl_TransferWriter) TW = WS->TransferWriter();
-  Handle(Transfer_FinderProcess) FP = TW->FinderProcess();
+  const Handle(Interface_InterfaceModel) &Model = WS->Model();
+  const Handle(XSControl_TransferWriter) &TW = WS->TransferWriter();
+  const Handle(Transfer_FinderProcess) &FP = TW->FinderProcess();
 
   const Handle(Interface_HGraph) aHGraph = WS->HGraph();
   if(aHGraph.IsNull())
@@ -2016,23 +3433,26 @@ Standard_Boolean STEPCAFControl_Writer::WriteDGTs (const Handle(XSControl_WorkSe
   if(DGTTool.IsNull() ) return Standard_False;
 
   TDF_LabelSequence DGTLabels;
+
   STEPConstruct_DataMapOfAsciiStringTransient DatumMap;
 
   // write Datums
+  DGTLabels.Clear();
   DGTTool->GetDatumLabels(DGTLabels);
   if(DGTLabels.Length()<=0) return Standard_False;
   Standard_Integer i;
   for(i=1; i<=DGTLabels.Length(); i++) {
     TDF_Label DatumL = DGTLabels.Value(i);
-    TDF_Label ShapeL;
-    if(!DGTTool->GetRefShapeLabel(DatumL,ShapeL)) continue;
+    TDF_LabelSequence ShapeL;
+    TDF_LabelSequence aNullSeq;
+    if(!DGTTool->GetRefShapeLabel(DatumL,ShapeL,aNullSeq)) continue;
     // find target shape
-    TopoDS_Shape aShape = XCAFDoc_ShapeTool::GetShape(ShapeL);
+    TopoDS_Shape aShape = XCAFDoc_ShapeTool::GetShape(ShapeL.Value(1));
     TopLoc_Location Loc;
     TColStd_SequenceOfTransient seqRI;
     FindEntities( FP, aShape, Loc, seqRI );
     if ( seqRI.Length() <= 0 ) {
-      FP->Messenger() << "Warning: Cannot find RI for "<<aShape.TShape()->DynamicType()->Name()<<endl;
+      FP->Messenger()->SendInfo() << "Warning: Cannot find RI for "<<aShape.TShape()->DynamicType()->Name()<<std::endl;
       continue;
     }
     Handle(StepRepr_ProductDefinitionShape) PDS;
@@ -2042,12 +3462,16 @@ Standard_Boolean STEPCAFControl_Writer::WriteDGTs (const Handle(XSControl_WorkSe
     Handle(StepShape_EdgeCurve) EC;
     FindPDSforDGT(aGraph,ent,PDS,RC,AF,EC);
     if(PDS.IsNull()) continue;
-    //cout<<"Model->Number(PDS)="<<Model->Number(PDS)<<endl;
+    //std::cout<<"Model->Number(PDS)="<<Model->Number(PDS)<<std::endl;
     Handle(XCAFDoc_Datum) DatumAttr;
     if(!DatumL.FindAttribute(XCAFDoc_Datum::GetID(),DatumAttr)) continue;
     Handle(TCollection_HAsciiString) aName = DatumAttr->GetName();
-    Handle(TCollection_HAsciiString) aDescription = DatumAttr->GetDescription();
     Handle(TCollection_HAsciiString) anIdentification = DatumAttr->GetIdentification();
+    Handle(TCollection_HAsciiString) aDescription = DatumAttr->GetDescription();
+    if (aDescription.IsNull())
+    {
+      aDescription = new TCollection_HAsciiString();
+    }
     Handle(StepDimTol_DatumFeature) DF = new StepDimTol_DatumFeature;
     Handle(StepDimTol_Datum) aDatum = new StepDimTol_Datum;
     DF->Init(aName, new TCollection_HAsciiString, PDS, StepData_LTrue);
@@ -2105,15 +3529,16 @@ Standard_Boolean STEPCAFControl_Writer::WriteDGTs (const Handle(XSControl_WorkSe
   if(DGTLabels.Length()<=0) return Standard_False;
   for(i=1; i<=DGTLabels.Length(); i++) {
     TDF_Label DimTolL = DGTLabels.Value(i);
-    TDF_Label ShapeL;
-    if(!DGTTool->GetRefShapeLabel(DimTolL,ShapeL)) continue;
+    TDF_LabelSequence ShapeL;
+    TDF_LabelSequence aNullSeq;
+    if(!DGTTool->GetRefShapeLabel(DimTolL,ShapeL,aNullSeq)) continue;
     // find target shape
-    TopoDS_Shape aShape = XCAFDoc_ShapeTool::GetShape(ShapeL);
+    TopoDS_Shape aShape = XCAFDoc_ShapeTool::GetShape(ShapeL.Value(1));
     TopLoc_Location Loc;
     TColStd_SequenceOfTransient seqRI;
     FindEntities( FP, aShape, Loc, seqRI );
     if ( seqRI.Length() <= 0 ) {
-      FP->Messenger() << "Warning: Cannot find RI for "<<aShape.TShape()->DynamicType()->Name()<<endl;
+      FP->Messenger()->SendInfo() << "Warning: Cannot find RI for "<<aShape.TShape()->DynamicType()->Name()<<std::endl;
       continue;
     }
     Handle(StepRepr_ProductDefinitionShape) PDS;
@@ -2123,7 +3548,7 @@ Standard_Boolean STEPCAFControl_Writer::WriteDGTs (const Handle(XSControl_WorkSe
     Handle(StepShape_EdgeCurve) EC;
     FindPDSforDGT(aGraph,ent,PDS,RC,AF,EC);
     if(PDS.IsNull()) continue;
-    //cout<<"Model->Number(PDS)="<<Model->Number(PDS)<<endl;
+    //std::cout<<"Model->Number(PDS)="<<Model->Number(PDS)<<std::endl;
 
     Handle(XCAFDoc_DimTol) DimTolAttr;
     if(!DimTolL.FindAttribute(XCAFDoc_DimTol::GetID(),DimTolAttr)) continue;
@@ -2156,33 +3581,7 @@ Standard_Boolean STEPCAFControl_Writer::WriteDGTs (const Handle(XSControl_WorkSe
     Model->AddWithRefs(SDR);
     // define aUnit for creation LengthMeasureWithUnit (common for all)
     StepBasic_Unit aUnit;
-    Handle(StepBasic_SiUnitAndLengthUnit) SLU;
-    Handle(StepGeom_GeometricRepresentationContextAndGlobalUnitAssignedContext) Ctx =
-      Handle(StepGeom_GeometricRepresentationContextAndGlobalUnitAssignedContext)::DownCast(RC);
-    if(!Ctx.IsNull()) {
-      for(Standard_Integer j=1; j<=Ctx->NbUnits(); j++) {
-        if(Ctx->UnitsValue(j)->IsKind(STANDARD_TYPE(StepBasic_SiUnitAndLengthUnit))) {
-          SLU = Handle(StepBasic_SiUnitAndLengthUnit)::DownCast(Ctx->UnitsValue(j));
-          break;
-        }
-      }
-    }
-    if(SLU.IsNull()) {
-      Handle(StepGeom_GeomRepContextAndGlobUnitAssCtxAndGlobUncertaintyAssCtx) Ctx1 =
-        Handle(StepGeom_GeomRepContextAndGlobUnitAssCtxAndGlobUncertaintyAssCtx)::DownCast(RC);
-      if(!Ctx1.IsNull()) {
-        for(Standard_Integer j=1; j<=Ctx1->NbUnits(); j++) {
-          if(Ctx1->UnitsValue(j)->IsKind(STANDARD_TYPE(StepBasic_SiUnitAndLengthUnit))) {
-            SLU = Handle(StepBasic_SiUnitAndLengthUnit)::DownCast(Ctx1->UnitsValue(j));
-            break;
-          }
-        }
-      }
-    }
-    if(SLU.IsNull()) {
-      SLU = new StepBasic_SiUnitAndLengthUnit;
-    }
-    aUnit.SetValue(SLU);
+    aUnit = GetUnit(RC);
 
     // specific part of writing D&GT entities
     if(kind<20) { //dimension
@@ -2232,10 +3631,10 @@ Standard_Boolean STEPCAFControl_Writer::WriteDGTs (const Handle(XSControl_WorkSe
         Model->AddEntity(VR);
         Handle(StepShape_ShapeDimensionRepresentation) SDimR =
           new StepShape_ShapeDimensionRepresentation;
-        Handle(StepRepr_HArray1OfRepresentationItem) HARI =
+        Handle(StepRepr_HArray1OfRepresentationItem) aHARI =
           new StepRepr_HArray1OfRepresentationItem(1,1);
-        HARI->SetValue(1,VR);
-        SDimR->Init(aName,HARI,RC);
+        aHARI->SetValue(1,VR);
+        SDimR->Init(aName,aHARI,RC);
         Model->AddWithRefs(SDimR);
         Handle(StepShape_DimensionalCharacteristicRepresentation) DimCharR =
           new StepShape_DimensionalCharacteristicRepresentation;
@@ -2248,7 +3647,7 @@ Standard_Boolean STEPCAFControl_Writer::WriteDGTs (const Handle(XSControl_WorkSe
     else if(kind<50) { //tolerance
       if(kind<35) { // tolerance with datum system
         TDF_LabelSequence DatumLabels;
-        DGTTool->GetDatumTolerLabels(DimTolL,DatumLabels);
+        DGTTool->GetDatumOfTolerLabels(DimTolL,DatumLabels);
         Standard_Integer NbDR = DatumLabels.Length();
         Handle(StepDimTol_HArray1OfDatumReference) HADR = new StepDimTol_HArray1OfDatumReference(1,NbDR);
         for(Standard_Integer j=1; j<=NbDR; j++) {
@@ -2346,6 +3745,274 @@ Standard_Boolean STEPCAFControl_Writer::WriteDGTs (const Handle(XSControl_WorkSe
   return Standard_True;
 }
 
+//=======================================================================
+//function : WriteDGTsAP242
+//purpose  : 
+//=======================================================================
+
+Standard_Boolean STEPCAFControl_Writer::WriteDGTsAP242 (const Handle(XSControl_WorkSession) &WS,
+                                                        const TDF_LabelSequence  &labels )
+{
+  // Get working data
+  const Handle(Interface_InterfaceModel) &aModel = WS->Model();
+
+  const Handle(Interface_HGraph) aHGraph = WS->HGraph();
+  if(aHGraph.IsNull())
+    return Standard_False;
+
+  Interface_Graph aGraph = aHGraph->Graph();
+  Handle(XCAFDoc_DimTolTool) DGTTool = XCAFDoc_DocumentTool::DimTolTool(labels(1));
+  if(DGTTool.IsNull())
+    return Standard_False;
+
+  // Common entities for presentation
+  STEPConstruct_Styles aStyles (WS);
+  Handle(StepVisual_Colour) aCurvColor = aStyles.EncodeColor(Quantity_NOC_WHITE);
+  Handle(StepRepr_RepresentationItem) anItem = NULL;
+  myGDTPrsCurveStyle->SetValue(1, aStyles.MakeColorPSA(anItem, aCurvColor, aCurvColor, aCurvColor, 0.0));
+  Interface_EntityIterator aModelIter = aModel->Entities();
+  for (; aModelIter.More() && myGDTCommonPDS.IsNull(); aModelIter.Next())
+    myGDTCommonPDS = Handle(StepRepr_ProductDefinitionShape)::DownCast(aModelIter.Value());
+
+  TDF_LabelSequence aDGTLabels;
+  STEPConstruct_DataMapOfAsciiStringTransient aDatumMap;
+  Handle(StepRepr_RepresentationContext) aRC;
+
+  //------------- //
+  // write Datums //
+  //--------------//
+  DGTTool->GetDatumLabels(aDGTLabels);
+  // Find all shapes with datums
+  TColStd_MapOfAsciiString aNameIdMap;
+  for(Standard_Integer i = 1; i <= aDGTLabels.Length(); i++) {
+    TDF_Label aDatumL = aDGTLabels.Value(i);
+    TDF_LabelSequence aShapeL, aNullSeq;
+    DGTTool->GetRefShapeLabel(aDatumL, aShapeL, aNullSeq);
+    Handle(XCAFDoc_Datum) aDatumAttr;
+    aDatumL.FindAttribute(XCAFDoc_Datum::GetID(), aDatumAttr);
+    Handle(XCAFDimTolObjects_DatumObject) anObject = aDatumAttr->GetObject();
+    TCollection_AsciiString aDatumName = anObject->GetName()->String();
+    TCollection_AsciiString aDatumTargetId = TCollection_AsciiString(anObject->GetDatumTargetNumber());
+    if (!aNameIdMap.Add(aDatumName.Cat(aDatumTargetId)))
+      continue;
+    Handle(Standard_Transient) aWrittenDatum;
+    Standard_Boolean isFirstDT = !aDatumMap.Find(aDatumName, aWrittenDatum);
+    Handle(StepDimTol_Datum) aDatum = WriteDatumAP242(WS, aShapeL, aDatumL, isFirstDT, 
+                                                      Handle(StepDimTol_Datum)::DownCast (aWrittenDatum));
+    // Add created Datum into Map
+    aDatumMap.Bind(aDatumName, aDatum);
+  }
+
+  //----------------- //
+  // write Dimensions //
+  //------------------//
+  aDGTLabels.Clear();
+  DGTTool->GetDimensionLabels(aDGTLabels);
+  // Auxiliary entities for derived geometry
+  Handle(StepRepr_ConstructiveGeometryRepresentation) aCGRepr =
+    new StepRepr_ConstructiveGeometryRepresentation();
+  Handle(StepRepr_ConstructiveGeometryRepresentationRelationship) aCGReprRel =
+    new StepRepr_ConstructiveGeometryRepresentationRelationship();
+  NCollection_Vector<Handle(StepGeom_CartesianPoint)> aConnectionPnts;
+  Handle(StepRepr_RepresentationContext) dummyRC;
+  Handle(StepAP242_GeometricItemSpecificUsage) dummyGISU;
+  for (Standard_Integer i = 1; i <= aDGTLabels.Length(); i++) {
+    TDF_Label aDimensionL = aDGTLabels.Value(i);
+    TDF_LabelSequence aFirstShapeL, aSecondShapeL;
+    Handle(XCAFDoc_Dimension) aDimAttr;
+    if (!aDimensionL.FindAttribute(XCAFDoc_Dimension::GetID(),aDimAttr)) 
+      continue;
+    Handle(XCAFDimTolObjects_DimensionObject) anObject = aDimAttr->GetObject();
+    if (anObject.IsNull())
+      continue;
+    if (anObject->GetType() == XCAFDimTolObjects_DimensionType_CommonLabel)
+    {
+      Handle(StepRepr_ShapeAspect) aSA = new StepRepr_ShapeAspect();
+      aSA->Init(new TCollection_HAsciiString(), new TCollection_HAsciiString(), myGDTCommonPDS, StepData_LTrue);
+      aModel->AddWithRefs(aSA);
+      WritePresentation(WS, anObject->GetPresentation(), anObject->GetPresentationName(), anObject->HasPlane(),
+        Standard_False, anObject->GetPlane(), anObject->GetPointTextAttach(), aSA);
+    }
+
+    if (!DGTTool->GetRefShapeLabel(aDimensionL, aFirstShapeL, aSecondShapeL))
+      continue;
+
+    // Write links with shapes
+    Handle(StepRepr_ShapeAspect) aFirstSA, aSecondSA;
+    if (aFirstShapeL.Length() == 1) {
+      TopoDS_Shape aShape = XCAFDoc_ShapeTool::GetShape(aFirstShapeL.Value(1));
+      aFirstSA = WriteShapeAspect(WS, aDimensionL, aShape, dummyRC, dummyGISU);
+      if (aRC.IsNull() && !dummyRC.IsNull())
+        aRC = dummyRC;
+    }
+    else if (aFirstShapeL.Length() > 1) {
+      Handle(StepRepr_CompositeShapeAspect) aCSA;
+      for (Standard_Integer shIt = 1; shIt <= aFirstShapeL.Length(); shIt++) {
+        TopoDS_Shape aShape = XCAFDoc_ShapeTool::GetShape(aFirstShapeL.Value(shIt));
+        Handle(StepRepr_ShapeAspect) aSA = WriteShapeAspect(WS, aDimensionL, aShape, dummyRC, dummyGISU);
+        if (aSA.IsNull())
+          continue;
+        if (aCSA.IsNull()) {
+          aCSA = new StepRepr_CompositeShapeAspect();
+          aCSA->Init(aSA->Name(), aSA->Description(), aSA->OfShape(), aSA->ProductDefinitional());
+          aModel->AddWithRefs(aCSA);
+        }
+        Handle(StepRepr_ShapeAspectRelationship) aSAR = new StepRepr_ShapeAspectRelationship();
+        aSAR->Init(new TCollection_HAsciiString(), Standard_False, new TCollection_HAsciiString(), aCSA, aSA);
+        aModel->AddWithRefs(aSAR);
+        if (aRC.IsNull() && !dummyRC.IsNull())
+          aRC = dummyRC;
+      }
+      aFirstSA = aCSA;
+    }
+    if (aSecondShapeL.Length() == 1) {
+      TopoDS_Shape aShape = XCAFDoc_ShapeTool::GetShape(aSecondShapeL.Value(1));
+      aSecondSA = WriteShapeAspect(WS, aDimensionL, aShape, dummyRC, dummyGISU);
+      if (aRC.IsNull() && !dummyRC.IsNull())
+        aRC = dummyRC;
+    }
+    else if (aSecondShapeL.Length() > 1) {
+      Handle(StepRepr_CompositeShapeAspect) aCSA;
+      for (Standard_Integer shIt = 1; shIt <= aSecondShapeL.Length(); shIt++) {
+        TopoDS_Shape aShape = XCAFDoc_ShapeTool::GetShape(aSecondShapeL.Value(shIt));
+        Handle(StepRepr_ShapeAspect) aSA = WriteShapeAspect(WS, aDimensionL, aShape, dummyRC, dummyGISU);
+        if (aCSA.IsNull() && !aSA.IsNull())
+        {
+          aCSA = new StepRepr_CompositeShapeAspect();
+        }
+        aCSA->Init(aSA->Name(), aSA->Description(), aSA->OfShape(), aSA->ProductDefinitional());
+        if (!aSA.IsNull()) {
+          Handle(StepRepr_ShapeAspectRelationship) aSAR = new StepRepr_ShapeAspectRelationship();
+          aSAR->Init(new TCollection_HAsciiString(), Standard_False, new TCollection_HAsciiString(), aCSA, aSA);
+          aModel->AddWithRefs(aSAR);
+        }
+        if (aRC.IsNull() && !dummyRC.IsNull())
+          aRC = dummyRC;
+      }
+      aSecondSA = aCSA;
+    }
+
+    if (anObject->GetType() == XCAFDimTolObjects_DimensionType_DimensionPresentation)
+    {
+      WritePresentation(WS, anObject->GetPresentation(), anObject->GetPresentationName(), anObject->HasPlane(),
+        Standard_False, anObject->GetPlane(), anObject->GetPointTextAttach(), aFirstSA);
+      continue;
+    }
+
+    // Write dimensions
+    StepShape_DimensionalCharacteristic aDimension;
+    if (anObject->HasPoint() || anObject->HasPoint2())
+      WriteDerivedGeometry(WS, anObject, aCGRepr, aFirstSA, aSecondSA, aConnectionPnts);
+    XCAFDimTolObjects_DimensionType aDimType = anObject->GetType();
+    if (STEPCAFControl_GDTProperty::IsDimensionalLocation(aDimType)) {
+      // Dimensional_Location
+      Handle(StepShape_DimensionalLocation) aDim = new StepShape_DimensionalLocation();
+      aDim->Init(STEPCAFControl_GDTProperty::GetDimTypeName(aDimType), Standard_False, NULL, aFirstSA, aSecondSA);
+      aDimension.SetValue(aDim);
+    }
+    else if (aDimType == XCAFDimTolObjects_DimensionType_Location_Angular) {
+      // Angular_Location
+      Handle(StepShape_AngularLocation) aDim = new StepShape_AngularLocation();
+      StepShape_AngleRelator aRelator = StepShape_Equal;
+      if (anObject->HasQualifier()) {
+        XCAFDimTolObjects_DimensionQualifier aQualifier = anObject->GetQualifier();
+        switch (aQualifier) {
+          case XCAFDimTolObjects_DimensionQualifier_Min: aRelator = StepShape_Small;
+            break;
+          case XCAFDimTolObjects_DimensionQualifier_Max: aRelator = StepShape_Large;
+            break;
+          default: aRelator = StepShape_Equal;
+        }
+      }
+      aDim->Init(new TCollection_HAsciiString(), Standard_False, NULL, aFirstSA, aSecondSA, aRelator);
+      aDimension.SetValue(aDim);
+    }
+    else if (aDimType == XCAFDimTolObjects_DimensionType_Location_WithPath) {
+      // Dimensional_Location_With_Path
+      Handle(StepShape_DimensionalLocationWithPath) aDim = new StepShape_DimensionalLocationWithPath();
+      Handle(StepRepr_ShapeAspect) aPathSA = WriteShapeAspect(WS, aDimensionL, anObject->GetPath(), dummyRC, dummyGISU);
+      aDim->Init(new TCollection_HAsciiString(), Standard_False, NULL, aFirstSA, aSecondSA, aPathSA);
+      aDimension.SetValue(aDim);
+    }
+    else if (STEPCAFControl_GDTProperty::IsDimensionalSize(aDimType)) {
+      // Dimensional_Size
+      Handle(StepShape_DimensionalSize) aDim = new StepShape_DimensionalSize();
+      aDim->Init(aFirstSA, STEPCAFControl_GDTProperty::GetDimTypeName(aDimType));
+      aDimension.SetValue(aDim);
+    }
+    else if (aDimType == XCAFDimTolObjects_DimensionType_Size_Angular) {
+      // Angular_Size
+      Handle(StepShape_AngularSize) aDim = new StepShape_AngularSize();
+      StepShape_AngleRelator aRelator = StepShape_Equal;
+      if (anObject->HasQualifier()) {
+        XCAFDimTolObjects_DimensionQualifier aQualifier = anObject->GetQualifier();
+        switch (aQualifier) {
+          case XCAFDimTolObjects_DimensionQualifier_Min: aRelator = StepShape_Small;
+            break;
+          case XCAFDimTolObjects_DimensionQualifier_Max: aRelator = StepShape_Large;
+            break;
+          default: aRelator = StepShape_Equal;
+        }
+      }
+      aDim->Init(aFirstSA, new TCollection_HAsciiString(), aRelator);
+      aDimension.SetValue(aDim);
+    }
+    else if (aDimType == XCAFDimTolObjects_DimensionType_Size_WithPath) {
+      // Dimensional_Size_With_Path
+      Handle(StepShape_DimensionalSizeWithPath) aDim = new StepShape_DimensionalSizeWithPath();
+      Handle(StepRepr_ShapeAspect) aPathSA = WriteShapeAspect(WS, aDimensionL, anObject->GetPath(), dummyRC, dummyGISU);
+      aDim->Init(aFirstSA, new TCollection_HAsciiString(), aPathSA);
+      aDimension.SetValue(aDim);
+    }
+
+    // Write values
+    WriteDimValues(WS, anObject, aRC, aDimension);
+    //Annotation plane and Presentation
+    WritePresentation(WS, anObject->GetPresentation(), anObject->GetPresentationName(), Standard_True, anObject->HasPlane(),
+      anObject->GetPlane(), anObject->GetPointTextAttach(), aDimension.Value());
+  }
+  // Write Derived geometry
+  if (aConnectionPnts.Length() > 0) {
+    Handle(StepRepr_HArray1OfRepresentationItem) anItems = new StepRepr_HArray1OfRepresentationItem(1, aConnectionPnts.Length());
+    for (Standard_Integer i = 0; i < aConnectionPnts.Length(); i++)
+      anItems->SetValue(i + 1, aConnectionPnts(i));
+    aCGRepr->Init(new TCollection_HAsciiString(), anItems, dummyRC);
+    aCGReprRel->Init(new TCollection_HAsciiString(), new TCollection_HAsciiString(), dummyGISU->UsedRepresentation(), aCGRepr);
+    aModel->AddWithRefs(aCGReprRel);
+  }
+
+  //----------------------------//
+  // write Geometric Tolerances //
+  //----------------------------//
+  aDGTLabels.Clear();
+  DGTTool->GetGeomToleranceLabels(aDGTLabels);
+  for (Standard_Integer i = 1; i <= aDGTLabels.Length(); i++) {
+    TDF_Label aGeomTolL = aDGTLabels.Value(i);
+    TDF_LabelSequence aFirstShapeL, aNullSeqL;
+    if (!DGTTool->GetRefShapeLabel(aGeomTolL, aFirstShapeL, aNullSeqL))
+      continue;
+    TDF_LabelSequence aDatumSeq;
+    DGTTool->GetDatumWithObjectOfTolerLabels(aGeomTolL, aDatumSeq);
+    Handle(StepDimTol_HArray1OfDatumSystemOrReference) aDatumSystem;
+    if (aDatumSeq.Length() > 0)
+      aDatumSystem = WriteDatumSystem(WS, aGeomTolL, aDatumSeq, aDatumMap, aRC);
+    WriteGeomTolerance(WS, aFirstShapeL, aGeomTolL, aDatumSystem, aRC);
+  }
+
+  // Write Draughting model for Annotation Planes
+  if (myGDTAnnotations.Length() == 0)
+    return Standard_True;
+
+  Handle(StepRepr_HArray1OfRepresentationItem) aItems =
+    new StepRepr_HArray1OfRepresentationItem(1, myGDTAnnotations.Length());
+  for (Standard_Integer i = 1; i <= aItems->Length(); i++) {
+    aItems->SetValue(i, myGDTAnnotations.Value(i - 1));
+  }
+  myGDTPresentationDM->Init(new TCollection_HAsciiString(), aItems, aRC);
+  aModel->AddWithRefs(myGDTPresentationDM);
+
+  return Standard_True;
+}
 
 //=======================================================================
 //function : FindPDSforRI
@@ -2356,7 +4023,8 @@ static Standard_Boolean FindPDSforRI(const Interface_Graph &aGraph,
                                      Handle(StepRepr_ProductDefinitionShape) &PDS,
                                      Handle(StepRepr_RepresentationContext) &RC)
 {
-  if(!ent->IsKind(STANDARD_TYPE(StepRepr_RepresentationItem))) return Standard_False;
+  if(ent.IsNull() || !ent->IsKind(STANDARD_TYPE(StepRepr_RepresentationItem)))
+    return Standard_False;
   Interface_EntityIterator subs = aGraph.Sharings(ent);
   for(subs.Start(); subs.More() && PDS.IsNull(); subs.Next()) {
     Handle(StepShape_ShapeRepresentation) SR = 
@@ -2389,9 +4057,9 @@ Standard_Boolean STEPCAFControl_Writer::WriteMaterials (const Handle(XSControl_W
   if ( labels.Length() <=0 ) return Standard_False;
 
   // get working data
-  Handle(Interface_InterfaceModel) Model = WS->Model();
-  Handle(XSControl_TransferWriter) TW = WS->TransferWriter();
-  Handle(Transfer_FinderProcess) FP = TW->FinderProcess();
+  const Handle(Interface_InterfaceModel) &Model = WS->Model();
+  const Handle(XSControl_TransferWriter) &TW = WS->TransferWriter();
+  const Handle(Transfer_FinderProcess) &FP = TW->FinderProcess();
 
   const Handle(Interface_HGraph) aHGraph = WS->HGraph();
   if(aHGraph.IsNull())
@@ -2645,7 +4313,7 @@ Standard_Boolean STEPCAFControl_Writer::GetSHUOMode () const
 
 void STEPCAFControl_Writer::SetDimTolMode(const Standard_Boolean dimtolmode)
 {
-  myDGTMode = dimtolmode;
+  myGDTMode = dimtolmode;
 }
 
 
@@ -2656,7 +4324,7 @@ void STEPCAFControl_Writer::SetDimTolMode(const Standard_Boolean dimtolmode)
 
 Standard_Boolean STEPCAFControl_Writer::GetDimTolMode() const
 {
-  return myDGTMode;
+  return myGDTMode;
 }
 
 

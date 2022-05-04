@@ -11,69 +11,67 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <STEPControl_Reader.ixx>
-#include <STEPControl_Controller.hxx>
-#include <XSControl_Controller.hxx>
-#include <XSControl_TransferReader.hxx>
-#include <Interface_ShareFlags.hxx>
 
-#include <STEPControl_ActorRead.hxx>
-
-#include <StepBasic_ProductDefinition.hxx>
 #include <Interface_EntityIterator.hxx>
 #include <Interface_Graph.hxx>
+#include <Interface_ShareFlags.hxx>
 #include <Interface_Static.hxx>
-#include <StepRepr_NextAssemblyUsageOccurrence.hxx>
-#include <StepBasic_ProductDefinitionContext.hxx>
 #include <StepBasic_ApplicationContext.hxx>
-#include <TCollection_AsciiString.hxx>
-#include <StepBasic_ProductDefinitionWithAssociatedDocuments.hxx>
-#include <StepBasic_DocumentProductEquivalence.hxx>
-#include <StepShape_ShapeDefinitionRepresentation.hxx>
-#include <StepShape_ShapeRepresentation.hxx>
-#include <StepRepr_PropertyDefinition.hxx>
-#include <StepRepr_RepresentationRelationship.hxx>
-#include <StepRepr_ShapeAspect.hxx>
-#include <StepRepr_ProductDefinitionShape.hxx>
-#include <StepRepr_NextAssemblyUsageOccurrence.hxx>
-#include <StepRepr_RepresentationMap.hxx>
-#include <StepRepr_MappedItem.hxx>
-#include <Transfer_TransientProcess.hxx>
-#include <TColStd_HSequenceOfTransient.hxx>
-#include <TColStd_MapOfAsciiString.hxx>
-#include <StepBasic_SiUnitName.hxx>
-#include <StepBasic_SiPrefix.hxx>
-#include <StepRepr_GlobalUnitAssignedContext.hxx>
-#include <StepRepr_RepresentationContext.hxx>
-#include <StepRepr_GlobalUncertaintyAssignedContext.hxx>
-#include <StepRepr_GlobalUncertaintyAssignedContext.hxx>
-#include <StepGeom_GeometricRepresentationContextAndGlobalUnitAssignedContext.hxx>
-#include <StepGeom_GeomRepContextAndGlobUnitAssCtxAndGlobUncertaintyAssCtx.hxx>
-#include <StepBasic_HArray1OfNamedUnit.hxx>
-#include <StepBasic_NamedUnit.hxx>
 #include <StepBasic_ConversionBasedUnit.hxx>
-#include <StepBasic_SiUnitAndLengthUnit.hxx>
-#include <StepBasic_SiUnitAndLengthUnit.hxx>
-#include <StepBasic_SolidAngleUnit.hxx>
-#include <StepBasic_MeasureWithUnit.hxx>
+#include <StepBasic_DocumentProductEquivalence.hxx>
+#include <StepBasic_HArray1OfNamedUnit.hxx>
 #include <StepBasic_LengthMeasureWithUnit.hxx>
+#include <StepBasic_MeasureWithUnit.hxx>
+#include <StepBasic_NamedUnit.hxx>
 #include <StepBasic_PlaneAngleMeasureWithUnit.hxx>
-#include <StepBasic_SolidAngleMeasureWithUnit.hxx>
-#include <STEPConstruct_UnitContext.hxx>
+#include <StepBasic_ProductDefinition.hxx>
+#include <StepBasic_ProductDefinitionContext.hxx>
+#include <StepBasic_ProductDefinitionFormation.hxx>
+#include <StepBasic_ProductDefinitionFormationRelationship.hxx>
+#include <StepBasic_ProductDefinitionWithAssociatedDocuments.hxx>
+#include <StepBasic_SiPrefix.hxx>
+#include <StepBasic_SiUnit.hxx>
+#include <StepBasic_SiUnitAndLengthUnit.hxx>
 #include <StepBasic_SiUnitAndPlaneAngleUnit.hxx>
 #include <StepBasic_SiUnitAndSolidAngleUnit.hxx>
-#include <XSControl_WorkSession.hxx>
+#include <StepBasic_SiUnitName.hxx>
+#include <StepBasic_SolidAngleMeasureWithUnit.hxx>
+#include <StepBasic_SolidAngleUnit.hxx>
+#include <STEPConstruct_UnitContext.hxx>
+#include <STEPControl_Controller.hxx>
+#include <STEPControl_Reader.hxx>
 #include <StepData_StepModel.hxx>
-#include <TColStd_SequenceOfAsciiString.hxx>
+#include <StepGeom_GeometricRepresentationContextAndGlobalUnitAssignedContext.hxx>
+#include <StepGeom_GeomRepContextAndGlobUnitAssCtxAndGlobUncertaintyAssCtx.hxx>
+#include <StepRepr_GlobalUncertaintyAssignedContext.hxx>
+#include <StepRepr_GlobalUnitAssignedContext.hxx>
+#include <StepRepr_MappedItem.hxx>
+#include <StepRepr_NextAssemblyUsageOccurrence.hxx>
+#include <StepRepr_ProductDefinitionShape.hxx>
+#include <StepRepr_PropertyDefinition.hxx>
 #include <StepRepr_RepresentationContext.hxx>
+#include <StepRepr_RepresentationMap.hxx>
+#include <StepRepr_RepresentationRelationship.hxx>
+#include <StepRepr_ShapeAspect.hxx>
+#include <StepShape_ManifoldSolidBrep.hxx>
+#include <StepShape_ShapeDefinitionRepresentation.hxx>
+#include <StepShape_ShapeRepresentation.hxx>
+#include <StepShape_ShellBasedSurfaceModel.hxx>
+#include <TCollection_AsciiString.hxx>
 #include <TColStd_Array1OfAsciiString.hxx>
 #include <TColStd_Array1OfReal.hxx>
-  
+#include <TColStd_HSequenceOfTransient.hxx>
+#include <TColStd_MapOfAsciiString.hxx>
+#include <TColStd_SequenceOfAsciiString.hxx>
+#include <Transfer_TransientProcess.hxx>
+#include <XSControl_Controller.hxx>
+#include <XSControl_TransferReader.hxx>
+#include <XSControl_WorkSession.hxx>
+
 //=======================================================================
 //function : STEPControl_Reader
 //purpose  : 
 //=======================================================================
-
 STEPControl_Reader::STEPControl_Reader ()
 {
   STEPControl_Controller::Init();
@@ -108,9 +106,10 @@ Handle(StepData_StepModel) STEPControl_Reader::StepModel () const
 //purpose  : 
 //=======================================================================
 
-Standard_Boolean STEPControl_Reader::TransferRoot (const Standard_Integer num)
+Standard_Boolean STEPControl_Reader::TransferRoot (const Standard_Integer num,
+                                                   const Message_ProgressRange& theProgress)
 {
-  return TransferOneRoot (num);
+  return TransferOneRoot(num, theProgress);
 }
 
 //=======================================================================
@@ -127,6 +126,23 @@ Standard_Integer STEPControl_Reader::NbRootsForTransfer()
   Standard_Integer nb = Model()->NbEntities();
   for (Standard_Integer i = 1; i <= nb; i ++) {
     Handle(Standard_Transient) ent = Model()->Value(i);
+    if (Interface_Static::IVal("read.step.all.shapes") == 1) {
+      // Special case to read invalid shape_representation without links to shapes.
+      if (ent->IsKind(STANDARD_TYPE(StepShape_ManifoldSolidBrep))) {
+        Interface_EntityIterator aShareds = WS()->Graph().Sharings(ent);
+        if (!aShareds.More()) {
+          theroots.Append(ent);
+          WS()->TransferReader()->TransientProcess()->RootsForTransfer()->Append(ent);
+        }
+      }
+      if (ent->IsKind(STANDARD_TYPE(StepShape_ShellBasedSurfaceModel))) {
+        Interface_EntityIterator aShareds = WS()->Graph().Sharings(ent);
+        if (!aShareds.More()) {
+          theroots.Append(ent);
+          WS()->TransferReader()->TransientProcess()->RootsForTransfer()->Append(ent);
+        }
+      }
+    }
     if(ent->IsKind(STANDARD_TYPE(StepBasic_ProductDefinition))) {
       // PTV 31.01.2003 TRJ11 exclude Product Definition With Associated Document from roots
       if (ent->IsKind(STANDARD_TYPE(StepBasic_ProductDefinitionWithAssociatedDocuments))) {
@@ -151,7 +167,7 @@ Standard_Integer STEPControl_Reader::NbRootsForTransfer()
         }
         if (iSexclude) {
 #ifdef OCCT_DEBUG
-          cout << "Warning: STEPControl_Reader::NbRootsForTransfer exclude PDWAD from roots" << endl;
+          std::cout << "Warning: STEPControl_Reader::NbRootsForTransfer exclude PDWAD from roots" << std::endl;
 #endif
           continue;
         }
@@ -201,7 +217,7 @@ Standard_Integer STEPControl_Reader::NbRootsForTransfer()
       //}
       if (IsRoot) {
         theroots.Append(ent);
-        WS()->MapReader()->RootsForTransfer()->Append(ent);
+        WS()->TransferReader()->TransientProcess()->RootsForTransfer()->Append(ent);
       }
     }
     TCollection_AsciiString aProdMode = Interface_Static::CVal("read.step.product.mode");
@@ -235,7 +251,7 @@ Standard_Integer STEPControl_Reader::NbRootsForTransfer()
         }
         if(IsRoot) {
           theroots.Append(ent);
-          WS()->MapReader()->RootsForTransfer()->Append(ent);
+          WS()->TransferReader()->TransientProcess()->RootsForTransfer()->Append(ent);
         }
       }
       if(ent->IsKind(STANDARD_TYPE(StepShape_ShapeRepresentation))) {
@@ -256,14 +272,17 @@ Standard_Integer STEPControl_Reader::NbRootsForTransfer()
                 Handle(StepShape_ShapeRepresentation)::DownCast(RR->Rep1());
               if(SR==SR2)
                 SR2 = Handle(StepShape_ShapeRepresentation)::DownCast(RR->Rep2());
-              Interface_EntityIterator subs2 = graph.Sharings(SR2);
-              for(subs2.Start(); subs2.More(); subs2.Next()) {
-                Handle(StepShape_ShapeDefinitionRepresentation) SDR2 = 
-                  Handle(StepShape_ShapeDefinitionRepresentation)::DownCast(subs2.Value());
-                if(!SDR2.IsNull()) IsRoot = Standard_False;
-                //else {
-                //  if(SR==SRR->Rep2()) IsRoot = Standard_False;
-                //}
+              if(!SR2.IsNull())
+              {
+                Interface_EntityIterator subs2 = graph.Sharings(SR2);
+                for(subs2.Start(); subs2.More(); subs2.Next()) {
+                  Handle(StepShape_ShapeDefinitionRepresentation) SDR2 = 
+                    Handle(StepShape_ShapeDefinitionRepresentation)::DownCast(subs2.Value());
+                  if(!SDR2.IsNull()) IsRoot = Standard_False;
+                  //else {
+                  //  if(SR==SRR->Rep2()) IsRoot = Standard_False;
+                  //}
+                }
               }
             }
           }
@@ -288,7 +307,7 @@ Standard_Integer STEPControl_Reader::NbRootsForTransfer()
         }
         if(IsRoot) {
           theroots.Append(ent);
-          WS()->MapReader()->RootsForTransfer()->Append(ent);
+          WS()->TransferReader()->TransientProcess()->RootsForTransfer()->Append(ent);
         }
       }
     }
@@ -320,8 +339,7 @@ void STEPControl_Reader::FileUnits( TColStd_SequenceOfAsciiString& theUnitLength
   const Interface_Graph& graph = WS()->Graph();
   TColStd_MapOfAsciiString aMapUnits[3];
 
-  Standard_Integer i =1;
-  for( ; i <= nbroots; i++)
+  for(Standard_Integer i = 1; i <= nbroots; i++)
   {
     Handle(Standard_Transient) anEnt = theroots(i);
     Standard_Integer num   = graph.EntityNumber(anEnt);
@@ -394,11 +412,11 @@ void STEPControl_Reader::FileUnits( TColStd_SequenceOfAsciiString& theUnitLength
   //for case when units was not found through PDF or SDR
   if(theUnitLengthNames.IsEmpty())
   {
-    Handle(Interface_InterfaceModel) aModel = WS()->Model();
+    const Handle(Interface_InterfaceModel) &aModel = WS()->Model();
     if(aModel.IsNull())
       return;
-    Standard_Integer i = 1, nb = aModel->NbEntities();
-    for( ; i <= nb; i++)
+    Standard_Integer nb = aModel->NbEntities();
+    for(Standard_Integer i = 1; i <= nb; i++)
     {
       Handle(Standard_Transient) anEnt = aModel->Value(i);
       Handle(StepRepr_RepresentationContext) aRepCont = Handle(StepRepr_RepresentationContext)::DownCast(anEnt);
@@ -549,7 +567,6 @@ Standard_Boolean STEPControl_Reader::findUnits(
     nbFind++;
        
    }
-    
-  return (0 != nbFind);
+
+  return nbFind != 0;
 }
-                                   

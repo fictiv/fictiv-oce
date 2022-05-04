@@ -11,18 +11,16 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepShape_OrientedOpenShell.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepShape_Face.hxx>
+#include <StepShape_OpenShell.hxx>
+#include <StepShape_OrientedOpenShell.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepShape_OrientedOpenShell,StepShape_OpenShell)
 
 StepShape_OrientedOpenShell::StepShape_OrientedOpenShell ()  {}
-
-void StepShape_OrientedOpenShell::Init(
-	const Handle(TCollection_HAsciiString)& aName,
-	const Handle(StepShape_HArray1OfFace)& aCfsFaces)
-{
-
-	StepShape_ConnectedFaceSet::Init(aName, aCfsFaces);
-}
 
 void StepShape_OrientedOpenShell::Init(
 	const Handle(TCollection_HAsciiString)& aName,
@@ -63,7 +61,7 @@ void StepShape_OrientedOpenShell::SetCfsFaces(const Handle(StepShape_HArray1OfFa
 {
 	// WARNING : the field is redefined.
 	// field set up forbidden.
-	cout << "Field is redefined, SetUp Forbidden" << endl;
+	std::cout << "Field is redefined, SetUp Forbidden" << std::endl;
 }
 
 Handle(StepShape_HArray1OfFace) StepShape_OrientedOpenShell::CfsFaces() const

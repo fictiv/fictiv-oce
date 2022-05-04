@@ -15,13 +15,17 @@
 
 // Generator:	ExpToCas (EXPRESS -> CASCADE/XSTEP Translator) V1.2
 
-#include <StepFEA_AlignedCurve3dElementCoordinateSystem.ixx>
+#include <Standard_Type.hxx>
+#include <StepFEA_AlignedCurve3dElementCoordinateSystem.hxx>
+#include <StepFEA_FeaAxis2Placement3d.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepFEA_AlignedCurve3dElementCoordinateSystem,StepFEA_FeaRepresentationItem)
 
 //=======================================================================
 //function : StepFEA_AlignedCurve3dElementCoordinateSystem
 //purpose  : 
 //=======================================================================
-
 StepFEA_AlignedCurve3dElementCoordinateSystem::StepFEA_AlignedCurve3dElementCoordinateSystem ()
 {
 }

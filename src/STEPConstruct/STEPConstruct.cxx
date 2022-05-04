@@ -13,22 +13,28 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <STEPConstruct.ixx>
-#include <TransferBRep.hxx>
-#include <TransferBRep_ShapeMapper.hxx>
-#include <Transfer_Binder.hxx>
-#include <Transfer_SimpleBinderOfTransient.hxx>
 
 #include <StepBasic_ProductDefinition.hxx>
 #include <StepBasic_ProductDefinitionRelationship.hxx>
-#include <StepRepr_PropertyDefinition.hxx>
+#include <STEPConstruct.hxx>
 #include <StepRepr_ProductDefinitionShape.hxx>
+#include <StepRepr_PropertyDefinition.hxx>
+#include <StepRepr_RepresentationItem.hxx>
+#include <StepShape_ContextDependentShapeRepresentation.hxx>
+#include <StepShape_ShapeDefinitionRepresentation.hxx>
+#include <TopLoc_Location.hxx>
+#include <TopoDS_Shape.hxx>
+#include <Transfer_Binder.hxx>
+#include <Transfer_FinderProcess.hxx>
+#include <Transfer_SimpleBinderOfTransient.hxx>
+#include <Transfer_TransientProcess.hxx>
+#include <TransferBRep.hxx>
+#include <TransferBRep_ShapeMapper.hxx>
 
 //=======================================================================
 //function : FindEntity
 //purpose  : 
 //=======================================================================
-
 Handle(StepRepr_RepresentationItem) STEPConstruct::FindEntity (const Handle(Transfer_FinderProcess) &FinderProcess,
 							       const TopoDS_Shape &Shape)
 {
@@ -36,8 +42,8 @@ Handle(StepRepr_RepresentationItem) STEPConstruct::FindEntity (const Handle(Tran
   Handle(TransferBRep_ShapeMapper) mapper = TransferBRep::ShapeMapper ( FinderProcess, Shape );
   FinderProcess->FindTypedTransient (mapper,STANDARD_TYPE(StepRepr_RepresentationItem), item);
 #ifdef OCCT_DEBUG
-  if ( item.IsNull() ) cout << Shape.TShape()->DynamicType()->Name() << ": RepItem not found" << endl;
-  else cout << Shape.TShape()->DynamicType()->Name() << ": RepItem found: " << item->DynamicType()->Name() << endl;
+  if ( item.IsNull() ) std::cout << Shape.TShape()->DynamicType()->Name() << ": RepItem not found" << std::endl;
+  else std::cout << Shape.TShape()->DynamicType()->Name() << ": RepItem found: " << item->DynamicType()->Name() << std::endl;
 #endif
   return item;
 }
@@ -63,9 +69,9 @@ Handle(StepRepr_RepresentationItem) STEPConstruct::FindEntity (const Handle(Tran
       FinderProcess->FindTypedTransient (mapper,STANDARD_TYPE(StepRepr_RepresentationItem), item);
   }
 #ifdef OCCT_DEBUG
-  if ( item.IsNull() ) cout << Shape.TShape()->DynamicType()->Name() << ": RepItem not found" << endl;
-  else if ( Loc != Shape.Location() ) cout << Shape.TShape()->DynamicType()->Name() << ": RepItem found for shape without location: " << item->DynamicType()->Name() << endl;
-  else cout << Shape.TShape()->DynamicType()->Name() << ": RepItem found: " << item->DynamicType()->Name() << endl;
+  if ( item.IsNull() ) std::cout << Shape.TShape()->DynamicType()->Name() << ": RepItem not found" << std::endl;
+  else if ( Loc != Shape.Location() ) std::cout << Shape.TShape()->DynamicType()->Name() << ": RepItem found for shape without location: " << item->DynamicType()->Name() << std::endl;
+  else std::cout << Shape.TShape()->DynamicType()->Name() << ": RepItem found: " << item->DynamicType()->Name() << std::endl;
 #endif  
   return item;
 }

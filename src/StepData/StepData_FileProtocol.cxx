@@ -11,8 +11,15 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepData_FileProtocol.ixx>
 
+#include <Interface_Check.hxx>
+#include <Interface_Graph.hxx>
+#include <Interface_Protocol.hxx>
+#include <Standard_Type.hxx>
+#include <StepData_FileProtocol.hxx>
+#include <StepData_Protocol.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepData_FileProtocol,StepData_Protocol)
 
 //static TCollection_AsciiString  thename("");
 static Standard_CString  thename = "";

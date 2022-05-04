@@ -16,13 +16,16 @@
 
 // Generator:	ExpToCas (EXPRESS -> CASCADE/XSTEP Translator) V1.0
 
-#include <StepBasic_ContractType.ixx>
+#include <Standard_Type.hxx>
+#include <StepBasic_ContractType.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepBasic_ContractType,Standard_Transient)
 
 //=======================================================================
 //function : StepBasic_ContractType
 //purpose  : 
 //=======================================================================
-
 StepBasic_ContractType::StepBasic_ContractType ()
 {
 }

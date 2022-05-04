@@ -11,17 +11,14 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepVisual_ColourRgb.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepVisual_ColourRgb.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepVisual_ColourRgb,StepVisual_ColourSpecification)
 
 StepVisual_ColourRgb::StepVisual_ColourRgb ()  {}
-
-void StepVisual_ColourRgb::Init(
-	const Handle(TCollection_HAsciiString)& aName)
-{
-
-	StepVisual_ColourSpecification::Init(aName);
-}
 
 void StepVisual_ColourRgb::Init(
 	const Handle(TCollection_HAsciiString)& aName,

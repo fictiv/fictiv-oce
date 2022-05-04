@@ -17,65 +17,61 @@
 //:o0 abv 16.02.99: POLYLINE allowed as 3d curve of edge
 //gka,abv 05.04.99: S4136: improving tolerance management, eliminate BRepAPI::Precision()
 
-#include <StepToTopoDS_TranslateEdge.ixx>
-
-#include <StepToTopoDS.hxx>
-#include <StepToTopoDS_TranslateVertex.hxx>
-#include <StepToTopoDS_GeometricTool.hxx>
-#include <StepToGeom_MakeCurve.hxx>
-
-#include <TopoDS.hxx>
-#include <TopoDS_Edge.hxx>
 #include <BRep_Builder.hxx>
 #include <BRep_Tool.hxx>
 #include <BRepLib.hxx>
 #include <BRepLib_MakeEdge.hxx>
+#include <GCPnts_AbscissaPoint.hxx>
+#include <Geom2d_Curve.hxx>
+#include <Geom_CartesianPoint.hxx>
 #include <Geom_Curve.hxx>
-#include <GeomAbs_Shape.hxx>
-
 #include <Geom_Line.hxx>
-#include <gp_Vec.hxx>
+#include <Geom_Surface.hxx>
+#include <GeomAbs_Shape.hxx>
+#include <GeomAdaptor_Curve.hxx>
 #include <gp_Dir.hxx>
 #include <gp_Lin.hxx>
-
+#include <gp_Vec.hxx>
+#include <Precision.hxx>
 #include <ShapeAnalysis_Curve.hxx>
 #include <ShapeConstruct_Curve.hxx>
-
+#include <StdFail_NotDone.hxx>
+#include <StepGeom_CartesianPoint.hxx>
+#include <StepGeom_Curve.hxx>
+#include <StepGeom_Pcurve.hxx>
+#include <StepGeom_Polyline.hxx>
+#include <StepGeom_SurfaceCurve.hxx>
+#include <StepRepr_DefinitionalRepresentation.hxx>
+#include <StepShape_Edge.hxx>
 #include <StepShape_EdgeCurve.hxx>
 #include <StepShape_OrientedEdge.hxx>
-#include <StepGeom_Curve.hxx>
-//#include <StepGeom_Polyline.hxx>
-#include <StepGeom_Pcurve.hxx>
-#include <StepGeom_SurfaceCurve.hxx>
+#include <StepShape_Vertex.hxx>
+#include <StepShape_VertexPoint.hxx>
+#include <StepToGeom.hxx>
+#include <StepToTopoDS.hxx>
+#include <StepToTopoDS_GeometricTool.hxx>
+#include <StepToTopoDS_NMTool.hxx>
+#include <StepToTopoDS_Tool.hxx>
+#include <StepToTopoDS_TranslateEdge.hxx>
+#include <StepToTopoDS_TranslateVertex.hxx>
+#include <TCollection_HAsciiString.hxx>
+#include <TopoDS.hxx>
+#include <TopoDS_Edge.hxx>
+#include <TopoDS_Shape.hxx>
+#include <TopoDS_Vertex.hxx>
 #include <Transfer_TransientProcess.hxx>
-//#include <TransferBRep.hxx>
-
-#include <GeomAdaptor_Curve.hxx>
-#include <GCPnts_AbscissaPoint.hxx>
-#include <Precision.hxx>
-
-#include <StepToGeom_MakeCurve2d.hxx>
-#include <StepRepr_DefinitionalRepresentation.hxx>
 #include <UnitsMethods.hxx>
 #include <Standard_Failure.hxx>
 
+//#include <StepGeom_Polyline.hxx>
+//#include <TransferBRep.hxx>
 //:d8
-#include <StepShape_VertexPoint.hxx>
-#include <StepGeom_CartesianPoint.hxx>
-#include <StepToGeom_MakeCartesianPoint.hxx>
-#include <Geom_CartesianPoint.hxx>
-
 // Used in I-DEAS-like STP processing (ssv; 15.11.2010)
-#include <TCollection_HAsciiString.hxx>
-
 //#define DEBUG
-
-
 // ============================================================================
 // Method  : DecodeMakeEdgeError
 // Purpose : 
 // ============================================================================
-
 static void DecodeMakeEdgeError(const BRepLib_MakeEdge&   ME,
 				const Handle(Standard_Transient)& orig,
 				const Handle(Geom_Curve)& myCurve,
@@ -89,14 +85,10 @@ static void DecodeMakeEdgeError(const BRepLib_MakeEdge&   ME,
   (void)U1, (void)U2; // avoid compiler warning
 
   Handle(Transfer_TransientProcess) TP = aTool.TransientProcess();
-//  if (!myCurve.IsNull() && !tobind.IsNull()) {
-//    TransferBRep::SetShapeResult
-//      (TP,tobind, MakeEdge(myCurve,V1,V2,U1,U2,BRepAPI::Precision()) );
-//    aTool.Bind (tobind,E);  SURTOUT PAS : noter pour debug/erreur
-//  }
+
 #ifdef OCCT_DEBUG
-  cout << "------------------------------------" << endl;
-  cout << "MakeEdge Error  : " << ME.Error()<<" - ";
+  std::cout << "------------------------------------" << std::endl;
+  std::cout << "MakeEdge Error  : " << ME.Error()<<" - ";
 #endif
   switch(ME.Error())
     {
@@ -124,22 +116,22 @@ static void DecodeMakeEdgeError(const BRepLib_MakeEdge&   ME,
       break;
     }
 #ifdef OCCT_DEBUG
-  cout << "Original Type   : " << orig->DynamicType() << endl;
-  cout << "3D Curve Type   : " << myCurve->DynamicType() << endl;
-  cout << "First Parameter : " << U1 << endl;
+  std::cout << "Original Type   : " << orig->DynamicType() << std::endl;
+  std::cout << "3D Curve Type   : " << myCurve->DynamicType() << std::endl;
+  std::cout << "First Parameter : " << U1 << std::endl;
   gp_Pnt p1 = BRep_Tool::Pnt(V1);
-//  cout << "First Point     : ";
-  cout << "First Vertex    : "<<p1.X()<<"  "<<p1.Y()<<"  "<<p1.Z()<<"  ";
-  cout << "Distance Point - Vertex : ";
+//  std::cout << "First Point     : ";
+  std::cout << "First Vertex    : "<<p1.X()<<"  "<<p1.Y()<<"  "<<p1.Z()<<"  ";
+  std::cout << "Distance Point - Vertex : ";
   Standard_Real d1 = p1.Distance(myCurve->Value(U1)); 
-  cout << d1 << endl;
-  cout << "Last  Parameter : " << U2 << endl;
+  std::cout << d1 << std::endl;
+  std::cout << "Last  Parameter : " << U2 << std::endl;
   gp_Pnt p2 = BRep_Tool::Pnt(V2);
-//  cout << "Last  Point     : ";
-  cout << "Last  Vertex    : "<<p2.X()<<"  "<<p2.Y()<<"  "<<p2.Z()<<"  ";
-  cout << "Distance Point - Vertex : ";
+//  std::cout << "Last  Point     : ";
+  std::cout << "Last  Vertex    : "<<p2.X()<<"  "<<p2.Y()<<"  "<<p2.Z()<<"  ";
+  std::cout << "Distance Point - Vertex : ";
   Standard_Real d2 = BRep_Tool::Pnt(V2).Distance(myCurve->Value(U2)); 
-  cout << d2 << endl;
+  std::cout << d2 << std::endl;
 #endif
 }
 
@@ -153,7 +145,8 @@ static Handle(Geom_Curve) MakeCurve
 {
   Handle(Geom_Curve) C2 = Handle(Geom_Curve)::DownCast (TP->FindTransient(C1));
   if (!C2.IsNull()) return C2;
-  if (StepToGeom_MakeCurve::Convert(C1,C2))
+  C2 = StepToGeom::MakeCurve (C1);
+  if (! C2.IsNull())
     TP->BindTransient (C1,C2);
   return C2;
 }
@@ -161,19 +154,24 @@ static Handle(Geom_Curve) MakeCurve
 static TopoDS_Edge  MakeEdge
   (const Handle(Geom_Curve)& C3D,
    const TopoDS_Vertex& V1, const TopoDS_Vertex& V2,
-   const Standard_Real U1, const Standard_Real U2) //, const Standard_Real preci)
+   const Standard_Real U1, const Standard_Real U2)
 {
-//  fait son edge quoi qu il arrive
   BRep_Builder B;
   TopoDS_Edge E;
-  B.MakeEdge (E,C3D,Precision::Confusion());//preci);
+  B.MakeEdge (E,C3D,Precision::Confusion());
   B.Add (E,V1);  B.Add (E,V2);
-  B.UpdateVertex(V1, U1, E, 0.);//preci);
-  B.UpdateVertex(V2, U2, E, 0.);//preci);
+  B.UpdateVertex(V1, U1, E, 0.);
+  B.UpdateVertex(V2, U2, E, 0.);
   return E;
 }
 
+// ============================================================================
+// Method  : StepToTopoDS_TranslateEdge::StepToTopoDS_TranslateEdge()
+// Purpose : 
+// ============================================================================
+
 StepToTopoDS_TranslateEdge::StepToTopoDS_TranslateEdge()
+: myError(StepToTopoDS_TranslateEdgeOther)
 {
   done = Standard_False;
 }
@@ -217,7 +215,6 @@ void StepToTopoDS_TranslateEdge::Init(const Handle(StepShape_Edge)& aEdge,
     else {
       myError  = StepToTopoDS_TranslateEdgeDone;
       done     = Standard_True;
-//      BRep_Builder B;
 //:S4136      B.SameRange(TopoDS::Edge(myResult), Standard_False);    //:a5 abv 11 Feb 98
 //:S4136      B.SameParameter(TopoDS::Edge(myResult), Standard_False);//:a5
       return;
@@ -256,10 +253,6 @@ void StepToTopoDS_TranslateEdge::Init(const Handle(StepShape_Edge)& aEdge,
 
   BRep_Builder B;
 
-//  Standard_Real preci = BRepAPI::Precision();
-
-//  Standard_Real precision = BRepAPI::Precision();
-
   Handle(StepGeom_Curve) C = EC->EdgeGeometry();
   if( C.IsNull())
   {
@@ -276,8 +269,7 @@ void StepToTopoDS_TranslateEdge::Init(const Handle(StepShape_Edge)& aEdge,
   // (following the geometrical sense)
   // -----------------------------------------------------------
 
-//  Standard_Boolean OrientedEdgeOrientation = OE->Orientation();
-  Standard_Boolean EdgeCurveSameSense      = EC->SameSense();
+  Standard_Boolean EdgeCurveSameSense = EC->SameSense();
   
   if (EdgeCurveSameSense) {
     Vstart = EC->EdgeStart();
@@ -318,37 +310,23 @@ void StepToTopoDS_TranslateEdge::Init(const Handle(StepShape_Edge)& aEdge,
   if ( C->IsKind(STANDARD_TYPE(StepGeom_Pcurve))) {
     B.MakeEdge(E);
 //:S4136    B.UpdateEdge (E,preci);
-    B.Add(E, V1);    // ?? en fin de TranslateEdgeLoop
+    B.Add(E, V1);
     B.Add(E, V2);
   }
   else if (C->IsKind(STANDARD_TYPE(StepGeom_SurfaceCurve)) ) {
-    // qui reprend les types SeamCurve et IntersectionCurve
+    // For SeamCurve and IntersectionCurve types
     // --- The Edge Geometry is a Surface Curve ---
     // ---     (3d + 2 Pcurve Or Surface)       ---
     Handle(StepGeom_SurfaceCurve) Sc =
       Handle(StepGeom_SurfaceCurve)::DownCast(C);
     Handle(StepGeom_Curve) C1 = Sc->Curve3d();
-//    if (C1->IsKind(STANDARD_TYPE(StepGeom_Polyline))) {
-//    B.MakeEdge(E);
-//      B.UpdateEdge (E,preci);
-//      B.Add(E, V1);    // ?? en fin de TranslateEdgeLoop
-//      B.Add(E, V2);
-//    }
-//    else {
       MakeFromCurve3D (C1,EC,Vend,Precision(), E,V1,V2 , aTool);
-//    }
   }
-//  else if (C->IsKind(STANDARD_TYPE(StepGeom_Polyline))) {
-//    B.MakeEdge(E);
-//    B.UpdateEdge (E,preci);
-//    B.Add(E, V1);    // ?? en fin de TranslateEdgeLoop
-//    B.Add(E, V2);
-//  }
   else {
     // --- The Edge Geometry is a Single 3d Curve ---
     MakeFromCurve3D (C,EC,Vend,Precision(), E,V1,V2 , aTool);
   }
-  // On force les flags SameRange et SameParameter a Standard_False
+  // Force set flags SameRange and SameParameter to Standard_False
   if (done) {
 //:S4136    B.SameRange(E, Standard_False);
 //:S4136    B.SameParameter(E, Standard_False);
@@ -378,15 +356,19 @@ static void GetCartesianPoints ( const Handle(StepShape_EdgeCurve)& EC,
 				 gp_Pnt &P1, gp_Pnt &P2)
 {
   for ( Standard_Integer i=1; i<=2; i++ ) {
-    const Handle(StepShape_Vertex) V = ( (i==1) == EC->SameSense() ? EC->EdgeStart() : EC->EdgeEnd() );
+    const Handle(StepShape_Vertex) V = ((i == 1) == EC->SameSense() ? EC->EdgeStart() : EC->EdgeEnd() );
     const Handle(StepShape_VertexPoint) VP = Handle(StepShape_VertexPoint)::DownCast(V);
     if ( VP.IsNull() ) continue;
     const Handle(StepGeom_CartesianPoint) P = Handle(StepGeom_CartesianPoint)::DownCast(VP->VertexGeometry());
-    Handle(Geom_CartesianPoint) CP;
-    StepToGeom_MakeCartesianPoint::Convert(P,CP);
-	( i==1 ? P1 : P2 ) = CP->Pnt();
+    Handle(Geom_CartesianPoint) CP = StepToGeom::MakeCartesianPoint (P);
+    ( i==1 ? P1 : P2 ) = CP->Pnt();
   }
 }
+
+// ============================================================================
+// Method  : StepToTopoDS_TranslateEdge::MakeFromCurve3D()
+// Purpose : 
+// ============================================================================
 
 void  StepToTopoDS_TranslateEdge::MakeFromCurve3D
   (const Handle(StepGeom_Curve)& C3D, const Handle(StepShape_EdgeCurve)& EC,
@@ -422,7 +404,8 @@ void  StepToTopoDS_TranslateEdge::MakeFromCurve3D
     TP->AddWarning(C3D,"Update of 3D-Parameters has failed");
 
   //:d5: instead of AdjustCurve above which is incorrect if U1 and U2 are not ends
-  gp_Pnt pU1 = C1->Value ( U1 ), pU2 = C1->Value ( U2 );
+  GeomAdaptor_Curve aCA(C1);
+  gp_Pnt pU1 = aCA.Value ( U1 ), pU2 = aCA.Value ( U2 );
   temp1 = pU1.Distance ( pv1 );
   temp2 = pU2.Distance ( pv2 );
   if ( temp1 > preci || temp2 > preci ) {
@@ -438,11 +421,9 @@ void  StepToTopoDS_TranslateEdge::MakeFromCurve3D
   }
   else {
     if (ME.Error() == BRepLib_DifferentPointsOnClosedCurve) {
-      // The Edge could be closed and trimmed by 2 Differents
-      // Vertices
+      // The Edge could be closed and trimmed by 2 Different vertices
       if (C1->IsClosed()) {
-	// Attention : il faudra mettre a jour la topologie des
-	// vertex pour avoir des edges cul a cul ...... Good Luck!
+	// Attention : topology updating
 	aTool.Bind (Vend,V1);
 	TopoDS_Shape aLocalShape = V1.Reversed();
 	V2 = TopoDS::Vertex(aLocalShape);
@@ -453,8 +434,8 @@ void  StepToTopoDS_TranslateEdge::MakeFromCurve3D
 	}
 	else {
 	  DecodeMakeEdgeError(ME, C3D, C1, V1, V2, U1, U2, aTool, EC);
-	  E = MakeEdge (C1,V1,V2,U1,U2);//preci
-	  myError = StepToTopoDS_TranslateEdgeDone; // ????
+	  E = MakeEdge (C1,V1,V2,U1,U2);
+	  myError = StepToTopoDS_TranslateEdgeDone;
 	  done = Standard_True;
 	  //		return;	  	      
         }
@@ -462,8 +443,7 @@ void  StepToTopoDS_TranslateEdge::MakeFromCurve3D
       else {
 	// Then, this is should be coded as degenerated
 	// To be performed later !!!
-//	   DecodeMakeEdgeError(ME, C3D, C1, V1, V2, U1, U2, aTool, EC);
-	myError = StepToTopoDS_TranslateEdgeDone; // ????
+	myError = StepToTopoDS_TranslateEdgeDone;
 	//  Bon, on la fait cette petite edge, mais faudra repasser
 	//  pour l enlever ET FUSIONNER LES VERTEX, pour tout le shell !
 	//  courbe trop petite pour etre mise -> fait planter
@@ -486,8 +466,8 @@ void  StepToTopoDS_TranslateEdge::MakeFromCurve3D
     }
     else {
       DecodeMakeEdgeError(ME, C3D, C1, V1, V2, U1, U2, aTool, EC);
-      E = MakeEdge (C1,V1,V2,U1,U2);//,preci
-      myError = StepToTopoDS_TranslateEdgeDone; // ????
+      E = MakeEdge (C1,V1,V2,U1,U2);
+      myError = StepToTopoDS_TranslateEdgeDone;
       done = Standard_True;
     }
   }
@@ -507,17 +487,18 @@ Handle(Geom2d_Curve)  StepToTopoDS_TranslateEdge::MakePCurve
   const Handle(StepGeom_Curve) StepCurve = Handle(StepGeom_Curve)::DownCast(DRI->ItemsValue(1));
   try
   {
-    if (StepToGeom_MakeCurve2d::Convert(StepCurve,C2d)) {
+    C2d = StepToGeom::MakeCurve2d (StepCurve);
+    if (! C2d.IsNull()) {
     // -- if the surface is a RectangularTrimmedSurface, 
     // -- send the BasisSurface.
-    C2d = UnitsMethods::DegreeToRadian(C2d, ConvSurf);
-  }
+     C2d = UnitsMethods::DegreeToRadian(C2d, ConvSurf);
+    }
     
   }
-  catch(Standard_Failure)
+  catch(Standard_Failure const&)
   {
-  return C2d;
-}
+    return C2d;
+  }
   return C2d;
 }
 
@@ -529,7 +510,7 @@ Handle(Geom2d_Curve)  StepToTopoDS_TranslateEdge::MakePCurve
 
 const TopoDS_Shape& StepToTopoDS_TranslateEdge::Value() const 
 {
-  StdFail_NotDone_Raise_if(!done,"");
+  StdFail_NotDone_Raise_if (!done, "StepToTopoDS_TranslateEdge::Value() - no result");
   return myResult;
 }
 

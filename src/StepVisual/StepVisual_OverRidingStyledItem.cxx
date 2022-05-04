@@ -11,24 +11,21 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepVisual_OverRidingStyledItem.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepRepr_RepresentationItem.hxx>
+#include <StepVisual_OverRidingStyledItem.hxx>
+#include <StepVisual_StyledItem.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepVisual_OverRidingStyledItem,StepVisual_StyledItem)
 
 StepVisual_OverRidingStyledItem::StepVisual_OverRidingStyledItem ()  {}
 
 void StepVisual_OverRidingStyledItem::Init(
 	const Handle(TCollection_HAsciiString)& aName,
 	const Handle(StepVisual_HArray1OfPresentationStyleAssignment)& aStyles,
-	const Handle(StepRepr_RepresentationItem)& aItem)
-{
-
-	StepVisual_StyledItem::Init(aName, aStyles, aItem);
-}
-
-void StepVisual_OverRidingStyledItem::Init(
-	const Handle(TCollection_HAsciiString)& aName,
-	const Handle(StepVisual_HArray1OfPresentationStyleAssignment)& aStyles,
-	const Handle(StepRepr_RepresentationItem)& aItem,
+	const Handle(Standard_Transient)& aItem,
 	const Handle(StepVisual_StyledItem)& aOverRiddenStyle)
 {
 	// --- classe own fields ---

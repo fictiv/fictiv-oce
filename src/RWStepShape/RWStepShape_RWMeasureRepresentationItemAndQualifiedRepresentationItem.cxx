@@ -11,13 +11,18 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <RWStepShape_RWMeasureRepresentationItemAndQualifiedRepresentationItem.ixx>
-#include <StepBasic_MeasureValueMember.hxx>
-#include <StepBasic_Unit.hxx>
-#include <StepBasic_MeasureWithUnit.hxx>
-#include <StepShape_HArray1OfValueQualifier.hxx>
-#include <StepShape_ValueQualifier.hxx>
 
+#include <Interface_Check.hxx>
+#include <Interface_EntityIterator.hxx>
+#include <RWStepShape_RWMeasureRepresentationItemAndQualifiedRepresentationItem.hxx>
+#include <StepBasic_MeasureValueMember.hxx>
+#include <StepBasic_MeasureWithUnit.hxx>
+#include <StepBasic_Unit.hxx>
+#include <StepData_StepReaderData.hxx>
+#include <StepData_StepWriter.hxx>
+#include <StepShape_HArray1OfValueQualifier.hxx>
+#include <StepShape_MeasureRepresentationItemAndQualifiedRepresentationItem.hxx>
+#include <StepShape_ValueQualifier.hxx>
 
 RWStepShape_RWMeasureRepresentationItemAndQualifiedRepresentationItem::RWStepShape_RWMeasureRepresentationItemAndQualifiedRepresentationItem () {}
 
@@ -33,7 +38,7 @@ void RWStepShape_RWMeasureRepresentationItemAndQualifiedRepresentationItem::Read
   //  --- Instance of plex componant : MeasureReprItem
 
   Standard_Integer num = 0;
-  data->NamedForComplex("MEASURE_REPRESENTATION_ITEM",num0,num,ach);
+  data->NamedForComplex("MEASURE_REPRESENTATION_ITEM","MSRPIT",num0,num,ach);
 
   // --- Number of Parameter Control ---
 
@@ -50,7 +55,7 @@ void RWStepShape_RWMeasureRepresentationItemAndQualifiedRepresentationItem::Read
 
   //  --- Instance of plex componant : QualifiedReprItem
 
-  data->NamedForComplex("QUALIFIED_REPRESENTATION_ITEM",num0,num,ach);
+  data->NamedForComplex("QUALIFIED_REPRESENTATION_ITEM","QLRPIT",num0,num,ach);
 
   // --- Number of Parameter Control ---
 
@@ -73,7 +78,7 @@ void RWStepShape_RWMeasureRepresentationItemAndQualifiedRepresentationItem::Read
 
   //  --- Instance of plex componant : RepresentationItem
 
-  data->NamedForComplex("REPRESENTATION_ITEM",num0,num,ach);
+  data->NamedForComplex("REPRESENTATION_ITEM","RPRITM",num0,num,ach);
 
   if (!data->CheckNbParams(num,1,ach,"representation_item")) return;
 

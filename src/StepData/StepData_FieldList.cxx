@@ -11,11 +11,17 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepData_FieldList.ixx>
-#include <Standard_OutOfRange.hxx>
 
+#include <Interface_EntityIterator.hxx>
+#include <Standard_OutOfRange.hxx>
+#include <StepData_Field.hxx>
+#include <StepData_FieldList.hxx>
 
 static StepData_Field nulfild;
+
+StepData_FieldList::~StepData_FieldList()
+{
+}
 
 StepData_FieldList::StepData_FieldList  ()    {  }
 
@@ -24,14 +30,12 @@ Standard_Integer  StepData_FieldList::NbFields () const
 
 const StepData_Field&  StepData_FieldList::Field (const Standard_Integer) const
 {
-  Standard_OutOfRange::Raise("StepData_FieldList : Field");
-  return nulfild;
+  throw Standard_OutOfRange("StepData_FieldList : Field");
 }
 
 StepData_Field&  StepData_FieldList::CField (const Standard_Integer)
 {
-  Standard_OutOfRange::Raise("StepData_FieldList : CField");
-  return nulfild;
+  throw Standard_OutOfRange("StepData_FieldList : CField");
 }
 
 

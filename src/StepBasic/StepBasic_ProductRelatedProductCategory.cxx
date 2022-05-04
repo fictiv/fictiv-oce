@@ -11,19 +11,15 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepBasic_ProductRelatedProductCategory.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepBasic_Product.hxx>
+#include <StepBasic_ProductRelatedProductCategory.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepBasic_ProductRelatedProductCategory,StepBasic_ProductCategory)
 
 StepBasic_ProductRelatedProductCategory::StepBasic_ProductRelatedProductCategory ()  {}
-
-void StepBasic_ProductRelatedProductCategory::Init(
-	const Handle(TCollection_HAsciiString)& aName,
-	const Standard_Boolean hasAdescription,
-	const Handle(TCollection_HAsciiString)& aDescription)
-{
-
-	StepBasic_ProductCategory::Init(aName, hasAdescription, aDescription);
-}
 
 void StepBasic_ProductRelatedProductCategory::Init(
 	const Handle(TCollection_HAsciiString)& aName,

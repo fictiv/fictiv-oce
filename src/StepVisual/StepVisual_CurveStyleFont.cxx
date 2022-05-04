@@ -11,8 +11,13 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepVisual_CurveStyleFont.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepVisual_CurveStyleFont.hxx>
+#include <StepVisual_CurveStyleFontPattern.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepVisual_CurveStyleFont,Standard_Transient)
 
 StepVisual_CurveStyleFont::StepVisual_CurveStyleFont ()  {}
 

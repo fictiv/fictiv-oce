@@ -15,15 +15,20 @@
 
 // Generator:	ExpToCas (EXPRESS -> CASCADE/XSTEP Translator) V1.1
 
-#include <RWStepShape_RWEdgeBasedWireframeShapeRepresentation.ixx>
+#include <Interface_Check.hxx>
+#include <Interface_EntityIterator.hxx>
+#include <RWStepShape_RWEdgeBasedWireframeShapeRepresentation.hxx>
+#include <StepData_StepReaderData.hxx>
+#include <StepData_StepWriter.hxx>
 #include <StepRepr_HArray1OfRepresentationItem.hxx>
+#include <StepRepr_RepresentationContext.hxx>
 #include <StepRepr_RepresentationItem.hxx>
+#include <StepShape_EdgeBasedWireframeShapeRepresentation.hxx>
 
 //=======================================================================
 //function : RWStepShape_RWEdgeBasedWireframeShapeRepresentation
 //purpose  : 
 //=======================================================================
-
 RWStepShape_RWEdgeBasedWireframeShapeRepresentation::RWStepShape_RWEdgeBasedWireframeShapeRepresentation ()
 {
 }
@@ -82,7 +87,7 @@ void RWStepShape_RWEdgeBasedWireframeShapeRepresentation::WriteStep (StepData_St
   SW.Send (ent->StepRepr_Representation::Name());
 
   SW.OpenSub();
-  for (Standard_Integer i1=1; i1 <= ent->StepRepr_Representation::Items()->Length(); i1++ ) {
+  for (Standard_Integer i1=1; i1 <= ent->StepRepr_Representation::NbItems(); i1++ ) {
     Handle(StepRepr_RepresentationItem) Var0 = ent->StepRepr_Representation::Items()->Value(i1);
     SW.Send (Var0);
   }
@@ -102,7 +107,7 @@ void RWStepShape_RWEdgeBasedWireframeShapeRepresentation::Share (const Handle(St
 
   // Inherited fields of Representation
 
-  for (Standard_Integer i1=1; i1 <= ent->StepRepr_Representation::Items()->Length(); i1++ ) {
+  for (Standard_Integer i1=1; i1 <= ent->StepRepr_Representation::NbItems(); i1++ ) {
     Handle(StepRepr_RepresentationItem) Var0 = ent->StepRepr_Representation::Items()->Value(i1);
     iter.AddItem (Var0);
   }

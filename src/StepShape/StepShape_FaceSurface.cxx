@@ -11,18 +11,15 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepShape_FaceSurface.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepGeom_Surface.hxx>
+#include <StepShape_FaceSurface.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepShape_FaceSurface,StepShape_Face)
 
 StepShape_FaceSurface::StepShape_FaceSurface ()  {}
-
-void StepShape_FaceSurface::Init(
-	const Handle(TCollection_HAsciiString)& aName,
-	const Handle(StepShape_HArray1OfFaceBound)& aBounds)
-{
-
-	StepShape_Face::Init(aName, aBounds);
-}
 
 void StepShape_FaceSurface::Init(
 	const Handle(TCollection_HAsciiString)& aName,

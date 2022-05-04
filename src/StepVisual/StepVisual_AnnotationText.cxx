@@ -11,8 +11,11 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepVisual_AnnotationText.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepVisual_AnnotationText.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepVisual_AnnotationText,StepRepr_MappedItem)
 
 StepVisual_AnnotationText::StepVisual_AnnotationText ()  {}
 

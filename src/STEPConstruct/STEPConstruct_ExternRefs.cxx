@@ -13,71 +13,67 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <STEPConstruct_ExternRefs.ixx>
 
 #include <Interface_EntityIterator.hxx>
-
-#include <StepData_SelectNamed.hxx>
-
-#include <StepBasic_RoleAssociation.hxx>
-#include <StepBasic_DocumentRepresentationType.hxx>
-#include <StepBasic_DocumentRepresentationType.hxx>
-#include <StepBasic_DocumentFile.hxx>
-#include <StepBasic_ObjectRole.hxx>
-#include <StepBasic_SourceItem.hxx>
-#include <StepBasic_DocumentType.hxx>
-#include <StepBasic_IdentificationRole.hxx>
-#include <StepBasic_ExternalSource.hxx>
-#include <StepBasic_ExternalSource.hxx>
-
-#include <StepRepr_CharacterizedDefinition.hxx>
-#include <StepRepr_PropertyDefinition.hxx>
-#include <StepRepr_RepresentationContext.hxx>
-#include <StepRepr_DescriptiveRepresentationItem.hxx>
-#include <StepRepr_HArray1OfRepresentationItem.hxx>
-#include <StepRepr_PropertyDefinitionRepresentation.hxx>
-
-#include <StepShape_ShapeRepresentation.hxx>
-
+#include <StepAP203_ApprovedItem.hxx>
+#include <StepAP203_CcDesignApproval.hxx>
+#include <StepAP203_CcDesignDateAndTimeAssignment.hxx>
+#include <StepAP203_CcDesignPersonAndOrganizationAssignment.hxx>
+#include <StepAP203_DateTimeItem.hxx>
+#include <StepAP203_HArray1OfApprovedItem.hxx>
+#include <StepAP203_HArray1OfDateTimeItem.hxx>
+#include <StepAP203_HArray1OfPersonOrganizationItem.hxx>
+#include <StepAP203_PersonOrganizationItem.hxx>
 #include <StepAP214_AppliedDocumentReference.hxx>
 #include <StepAP214_AppliedExternalIdentificationAssignment.hxx>
 #include <StepAP214_ExternalIdentificationItem.hxx>
-#include <StepAP214_HArray1OfExternalIdentificationItem.hxx>
 #include <StepAP214_HArray1OfDocumentReferenceItem.hxx>
-#include <StepRepr_ProductDefinitionShape.hxx>
-#include <StepBasic_ProductDefinitionFormation.hxx>
-#include <StepBasic_ProductDefinitionContext.hxx>
-#include <StepBasic_ProductDefinitionWithAssociatedDocuments.hxx>
-#include <StepBasic_Product.hxx>
-#include <StepBasic_HArray1OfDocument.hxx>
-#include <StepBasic_HArray1OfProductContext.hxx>
+#include <StepAP214_HArray1OfExternalIdentificationItem.hxx>
 #include <StepBasic_ApplicationContext.hxx>
-#include <StepRepr_CharacterizedDefinition.hxx>
-#include <StepRepr_RepresentedDefinition.hxx>
-#include <TCollection_HAsciiString.hxx>
-#include <StepRepr_NextAssemblyUsageOccurrence.hxx>
-#include <StepAP203_CcDesignPersonAndOrganizationAssignment.hxx>
-#include <StepAP203_HArray1OfPersonOrganizationItem.hxx>
-#include <StepAP203_PersonOrganizationItem.hxx>
-#include <StepAP203_CcDesignDateAndTimeAssignment.hxx>
-#include <StepAP203_HArray1OfDateTimeItem.hxx>
-#include <StepAP203_DateTimeItem.hxx>
-#include <StepAP203_CcDesignApproval.hxx>
-#include <StepAP203_HArray1OfApprovedItem.hxx>
-#include <StepAP203_ApprovedItem.hxx>
-#include <StepBasic_DocumentProductEquivalence.hxx>
-#include <StepBasic_DocumentType.hxx>
-#include <StepBasic_HArray1OfProduct.hxx>
+#include <StepBasic_ApplicationProtocolDefinition.hxx>
 #include <StepBasic_Document.hxx>
+#include <StepBasic_DocumentFile.hxx>
+#include <StepBasic_DocumentProductEquivalence.hxx>
+#include <StepBasic_DocumentRepresentationType.hxx>
+#include <StepBasic_DocumentType.hxx>
+#include <StepBasic_ExternalSource.hxx>
+#include <StepBasic_HArray1OfDocument.hxx>
+#include <StepBasic_HArray1OfProduct.hxx>
+#include <StepBasic_HArray1OfProductContext.hxx>
+#include <StepBasic_IdentificationRole.hxx>
+#include <StepBasic_ObjectRole.hxx>
+#include <StepBasic_Product.hxx>
+#include <StepBasic_ProductContext.hxx>
+#include <StepBasic_ProductDefinition.hxx>
+#include <StepBasic_ProductDefinitionContext.hxx>
+#include <StepBasic_ProductDefinitionFormation.hxx>
+#include <StepBasic_ProductDefinitionWithAssociatedDocuments.hxx>
 #include <StepBasic_ProductOrFormationOrDefinition.hxx>
 #include <StepBasic_ProductRelatedProductCategory.hxx>
-
+#include <StepBasic_RoleAssociation.hxx>
+#include <StepBasic_SourceItem.hxx>
+#include <STEPConstruct_ExternRefs.hxx>
+#include <StepData_SelectNamed.hxx>
+#include <StepRepr_CharacterizedDefinition.hxx>
+#include <StepRepr_DescriptiveRepresentationItem.hxx>
+#include <StepRepr_HArray1OfRepresentationItem.hxx>
+#include <StepRepr_NextAssemblyUsageOccurrence.hxx>
+#include <StepRepr_ProductDefinitionShape.hxx>
+#include <StepRepr_PropertyDefinition.hxx>
+#include <StepRepr_PropertyDefinitionRepresentation.hxx>
+#include <StepRepr_RepresentationContext.hxx>
+#include <StepRepr_RepresentedDefinition.hxx>
+#include <StepShape_ShapeRepresentation.hxx>
+#include <TCollection_HAsciiString.hxx>
+#include <XSControl_WorkSession.hxx>
+#include <XSControl_TransferReader.hxx>
+#include <OSD_File.hxx>
+#include <OSD_Path.hxx>
 
 //=======================================================================
 //function : STEPConstruct_ExternRefs
 //purpose  : 
 //=======================================================================
-
 STEPConstruct_ExternRefs::STEPConstruct_ExternRefs ()
 {
 }
@@ -402,8 +398,23 @@ Standard_CString STEPConstruct_ExternRefs::FileName (const Standard_Integer num)
       }
     }
   }
-  if ( ! aCStringFileName || ! aCStringFileName[0] ) {
-    // try to find name direct from DocFile
+  Standard_CString oldFileName = 0;
+  // compute true path to the extern file
+  OSD_Path mainfile(WS()->LoadedFile());
+  mainfile.SetName("");
+  mainfile.SetExtension("");
+  TCollection_AsciiString dpath;
+  mainfile.SystemName(dpath);
+  if (aCStringFileName && aCStringFileName[0]) {
+    TCollection_AsciiString fullname = OSD_Path::AbsolutePath(dpath, aCStringFileName);
+    if (fullname.Length() <= 0) fullname = aCStringFileName;
+    if (!OSD_File(fullname).Exists()) {
+      oldFileName = aCStringFileName;
+      aCStringFileName = 0;
+    }
+  }
+  if (!aCStringFileName || !aCStringFileName[0]) {
+    // try to find name of the directory from DocFile
     if ( !DocFile.IsNull() ) {
       Handle(TCollection_HAsciiString) aFilename = DocFile->Id();
       if (!aFilename.IsNull() && !aFilename->IsEmpty())
@@ -414,10 +425,34 @@ Standard_CString STEPConstruct_ExternRefs::FileName (const Standard_Integer num)
         aCStringFileName = aFilename->ToCString();
       }
       if ( ! aCStringFileName || ! aCStringFileName[0] ) {
-        return "";
+        if (oldFileName) {
+          aCStringFileName = oldFileName;
+        }
+        else {
+          return "";
+        }
       }
-      else 
-        return aCStringFileName;
+    }
+  }
+  TCollection_AsciiString fullname = OSD_Path::AbsolutePath(dpath, aCStringFileName);
+  if (fullname.Length() <= 0) fullname = aCStringFileName;
+  if (!OSD_File(fullname).Exists()) {
+    if (oldFileName) {
+      aCStringFileName = oldFileName;
+    }
+    Handle(Transfer_TransientProcess) aTP = WS()->TransferReader()->TransientProcess();
+    TCollection_AsciiString aMess("Can not read external file ");
+    aMess.AssignCat(aCStringFileName);
+    aTP->AddFail(DocFile, aMess.ToCString());
+  }
+  else {
+    if (oldFileName && strcmp(oldFileName, aCStringFileName) != 0) {
+      Handle(Transfer_TransientProcess) aTP = WS()->TransferReader()->TransientProcess();
+      TCollection_AsciiString aMess("External file with name from entity AEIA (");
+      aMess.AssignCat(oldFileName);
+      aMess.AssignCat(") not existed => use file name from DocumentFile entity - ");
+      aMess.AssignCat(aCStringFileName);
+      aTP->AddWarning(DocFile, aMess.ToCString());
     }
   }
   return aCStringFileName;
@@ -431,6 +466,16 @@ Standard_CString STEPConstruct_ExternRefs::FileName (const Standard_Integer num)
 Handle(StepBasic_ProductDefinition) STEPConstruct_ExternRefs::ProdDef (const Standard_Integer num) const
 {
   return Handle(StepBasic_ProductDefinition)::DownCast( myShapes(num) );
+}
+
+//=======================================================================
+//function : DocFile
+//purpose  : 
+//=======================================================================
+
+Handle(StepBasic_DocumentFile) STEPConstruct_ExternRefs::DocFile(const Standard_Integer num) const
+{
+  return Handle(StepBasic_DocumentFile)::DownCast(myDocFiles.Value(num));
 }
 
 //=======================================================================
@@ -871,7 +916,7 @@ void STEPConstruct_ExternRefs::checkAP214Shared ()
     // create new ProductRelatedProductCategory for all extern files.
     Handle(TCollection_HAsciiString) PRPCname = new TCollection_HAsciiString("document");
     mySharedPRPC = new StepBasic_ProductRelatedProductCategory;
-    mySharedPRPC->Init( PRPCname, Standard_False, EmptyString );
+    mySharedPRPC->Init( PRPCname, Standard_False, EmptyString, 0 );
   }
   if ( mySharedDocType.IsNull() ) {
     // create new shared Document Type

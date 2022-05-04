@@ -11,18 +11,15 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepGeom_Hyperbola.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepGeom_Axis2Placement.hxx>
+#include <StepGeom_Hyperbola.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepGeom_Hyperbola,StepGeom_Conic)
 
 StepGeom_Hyperbola::StepGeom_Hyperbola ()  {}
-
-void StepGeom_Hyperbola::Init(
-	const Handle(TCollection_HAsciiString)& aName,
-	const StepGeom_Axis2Placement& aPosition)
-{
-
-	StepGeom_Conic::Init(aName, aPosition);
-}
 
 void StepGeom_Hyperbola::Init(
 	const Handle(TCollection_HAsciiString)& aName,

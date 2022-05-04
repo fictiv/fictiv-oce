@@ -11,14 +11,23 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepDimTol_GeoTolAndGeoTolWthDatRefAndModGeoTolAndPosTol.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepBasic_MeasureWithUnit.hxx>
+#include <StepDimTol_GeometricToleranceTarget.hxx>
+#include <StepDimTol_GeometricToleranceWithDatumReference.hxx>
+#include <StepDimTol_GeoTolAndGeoTolWthDatRefAndModGeoTolAndPosTol.hxx>
+#include <StepDimTol_ModifiedGeometricTolerance.hxx>
+#include <StepDimTol_PositionTolerance.hxx>
+#include <StepRepr_ShapeAspect.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepDimTol_GeoTolAndGeoTolWthDatRefAndModGeoTolAndPosTol,StepDimTol_GeometricTolerance)
 
 //=======================================================================
 //function : StepDimTol_GeoTolAndGeoTolWthDatRefAndModGeoTolAndPosTol
 //purpose  : 
 //=======================================================================
-
 StepDimTol_GeoTolAndGeoTolWthDatRefAndModGeoTolAndPosTol::StepDimTol_GeoTolAndGeoTolWthDatRefAndModGeoTolAndPosTol()
 {
 }
@@ -34,6 +43,27 @@ void StepDimTol_GeoTolAndGeoTolWthDatRefAndModGeoTolAndPosTol::Init
    const Handle(TCollection_HAsciiString)& aDescription,
    const Handle(StepBasic_MeasureWithUnit)& aMagnitude,
    const Handle(StepRepr_ShapeAspect)& aTolerancedShapeAspect,
+   const Handle(StepDimTol_GeometricToleranceWithDatumReference)& aGTWDR,
+   const Handle(StepDimTol_ModifiedGeometricTolerance)& aMGT)
+{
+  SetName(aName);
+  SetDescription(aDescription);
+  SetMagnitude(aMagnitude);
+  SetTolerancedShapeAspect(aTolerancedShapeAspect);
+  myGeometricToleranceWithDatumReference = aGTWDR;
+  myModifiedGeometricTolerance = aMGT;
+}
+
+//=======================================================================
+//function : Init
+//purpose  : 
+//=======================================================================
+
+void StepDimTol_GeoTolAndGeoTolWthDatRefAndModGeoTolAndPosTol::Init
+  (const Handle(TCollection_HAsciiString)& aName,
+   const Handle(TCollection_HAsciiString)& aDescription,
+   const Handle(StepBasic_MeasureWithUnit)& aMagnitude,
+   const StepDimTol_GeometricToleranceTarget& aTolerancedShapeAspect,
    const Handle(StepDimTol_GeometricToleranceWithDatumReference)& aGTWDR,
    const Handle(StepDimTol_ModifiedGeometricTolerance)& aMGT)
 {

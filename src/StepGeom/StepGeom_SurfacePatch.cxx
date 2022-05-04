@@ -11,8 +11,12 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepGeom_SurfacePatch.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepGeom_BoundedSurface.hxx>
+#include <StepGeom_SurfacePatch.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepGeom_SurfacePatch,Standard_Transient)
 
 StepGeom_SurfacePatch::StepGeom_SurfacePatch ()  {}
 

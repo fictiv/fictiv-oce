@@ -11,8 +11,12 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepBasic_ApplicationContext.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepBasic_ApplicationContext.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepBasic_ApplicationContext,Standard_Transient)
 
 StepBasic_ApplicationContext::StepBasic_ApplicationContext ()  {}
 

@@ -11,18 +11,17 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <RWStepVisual_RWOverRidingStyledItem.ixx>
-#include <StepVisual_StyledItem.hxx>
-#include <StepVisual_HArray1OfPresentationStyleAssignment.hxx>
-#include <StepVisual_PresentationStyleAssignment.hxx>
-#include <StepRepr_RepresentationItem.hxx>
 
-
+#include <Interface_Check.hxx>
 #include <Interface_EntityIterator.hxx>
-
-
+#include <RWStepVisual_RWOverRidingStyledItem.hxx>
+#include <StepData_StepReaderData.hxx>
+#include <StepData_StepWriter.hxx>
+#include <StepRepr_RepresentationItem.hxx>
+#include <StepVisual_HArray1OfPresentationStyleAssignment.hxx>
 #include <StepVisual_OverRidingStyledItem.hxx>
-
+#include <StepVisual_PresentationStyleAssignment.hxx>
+#include <StepVisual_StyledItem.hxx>
 
 RWStepVisual_RWOverRidingStyledItem::RWStepVisual_RWOverRidingStyledItem () {}
 
@@ -62,9 +61,8 @@ void RWStepVisual_RWOverRidingStyledItem::ReadStep
 
 	// --- inherited field : item ---
 
-	Handle(StepRepr_RepresentationItem) aItem;
-	//szv#4:S4163:12Mar99 `Standard_Boolean stat3 =` not needed
-	data->ReadEntity(num, 3,"item", ach, STANDARD_TYPE(StepRepr_RepresentationItem), aItem);
+  Handle(Standard_Transient) aItem;
+  data->ReadEntity(num, 3,"item", ach, STANDARD_TYPE(Standard_Transient), aItem);
 
 	// --- own field : overRiddenStyle ---
 

@@ -11,8 +11,13 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepVisual_PresentationSize.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepVisual_PlanarBox.hxx>
+#include <StepVisual_PresentationSize.hxx>
+#include <StepVisual_PresentationSizeAssignmentSelect.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepVisual_PresentationSize,Standard_Transient)
 
 StepVisual_PresentationSize::StepVisual_PresentationSize ()  {}
 

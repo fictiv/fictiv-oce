@@ -11,8 +11,13 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepRepr_RepresentationRelationship.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepRepr_Representation.hxx>
+#include <StepRepr_RepresentationRelationship.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepRepr_RepresentationRelationship,Standard_Transient)
 
 StepRepr_RepresentationRelationship::StepRepr_RepresentationRelationship ()  {}
 

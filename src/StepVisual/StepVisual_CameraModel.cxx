@@ -11,8 +11,11 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepVisual_CameraModel.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepVisual_CameraModel.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepVisual_CameraModel,StepGeom_GeometricRepresentationItem)
 
 StepVisual_CameraModel::StepVisual_CameraModel ()  {}
 

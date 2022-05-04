@@ -11,8 +11,12 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepVisual_PresentationStyleAssignment.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepVisual_PresentationStyleAssignment.hxx>
+#include <StepVisual_PresentationStyleSelect.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepVisual_PresentationStyleAssignment,Standard_Transient)
 
 StepVisual_PresentationStyleAssignment::StepVisual_PresentationStyleAssignment ()  {}
 
@@ -41,5 +45,5 @@ StepVisual_PresentationStyleSelect StepVisual_PresentationStyleAssignment::Style
 
 Standard_Integer StepVisual_PresentationStyleAssignment::NbStyles () const
 {
-	return styles->Length();
+  return (styles.IsNull()) ?  0 : styles->Length();
 }

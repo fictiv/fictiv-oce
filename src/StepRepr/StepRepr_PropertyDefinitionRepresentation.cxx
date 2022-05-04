@@ -15,13 +15,17 @@
 
 // Generator:	ExpToCas (EXPRESS -> CASCADE/XSTEP Translator) V1.2
 
-#include <StepRepr_PropertyDefinitionRepresentation.ixx>
+#include <Standard_Type.hxx>
+#include <StepRepr_PropertyDefinitionRepresentation.hxx>
+#include <StepRepr_Representation.hxx>
+#include <StepRepr_RepresentedDefinition.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepRepr_PropertyDefinitionRepresentation,Standard_Transient)
 
 //=======================================================================
 //function : StepRepr_PropertyDefinitionRepresentation
 //purpose  : 
 //=======================================================================
-
 StepRepr_PropertyDefinitionRepresentation::StepRepr_PropertyDefinitionRepresentation ()
 {
 }

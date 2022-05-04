@@ -11,18 +11,16 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepShape_OrientedPath.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepShape_EdgeLoop.hxx>
+#include <StepShape_OrientedEdge.hxx>
+#include <StepShape_OrientedPath.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepShape_OrientedPath,StepShape_Path)
 
 StepShape_OrientedPath::StepShape_OrientedPath ()  {}
-
-void StepShape_OrientedPath::Init(
-	const Handle(TCollection_HAsciiString)& aName,
-	const Handle(StepShape_HArray1OfOrientedEdge)& aEdgeList)
-{
-
-	StepShape_Path::Init(aName, aEdgeList);
-}
 
 void StepShape_OrientedPath::Init(
 	const Handle(TCollection_HAsciiString)& aName,
@@ -63,7 +61,7 @@ void StepShape_OrientedPath::SetEdgeList(const Handle(StepShape_HArray1OfOriente
 {
 	// WARNING : the field is redefined.
 	// field set up forbidden.
-	cout << "Field is redefined, SetUp Forbidden" << endl;
+	std::cout << "Field is redefined, SetUp Forbidden" << std::endl;
 }
 
 Handle(StepShape_HArray1OfOrientedEdge) StepShape_OrientedPath::EdgeList() const

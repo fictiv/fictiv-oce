@@ -20,72 +20,75 @@
 //:o7 abv 18.02.99: bm1_sy_fuel.stp #1427(items 1,2) protection against null entity
 //abv,gka 05.04.99 S4136: parameter names changed; avoid extra call to FixSameParameter
 
-#include <stdio.h>
-#include <StepToTopoDS_Builder.ixx>
-#include <Standard_ErrorHandler.hxx>
-#include <Standard_Failure.hxx>
-#include <Interface_Static.hxx>
-#include <TransferBRep.hxx>
-
-#include <StepToTopoDS_Tool.hxx>
-#include <StepToTopoDS_DataMapOfTRI.hxx>
-#include <StepToTopoDS_TranslateShell.hxx>
-#include <StepToTopoDS_TranslateCompositeCurve.hxx>
-#include <StepToTopoDS_TranslateCurveBoundedSurface.hxx>
-
-//#include <StepShape_VertexShell.hxx>
-#include <StepShape_Shell.hxx>
-#include <StepShape_OpenShell.hxx>
-#include <StepShape_OrientedClosedShell.hxx> //:e0
-#include <StepGeom_Surface.hxx>
-#include <StepGeom_Curve.hxx>
-#include <StepGeom_CartesianPoint.hxx>
-#include <StepGeom_CompositeCurve.hxx>
-#include <StepGeom_RectangularCompositeSurface.hxx>
-#include <StepGeom_SurfacePatch.hxx>
-#include <StepShape_GeometricSetSelect.hxx>
-#include <StepToGeom_MakeCurve.hxx>
-#include <StepToGeom_MakeCartesianPoint.hxx>
-#include <StepToGeom_MakeSurface.hxx>
-
-#include <Geom_Surface.hxx>
-#include <Geom_BoundedSurface.hxx>
-#include <Geom_Curve.hxx>
-#include <Geom_CartesianPoint.hxx>
-
-#include <BRepBuilderAPI_MakeFace.hxx>
+#include <BRep_Builder.hxx>
 #include <BRepBuilderAPI_MakeEdge.hxx>
+#include <BRepBuilderAPI_MakeFace.hxx>
 #include <BRepBuilderAPI_MakeVertex.hxx>
 #include <BRepLib.hxx>
-#include <BRep_Builder.hxx>
-#include <Precision.hxx>
-#include <TopoDS_Shell.hxx>
-#include <TopoDS_Face.hxx>
-#include <TopoDS_Edge.hxx>
-#include <TopoDS_Solid.hxx>
-#include <TopoDS_Compound.hxx>
-#include <TopExp_Explorer.hxx>
-
+#include <Geom_BoundedSurface.hxx>
+#include <Geom_CartesianPoint.hxx>
+#include <Geom_Curve.hxx>
 #include <Geom_RectangularTrimmedSurface.hxx>
-
+#include <Geom_Surface.hxx>
+#include <Interface_Static.hxx>
+#include <Message_Messenger.hxx>
+#include <Message_ProgressScope.hxx>
+#include <Precision.hxx>
 #include <ShapeFix_ShapeTolerance.hxx>
+#include <Standard_ErrorHandler.hxx>
+#include <Standard_Failure.hxx>
+#include <StdFail_NotDone.hxx>
+#include <STEPControl_ActorRead.hxx>
+#include <StepGeom_CartesianPoint.hxx>
+#include <StepGeom_CompositeCurve.hxx>
+#include <StepGeom_Curve.hxx>
+#include <StepGeom_CurveBoundedSurface.hxx>
+#include <StepGeom_GeometricRepresentationItem.hxx>
+#include <StepGeom_RectangularCompositeSurface.hxx>
+#include <StepGeom_Surface.hxx>
+#include <StepGeom_SurfacePatch.hxx>
+#include <StepShape_BrepWithVoids.hxx>
+#include <StepShape_ClosedShell.hxx>
 #include <StepShape_ConnectedEdgeSet.hxx>
 #include <StepShape_EdgeBasedWireframeModel.hxx>
+#include <StepShape_FaceBasedSurfaceModel.hxx>
+#include <StepShape_FaceSurface.hxx>
+#include <StepShape_FacetedBrep.hxx>
+#include <StepShape_FacetedBrepAndBrepWithVoids.hxx>
+#include <StepShape_GeometricSet.hxx>
+#include <StepShape_GeometricSetSelect.hxx>
 #include <StepShape_HArray1OfConnectedEdgeSet.hxx>
-#include <StepToTopoDS_TranslateEdge.hxx>
-#include <StepShape_HArray1OfEdge.hxx>
-#include <TopoDS.hxx>
 #include <StepShape_HArray1OfConnectedFaceSet.hxx>
-#include <StepToTopoDS_TranslateFace.hxx>
+#include <StepShape_HArray1OfEdge.hxx>
 #include <StepShape_HArray1OfFace.hxx>
-
-#include <STEPControl_ActorRead.hxx>
-
-#include <Message_ProgressSentry.hxx>
-#include <Message_Messenger.hxx>
+#include <StepShape_ManifoldSolidBrep.hxx>
+#include <StepShape_OpenShell.hxx>
+#include <StepShape_OrientedClosedShell.hxx>
+#include <StepShape_Shell.hxx>
+#include <StepShape_ShellBasedSurfaceModel.hxx>
+#include <StepToGeom.hxx>
+#include <StepToTopoDS_Builder.hxx>
+#include <StepToTopoDS_DataMapOfTRI.hxx>
+#include <StepToTopoDS_NMTool.hxx>
+#include <StepToTopoDS_Tool.hxx>
+#include <StepToTopoDS_TranslateCompositeCurve.hxx>
+#include <StepToTopoDS_TranslateCurveBoundedSurface.hxx>
+#include <StepToTopoDS_TranslateEdge.hxx>
+#include <StepToTopoDS_TranslateFace.hxx>
+#include <StepToTopoDS_TranslateShell.hxx>
+#include <TopExp_Explorer.hxx>
+#include <TopoDS.hxx>
+#include <TopoDS_Compound.hxx>
+#include <TopoDS_Edge.hxx>
+#include <TopoDS_Face.hxx>
+#include <TopoDS_Shape.hxx>
+#include <TopoDS_Shell.hxx>
+#include <TopoDS_Solid.hxx>
 #include <Transfer_ActorOfTransientProcess.hxx>
-#include <STEPControl_ActorRead.hxx>
+#include <Transfer_TransientProcess.hxx>
+#include <TransferBRep.hxx>
 
+#include <stdio.h>
 static void ResetPreci (const TopoDS_Shape& S, Standard_Real maxtol)
 {
   //:S4136
@@ -94,12 +97,6 @@ static void ResetPreci (const TopoDS_Shape& S, Standard_Real maxtol)
     ShapeFix_ShapeTolerance STU;
     STU.LimitTolerance (S,Precision::Confusion(),maxtol);
   }
-//  Standard_Real ratio = Interface_Static::RVal("XSTEP.readprecision.ratio");
-//  if (ratio >= 1) {
-//    Standard_Real lastpre = Interface_Static::RVal("lastpreci");
-//    ShapeFix_ShapeTolerance STU;
-//    STU.LimitTolerance (S,lastpre/ratio,lastpre*ratio);
-//  }
 }
 
 // ============================================================================
@@ -108,69 +105,9 @@ static void ResetPreci (const TopoDS_Shape& S, Standard_Real maxtol)
 // ============================================================================
 
 StepToTopoDS_Builder::StepToTopoDS_Builder()
+: myError(StepToTopoDS_BuilderOther)
 {
   done = Standard_False;
-}
-
-// ============================================================================
-// Method  : StepToTopoDS_Builder::StepToTopoDS_Builder
-// Purpose : Constructor with a ManifoldSolidBrep
-// ============================================================================
-
-StepToTopoDS_Builder::StepToTopoDS_Builder
-(const Handle(StepShape_ManifoldSolidBrep)& aManifoldSolid, 
- const Handle(Transfer_TransientProcess)& TP)
-{
-  Init(aManifoldSolid, TP);
-}
-
-// ============================================================================
-// Method  : StepToTopoDS_Builder::StepToTopoDS_Builder
-// Purpose : Constructor woth a BrepWithVoids
-// ============================================================================
-
-StepToTopoDS_Builder::StepToTopoDS_Builder
-(const Handle(StepShape_BrepWithVoids)& aBRepWithVoids,
- const Handle(Transfer_TransientProcess)& TP)
-{
-  Init(aBRepWithVoids, TP);
-}
-
-// ============================================================================
-// Method  : StepToTopoDS_Builder::StepToTopoDS_Builder
-// Purpose : Constructor with a FacetedBrep
-// ============================================================================
-
-StepToTopoDS_Builder::StepToTopoDS_Builder
-(const Handle(StepShape_FacetedBrep)& aFB,
- const Handle(Transfer_TransientProcess)& TP)
-{
-  Init(aFB, TP);
-}
-
-// ============================================================================
-// Method  : StepToTopoDS_Builder::StepToTopoDS_Builder
-// Purpose : Constructor with a FacetedBrepAndBrepWithVoids
-// ============================================================================
-
-StepToTopoDS_Builder::StepToTopoDS_Builder
-(const Handle(StepShape_FacetedBrepAndBrepWithVoids)& aFBABWV,
- const Handle(Transfer_TransientProcess)& TP)
-{
-  Init(aFBABWV, TP);
-}
-
-// ============================================================================
-// Method  : StepToTopoDS_Builder::StepToTopoDS_Builder
-// Purpose : Constructor with a ShellBasedSurfaceModel
-// ============================================================================
-
-StepToTopoDS_Builder::StepToTopoDS_Builder
-(const Handle(StepShape_ShellBasedSurfaceModel)& aSBSM,
- const Handle(Transfer_TransientProcess)& TP,
- StepToTopoDS_NMTool& NMTool)
-{
-  Init(aSBSM, TP, NMTool);
 }
 
 // ============================================================================
@@ -180,9 +117,10 @@ StepToTopoDS_Builder::StepToTopoDS_Builder
 
 void StepToTopoDS_Builder::Init
 (const Handle(StepShape_ManifoldSolidBrep)& aManifoldSolid,
- const Handle(Transfer_TransientProcess)& TP)
+ const Handle(Transfer_TransientProcess)& TP,
+ const Message_ProgressRange& theProgress)
 {
-  Handle(Message_Messenger) sout = TP->Messenger();
+  Message_Messenger::StreamBuffer sout = TP->Messenger()->SendInfo();
   // Initialisation of the Tool
 
   StepToTopoDS_Tool         myTool;
@@ -200,7 +138,7 @@ void StepToTopoDS_Builder::Init
   myTranShell.SetMaxTol(MaxTol());
   // Non-manifold topology is not referenced by ManifoldSolidBrep (ssv; 14.11.2010)
   StepToTopoDS_NMTool dummyNMTool;
-  myTranShell.Init(aShell, myTool, dummyNMTool);
+  myTranShell.Init(aShell, myTool, dummyNMTool, theProgress);
 
   if (myTranShell.IsDone()) {
     TopoDS_Shape Sh = myTranShell.Value();
@@ -218,16 +156,16 @@ void StepToTopoDS_Builder::Init
 
     if ( TP->TraceLevel() > 2 )
     {
-      sout << "Geometric Statitics : " << endl;
-      sout << "   Surface Continuity : - C0 : " << myTool.C0Surf() << endl;
-      sout << "                        - C1 : " << myTool.C1Surf() << endl;
-      sout << "                        - C2 : " << myTool.C2Surf() << endl;
-      sout << "   Curve Continuity :   - C0 : " << myTool.C0Cur3() << endl;
-      sout << "                        - C1 : " << myTool.C1Cur3() << endl;
-      sout << "                        - C2 : " << myTool.C2Cur3() << endl;
-      sout << "   PCurve Continuity :  - C0 : " << myTool.C0Cur2() << endl;
-      sout << "                        - C1 : " << myTool.C1Cur2() << endl;
-      sout << "                        - C2 : " << myTool.C2Cur2() << endl;
+      sout << "Geometric Statitics : " << std::endl;
+      sout << "   Surface Continuity : - C0 : " << myTool.C0Surf() << std::endl;
+      sout << "                        - C1 : " << myTool.C1Surf() << std::endl;
+      sout << "                        - C2 : " << myTool.C2Surf() << std::endl;
+      sout << "   Curve Continuity :   - C0 : " << myTool.C0Cur3() << std::endl;
+      sout << "                        - C1 : " << myTool.C1Cur3() << std::endl;
+      sout << "                        - C2 : " << myTool.C2Cur3() << std::endl;
+      sout << "   PCurve Continuity :  - C0 : " << myTool.C0Cur2() << std::endl;
+      sout << "                        - C1 : " << myTool.C1Cur2() << std::endl;
+      sout << "                        - C2 : " << myTool.C2Cur2() << std::endl;
     }
 
 //:S4136    ShapeFix::SameParameter (S,Standard_False);
@@ -247,9 +185,10 @@ void StepToTopoDS_Builder::Init
 
 void StepToTopoDS_Builder::Init
 (const Handle(StepShape_BrepWithVoids)& aBRepWithVoids,
- const Handle(Transfer_TransientProcess)& TP)
+ const Handle(Transfer_TransientProcess)& TP,
+ const Message_ProgressRange& theProgress)
 {
-  Handle(Message_Messenger) sout = TP->Messenger();
+  Message_Messenger::StreamBuffer sout = TP->Messenger()->SendInfo();
  // Initialisation of the Tool
   StepToTopoDS_Tool         myTool;
   StepToTopoDS_DataMapOfTRI aMap;
@@ -265,7 +204,7 @@ void StepToTopoDS_Builder::Init
   BRep_Builder B;
   B.MakeSolid(S);
   
-  Message_ProgressSentry PS ( TP->GetProgress(), "Shell", 0, Nb+1, 1 );
+  Message_ProgressScope PS (theProgress, "Shell", Nb+1);
 
   StepToTopoDS_TranslateShell myTranShell;
 
@@ -276,9 +215,7 @@ void StepToTopoDS_Builder::Init
   aCShell = Handle(StepShape_ClosedShell)::DownCast(aBRepWithVoids->Outer());
   // Non-manifold topology is not referenced by BrepWithVoids (ssv; 14.11.2010)
   StepToTopoDS_NMTool dummyNMTool;
-  myTranShell.Init(aCShell, myTool, dummyNMTool);
-  
-  PS.Next();
+  myTranShell.Init(aCShell, myTool, dummyNMTool, PS.Next());
 
   if (myTranShell.IsDone()) {
     Sh = myTranShell.Value();
@@ -299,10 +236,10 @@ void StepToTopoDS_Builder::Init
 
   // Voids
 
-  for (Standard_Integer i=1; i<=Nb && PS.More(); i++, PS.Next()) {
+  for (Standard_Integer i=1; i<=Nb && PS.More(); i++) {
 
     aCShell = aBRepWithVoids->VoidsValue(i);
-    myTranShell.Init(aCShell, myTool, dummyNMTool);
+    myTranShell.Init(aCShell, myTool, dummyNMTool, PS.Next());
     if (myTranShell.IsDone()) {
       Sh = myTranShell.Value();
       Sh.Closed(Standard_True);
@@ -326,16 +263,16 @@ void StepToTopoDS_Builder::Init
   
   if ( TP->TraceLevel() > 2 )
   {
-    sout << "Geometric Statitics : " << endl;
-    sout << "   Surface Continuity : - C0 : " << myTool.C0Surf() << endl;
-    sout << "                        - C1 : " << myTool.C1Surf() << endl;
-    sout << "                        - C2 : " << myTool.C2Surf() << endl;
-    sout << "   Curve Continuity :   - C0 : " << myTool.C0Cur3() << endl;
-    sout << "                        - C1 : " << myTool.C1Cur3() << endl;
-    sout << "                        - C2 : " << myTool.C2Cur3() << endl;
-    sout << "   PCurve Continuity :  - C0 : " << myTool.C0Cur2() << endl;
-    sout << "                        - C1 : " << myTool.C1Cur2() << endl;
-    sout << "                        - C2 : " << myTool.C2Cur2() << endl;
+    sout << "Geometric Statitics : " << std::endl;
+    sout << "   Surface Continuity : - C0 : " << myTool.C0Surf() << std::endl;
+    sout << "                        - C1 : " << myTool.C1Surf() << std::endl;
+    sout << "                        - C2 : " << myTool.C2Surf() << std::endl;
+    sout << "   Curve Continuity :   - C0 : " << myTool.C0Cur3() << std::endl;
+    sout << "                        - C1 : " << myTool.C1Cur3() << std::endl;
+    sout << "                        - C2 : " << myTool.C2Cur3() << std::endl;
+    sout << "   PCurve Continuity :  - C0 : " << myTool.C0Cur2() << std::endl;
+    sout << "                        - C1 : " << myTool.C1Cur2() << std::endl;
+    sout << "                        - C2 : " << myTool.C2Cur2() << std::endl;
   }
 
 //:S4136  ShapeFix::SameParameter (S,Standard_False);
@@ -348,7 +285,8 @@ void StepToTopoDS_Builder::Init
 // ============================================================================
 
 void StepToTopoDS_Builder::Init(const Handle(StepShape_FacetedBrep)& aFB,
-			       const Handle(Transfer_TransientProcess)& TP)
+                                const Handle(Transfer_TransientProcess)& TP,
+                                const Message_ProgressRange& theProgress)
 {
   // Initialisation of the Tool
 
@@ -368,7 +306,7 @@ void StepToTopoDS_Builder::Init(const Handle(StepShape_FacetedBrep)& aFB,
   myTranShell.SetMaxTol(MaxTol());  
   // Non-manifold topology is not referenced by FacetedBrep (ss; 14.11.2010)
   StepToTopoDS_NMTool dummyNMTool;
-  myTranShell.Init(aCShell, myTool, dummyNMTool);
+  myTranShell.Init(aCShell, myTool, dummyNMTool, theProgress);
 
   if (myTranShell.IsDone()) {
     Sh = myTranShell.Value();
@@ -399,7 +337,8 @@ void StepToTopoDS_Builder::Init(const Handle(StepShape_FacetedBrep)& aFB,
 
 void StepToTopoDS_Builder::Init
 (const Handle(StepShape_FacetedBrepAndBrepWithVoids)& aFBABWV,
- const Handle(Transfer_TransientProcess)& TP)
+ const Handle(Transfer_TransientProcess)& TP,
+ const Message_ProgressRange& theProgress)
 {
   // Initialisation of the Tool
 
@@ -414,12 +353,14 @@ void StepToTopoDS_Builder::Init
   aCShell = Handle(StepShape_ClosedShell)::DownCast(aFBABWV->Outer());
   TopoDS_Shape Sh;
 
+  Message_ProgressScope aPSRoot(theProgress, NULL, 2);
+
   StepToTopoDS_TranslateShell myTranShell;
   myTranShell.SetPrecision(Precision()); //gka
   myTranShell.SetMaxTol(MaxTol());
   // Non-manifold topology is not referenced by FacetedBrepAndBrepWithVoids (ss; 14.11.2010)
   StepToTopoDS_NMTool dummyNMTool;
-  myTranShell.Init(aCShell, myTool, dummyNMTool);
+  myTranShell.Init(aCShell, myTool, dummyNMTool, aPSRoot.Next());
 
   if (myTranShell.IsDone()) {
     Sh = myTranShell.Value();
@@ -431,14 +372,15 @@ void StepToTopoDS_Builder::Init
     B.Add(S,Sh);
     Standard_Integer Nb, i;
     Nb = aFBABWV->NbVoids();
-    for ( i=1; i<=Nb; i++ ) {
+    Message_ProgressScope aPS (aPSRoot.Next(), NULL, Nb);
+    for ( i=1; i<=Nb && aPS.More(); i++) {
       aCShell = aFBABWV->VoidsValue(i);
-      myTranShell.Init(aCShell, myTool, dummyNMTool);
+      myTranShell.Init(aCShell, myTool, dummyNMTool, aPS.Next());
       if (myTranShell.IsDone()) {
-	Sh = myTranShell.Value();
-	Sh.Closed(Standard_True);
-	//BRepLib::SameParameter(Sh);
-	B.Add(S,Sh);
+        Sh = myTranShell.Value();
+        Sh.Closed(Standard_True);
+        //BRepLib::SameParameter(Sh);
+        B.Add(S, Sh);
       }
       else {
 	TP->AddWarning
@@ -465,9 +407,10 @@ void StepToTopoDS_Builder::Init
 void StepToTopoDS_Builder::Init
 (const Handle(StepShape_ShellBasedSurfaceModel)& aSBSM,
  const Handle(Transfer_TransientProcess)& TP,
- StepToTopoDS_NMTool& NMTool)
+ StepToTopoDS_NMTool& NMTool,
+ const Message_ProgressRange& theProgress)
 {
-  Handle(Message_Messenger) sout = TP->Messenger();
+  Message_Messenger::StreamBuffer sout = TP->Messenger()->SendInfo();
   // Initialisation of the Tool
 
   StepToTopoDS_Tool         myTool;
@@ -492,49 +435,35 @@ void StepToTopoDS_Builder::Init
   myTranShell.SetPrecision(Precision());
   myTranShell.SetMaxTol(MaxTol());
 
-  Message_ProgressSentry PS ( TP->GetProgress(), "Shell", 0, Nb, 1 );
-  for (Standard_Integer i=1; i<=Nb && PS.More(); i++, PS.Next()) {
-  //for (Standard_Integer i=1; i<=Nb; i++) {
+  Message_ProgressScope PS ( theProgress, "Shell", Nb);
+  for (Standard_Integer i = 1; i <= Nb && PS.More(); i++)
+  {
+    Message_ProgressRange aRange = PS.Next();
     aShell = aSBSM->SbsmBoundaryValue(i);
-    //aVertexShell = aShell.VertexShell();
-    aOpenShell   = aShell.OpenShell();
+    aOpenShell = aShell.OpenShell();
     aClosedShell = aShell.ClosedShell();
-    //if (!aVertexShell.IsNull()) {
-    //TP->AddWarning
-    //(aVertexShell,
-    //" VertexShell from ShellBasedSurfaceModel not mapped to TopoDS");
-    //}
-    //else 
     if (!aOpenShell.IsNull()) {
-      myTranShell.Init(aOpenShell, myTool, NMTool);
+      myTranShell.Init(aOpenShell, myTool, NMTool, aRange);
       if (myTranShell.IsDone()) {
-	//Sh = myTranShell.Value();
-	//Sh.Closed(Standard_False);
-	//BRepLib::SameParameter(Sh);
-	//B.Add(S,Sh);
-	Shl = TopoDS::Shell(myTranShell.Value());
-	Shl.Closed(Standard_False);
-	B.Add(S,Shl);
+        Shl = TopoDS::Shell(myTranShell.Value());
+        Shl.Closed(Standard_False);
+        B.Add(S, Shl);
       }
-      else { 
-	TP->AddWarning
-	  (aOpenShell," OpenShell from ShellBasedSurfaceModel not mapped to TopoDS");
+      else {
+        TP->AddWarning
+          (aOpenShell, " OpenShell from ShellBasedSurfaceModel not mapped to TopoDS");
       }
     }
     else if (!aClosedShell.IsNull()) {
-      myTranShell.Init(aClosedShell, myTool, NMTool);
+      myTranShell.Init(aClosedShell, myTool, NMTool, aRange);
       if (myTranShell.IsDone()) {
-	//Sh = myTranShell.Value();
-	//Sh.Closed(Standard_True);
-	//BRepLib::SameParameter(Sh);
-	//B.Add(S,Sh);
-	Shl = TopoDS::Shell(myTranShell.Value());
-	Shl.Closed(Standard_True);
-	B.Add(S,Shl);
+        Shl = TopoDS::Shell(myTranShell.Value());
+        Shl.Closed(Standard_True);
+        B.Add(S, Shl);
       }
-      else { 
-	TP->AddWarning
-	  (aClosedShell," ClosedShell from ShellBasedSurfaceModel not mapped to TopoDS");
+      else {
+        TP->AddWarning
+          (aClosedShell, " ClosedShell from ShellBasedSurfaceModel not mapped to TopoDS");
       }
     }
   }
@@ -549,16 +478,16 @@ void StepToTopoDS_Builder::Init
   
   if ( TP->TraceLevel() > 2 )
   {
-    sout << "Geometric Statitics : " << endl;
-    sout << "   Surface Continuity : - C0 : " << myTool.C0Surf() << endl;
-    sout << "                        - C1 : " << myTool.C1Surf() << endl;
-    sout << "                        - C2 : " << myTool.C2Surf() << endl;
-    sout << "   Curve Continuity :   - C0 : " << myTool.C0Cur3() << endl;
-    sout << "                        - C1 : " << myTool.C1Cur3() << endl;
-    sout << "                        - C2 : " << myTool.C2Cur3() << endl;
-    sout << "   PCurve Continuity :  - C0 : " << myTool.C0Cur2() << endl;
-    sout << "                        - C1 : " << myTool.C1Cur2() << endl;
-    sout << "                        - C2 : " << myTool.C2Cur2() << endl;
+    sout << "Geometric Statitics : " << std::endl;
+    sout << "   Surface Continuity : - C0 : " << myTool.C0Surf() << std::endl;
+    sout << "                        - C1 : " << myTool.C1Surf() << std::endl;
+    sout << "                        - C2 : " << myTool.C2Surf() << std::endl;
+    sout << "   Curve Continuity :   - C0 : " << myTool.C0Cur3() << std::endl;
+    sout << "                        - C1 : " << myTool.C1Cur3() << std::endl;
+    sout << "                        - C2 : " << myTool.C2Cur3() << std::endl;
+    sout << "   PCurve Continuity :  - C0 : " << myTool.C0Cur2() << std::endl;
+    sout << "                        - C1 : " << myTool.C1Cur2() << std::endl;
+    sout << "                        - C2 : " << myTool.C2Cur2() << std::endl;
   }
 
 //:S4136  ShapeFix::SameParameter (S,Standard_False);
@@ -701,8 +630,8 @@ static TopoDS_Face TranslateBoundedSurf (const Handle(StepGeom_Surface) &surf,
 {
   TopoDS_Face res;
 
-  Handle(Geom_Surface) theSurf;
-  if (!StepToGeom_MakeSurface::Convert(surf,theSurf) || //:i6: protection
+  Handle(Geom_Surface) theSurf = StepToGeom::MakeSurface (surf);
+  if (theSurf.IsNull() || //:i6: protection
       !theSurf->IsKind(STANDARD_TYPE(Geom_BoundedSurface))) return res;
 
   BRepBuilderAPI_MakeFace myMkFace;
@@ -728,15 +657,9 @@ void StepToTopoDS_Builder::Init
 (const Handle(StepShape_GeometricSet)& GCS,
  const Handle(Transfer_TransientProcess)& TP,
  const Handle(Transfer_ActorOfTransientProcess)& RA,
- const Standard_Boolean isManifold)
+ const Standard_Boolean isManifold,
+ const Message_ProgressRange& theProgress)
 {
-  // Initialisation of the Tool
-
-//  StepToTopoDS_Tool         myTool;
-//  StepToTopoDS_DataMapOfTRI aMap;
-
-//  myTool.Init(aMap, TP);
-
   // Start Mapping
   TopoDS_Compound S;
   BRep_Builder B;
@@ -746,7 +669,10 @@ void StepToTopoDS_Builder::Init
   Standard_Real preci = Precision();   //gka
   Standard_Real maxtol = MaxTol();
   Standard_Integer nbElem = GCS->NbElements();
-  for (i = 1; i <= nbElem ; i++) {
+  Message_ProgressScope aPS(theProgress, NULL, nbElem);
+  for (i = 1; i <= nbElem && aPS.More(); i++)
+  {
+    Message_ProgressRange aRange = aPS.Next();
     StepShape_GeometricSetSelect aGSS = GCS->ElementsValue(i);
     Handle(Standard_Transient) ent = aGSS.Value();
 
@@ -768,87 +694,87 @@ void StepToTopoDS_Builder::Init
 
       // try composite_curve
       Handle(StepGeom_CompositeCurve) CC = Handle(StepGeom_CompositeCurve)::DownCast(aCrv);
-      if ( ! CC.IsNull() ) {
-	StepToTopoDS_TranslateCompositeCurve TrCC;
-	TrCC.SetPrecision(preci);
-	TrCC.SetMaxTol(maxtol);
-	TrCC.Init( CC, TP );
-	if ( TrCC.IsDone() ) 
-	{
-	  if (TrCC.IsInfiniteSegment())
-	  {
-	    BRep_Builder aB;
-	    TopoDS_Compound aComp;
-	    aB.MakeCompound(aComp);
-	    TopExp_Explorer anExp;
-	    for (anExp.Init (TrCC.Value(), TopAbs_EDGE); anExp.More(); anExp.Next())
-	      aB.Add (aComp, anExp.Current());
-	    res = aComp;
-	  }
-	  else
-	    res = TrCC.Value();
-	}
+      if (!CC.IsNull()) {
+        StepToTopoDS_TranslateCompositeCurve TrCC;
+        TrCC.SetPrecision(preci);
+        TrCC.SetMaxTol(maxtol);
+        TrCC.Init(CC, TP);
+        if (TrCC.IsDone())
+        {
+          if (TrCC.IsInfiniteSegment())
+          {
+            BRep_Builder aB;
+            TopoDS_Compound aComp;
+            aB.MakeCompound(aComp);
+            TopExp_Explorer anExp;
+            for (anExp.Init(TrCC.Value(), TopAbs_EDGE); anExp.More(); anExp.Next())
+              aB.Add(aComp, anExp.Current());
+            res = aComp;
+          }
+          else
+            res = TrCC.Value();
+        }
       }
       else { // try other curves
-	Handle(Geom_Curve) aGeomCrv;
-	try {
-	  OCC_CATCH_SIGNALS
-      StepToGeom_MakeCurve::Convert(aCrv,aGeomCrv);
-	}
-	catch(Standard_Failure) {
-	  Handle(Message_Messenger) sout = TP->Messenger();
-	  sout<<"StepToTopoDS, GeometricSet, elem "<<i<<" of "<<nbElem<<": exception ";
-	  sout<<Standard_Failure::Caught()->GetMessageString() << endl;
-	}
-	if ( ! aGeomCrv.IsNull() ) {
-	  BRepBuilderAPI_MakeEdge anEdge(aGeomCrv, aGeomCrv->FirstParameter(), aGeomCrv->LastParameter());
-	  if ( anEdge.IsDone() ) res = anEdge.Edge();
-	}
+        Handle(Geom_Curve) aGeomCrv;
+        try {
+          OCC_CATCH_SIGNALS
+            aGeomCrv = StepToGeom::MakeCurve(aCrv);
+        }
+        catch (Standard_Failure const& anException) {
+          Message_Messenger::StreamBuffer sout = TP->Messenger()->SendInfo();
+          sout << "StepToTopoDS, GeometricSet, elem " << i << " of " << nbElem << ": exception ";
+          sout << anException.GetMessageString() << std::endl;
+        }
+        if (!aGeomCrv.IsNull()) {
+          BRepBuilderAPI_MakeEdge anEdge(aGeomCrv, aGeomCrv->FirstParameter(), aGeomCrv->LastParameter());
+          if (anEdge.IsDone()) res = anEdge.Edge();
+        }
       }
     }
     // try point
     else if ( ent->IsKind(STANDARD_TYPE(StepGeom_CartesianPoint)) ) {
       Handle(StepGeom_CartesianPoint) aPnt = Handle(StepGeom_CartesianPoint)::DownCast ( ent );
-      Handle(Geom_CartesianPoint) thePnt;
-      if (StepToGeom_MakeCartesianPoint::Convert(aPnt,thePnt)) {
+      Handle(Geom_CartesianPoint) thePnt = StepToGeom::MakeCartesianPoint (aPnt);
+      if (! thePnt.IsNull()) {
         BRepBuilderAPI_MakeVertex myMkVtx(thePnt->Pnt());
         if ( myMkVtx.IsDone() ) res = myMkVtx.Vertex();
       }
     }
     // Element should finally be a Surface
-    else if ( ent->IsKind(STANDARD_TYPE(StepGeom_Surface)) ) {
-      Handle(StepGeom_Surface) aSurf = 
-	Handle(StepGeom_Surface)::DownCast(ent);
-	
+    else if (ent->IsKind(STANDARD_TYPE(StepGeom_Surface))) {
+      Handle(StepGeom_Surface) aSurf =
+        Handle(StepGeom_Surface)::DownCast(ent);
+
       // try curve_bounded_surf
-      if ( ent->IsKind(STANDARD_TYPE(StepGeom_CurveBoundedSurface)) ) {
-	Handle(StepGeom_CurveBoundedSurface) CBS = 
-	  Handle(StepGeom_CurveBoundedSurface)::DownCast(aSurf);
-	StepToTopoDS_TranslateCurveBoundedSurface TrCBS;
-	TrCBS.SetPrecision(preci);
-	TrCBS.SetMaxTol(maxtol);
-	
-	TrCBS.Init( CBS, TP );
-	if ( TrCBS.IsDone() ) res = TrCBS.Value();
+      if (ent->IsKind(STANDARD_TYPE(StepGeom_CurveBoundedSurface))) {
+        Handle(StepGeom_CurveBoundedSurface) CBS =
+          Handle(StepGeom_CurveBoundedSurface)::DownCast(aSurf);
+        StepToTopoDS_TranslateCurveBoundedSurface TrCBS;
+        TrCBS.SetPrecision(preci);
+        TrCBS.SetMaxTol(maxtol);
+
+        TrCBS.Init(CBS, TP);
+        if (TrCBS.IsDone()) res = TrCBS.Value();
       }
       // try RectangularCompositeSurface
-      else if ( ent->IsKind(STANDARD_TYPE(StepGeom_RectangularCompositeSurface)) ) {
-	Handle(StepGeom_RectangularCompositeSurface) RCS = 
-	  Handle(StepGeom_RectangularCompositeSurface)::DownCast(aSurf);
-	Standard_Integer nbi = RCS->NbSegmentsI();
-	Standard_Integer nbj = RCS->NbSegmentsJ();
-	TopoDS_Compound C;
-	B.MakeCompound ( C );
-	for ( Standard_Integer ii=1; ii <= nbi; ii++ ) 
-	  for ( Standard_Integer j=1; j <= nbj; j++ ) {
-	    Handle(StepGeom_SurfacePatch) patch = RCS->SegmentsValue ( ii, j );
-	    TopoDS_Face f = TranslateBoundedSurf (patch->ParentSurface(), preci);
-	    if ( ! f.IsNull() ) B.Add ( C, f );
-	  }
-	res = C;
+      else if (ent->IsKind(STANDARD_TYPE(StepGeom_RectangularCompositeSurface))) {
+        Handle(StepGeom_RectangularCompositeSurface) RCS =
+          Handle(StepGeom_RectangularCompositeSurface)::DownCast(aSurf);
+        Standard_Integer nbi = RCS->NbSegmentsI();
+        Standard_Integer nbj = RCS->NbSegmentsJ();
+        TopoDS_Compound C;
+        B.MakeCompound(C);
+        for (Standard_Integer ii = 1; ii <= nbi; ii++)
+          for (Standard_Integer j = 1; j <= nbj; j++) {
+            Handle(StepGeom_SurfacePatch) patch = RCS->SegmentsValue(ii, j);
+            TopoDS_Face f = TranslateBoundedSurf(patch->ParentSurface(), preci);
+            if (!f.IsNull()) B.Add(C, f);
+          }
+        res = C;
       }
       // try other surfs
-      else res = TranslateBoundedSurf (aSurf, preci);
+      else res = TranslateBoundedSurf(aSurf, preci);
     }
     else if ( ent->IsKind(STANDARD_TYPE(StepGeom_GeometricRepresentationItem)) )
     {
@@ -859,7 +785,7 @@ void StepToTopoDS_Builder::Init
         Handle(STEPControl_ActorRead) anActor = Handle(STEPControl_ActorRead)::DownCast(RA);
         Handle(Transfer_Binder) binder;
         if( !anActor.IsNull())
-          binder = anActor->TransferShape(GRI, TP, isManifold);
+          binder = anActor->TransferShape(GRI, TP, isManifold, Standard_False, aRange);
         if (!binder.IsNull())
         {
           res = TransferBRep::ShapeResult(binder);
@@ -887,7 +813,7 @@ void StepToTopoDS_Builder::Init
 
 const TopoDS_Shape& StepToTopoDS_Builder::Value() const 
 {
-  StdFail_NotDone_Raise_if(!done,"");
+  StdFail_NotDone_Raise_if (!done, "StepToTopoDS_Builder::Value() - no result");
   return myResult;
 }
 

@@ -11,13 +11,20 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepSelect_StepType.ixx>
-#include <TColStd_SequenceOfAsciiString.hxx>
+
+#include <Interface_InterfaceError.hxx>
+#include <Interface_InterfaceModel.hxx>
+#include <Interface_Macros.hxx>
+#include <Interface_Protocol.hxx>
+#include <Standard_Transient.hxx>
+#include <Standard_Type.hxx>
+#include <StepData_Protocol.hxx>
 #include <StepData_ReadWriteModule.hxx>
 #include <StepData_UndefinedEntity.hxx>
-#include <Interface_InterfaceError.hxx>
-#include <Interface_Macros.hxx>
+#include <StepSelect_StepType.hxx>
+#include <TColStd_SequenceOfAsciiString.hxx>
 
+IMPLEMENT_STANDARD_RTTIEXT(StepSelect_StepType,IFSelect_Signature)
 
 static TCollection_AsciiString lastvalue;
 
@@ -29,7 +36,7 @@ static TCollection_AsciiString lastvalue;
   (const Handle(Interface_Protocol)& proto)
 {
   DeclareAndCast(StepData_Protocol,newproto,proto);
-  if (newproto.IsNull()) Interface_InterfaceError::Raise("StepSelect_StepType");
+  if (newproto.IsNull()) throw Interface_InterfaceError("StepSelect_StepType");
   theproto = newproto;
   thelib.Clear();
   thelib.AddProtocol (theproto);

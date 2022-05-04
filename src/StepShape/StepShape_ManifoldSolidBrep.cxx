@@ -11,17 +11,16 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepShape_ManifoldSolidBrep.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepShape_ClosedShell.hxx>
+#include <StepShape_ConnectedFaceSet.hxx>
+#include <StepShape_ManifoldSolidBrep.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepShape_ManifoldSolidBrep,StepShape_SolidModel)
 
 StepShape_ManifoldSolidBrep::StepShape_ManifoldSolidBrep ()  {}
-
-void StepShape_ManifoldSolidBrep::Init(
-	const Handle(TCollection_HAsciiString)& aName)
-{
-
-	StepRepr_RepresentationItem::Init(aName);
-}
 
 void StepShape_ManifoldSolidBrep::Init(
   const Handle(TCollection_HAsciiString)& aName,

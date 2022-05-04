@@ -16,13 +16,16 @@
 
 // Generator:	ExpToCas (EXPRESS -> CASCADE/XSTEP Translator) V1.0
 
-#include <StepAP203_StartWork.ixx>
+#include <Standard_Type.hxx>
+#include <StepAP203_StartWork.hxx>
+#include <StepBasic_Action.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepAP203_StartWork,StepBasic_ActionAssignment)
 
 //=======================================================================
 //function : StepAP203_StartWork
 //purpose  : 
 //=======================================================================
-
 StepAP203_StartWork::StepAP203_StartWork ()
 {
 }

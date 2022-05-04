@@ -11,12 +11,21 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepData_UndefinedEntity.ixx>
-#include <Interface_ParamType.hxx>
-#include <TCollection_AsciiString.hxx>
+
+#include <Interface_Check.hxx>
+#include <Interface_CopyTool.hxx>
+#include <Interface_EntityIterator.hxx>
 #include <Interface_Macros.hxx>
+#include <Interface_ParamType.hxx>
+#include <Interface_UndefinedContent.hxx>
+#include <Standard_Type.hxx>
+#include <StepData_StepReaderData.hxx>
+#include <StepData_StepWriter.hxx>
+#include <StepData_UndefinedEntity.hxx>
+#include <TCollection_AsciiString.hxx>
+#include <TCollection_HAsciiString.hxx>
 
-
+IMPLEMENT_STANDARD_RTTIEXT(StepData_UndefinedEntity,Standard_Transient)
 
 StepData_UndefinedEntity::StepData_UndefinedEntity ()
       {  thecont = new Interface_UndefinedContent;  thesub = Standard_False;  }
@@ -58,12 +67,15 @@ void StepData_UndefinedEntity::ReadRecord(const Handle(StepData_StepReaderData)&
     Standard_Integer nume = 0;
     if (partyp == Interface_ParamIdent) {
       nume = SR->ParamNumber(num,i);
+      if (nume > 0) {
+	anent = SR->BoundEntity(nume);
+        if (anent.IsNull()) {
+          nume = 0;
+        }
+      }
       if (nume <= 0) {
 	ach->AddFail("A reference to another entity is unresolved");
 	partyp = Interface_ParamVoid;
-      }
-      else {
-	anent = SR->BoundEntity(nume);
       }
     }
     else if (partyp == Interface_ParamSub) {

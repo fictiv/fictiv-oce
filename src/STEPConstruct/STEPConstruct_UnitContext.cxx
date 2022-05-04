@@ -17,44 +17,51 @@
 //abv 17.11.99: renamed from StepPDR_MakeUnitAndToleranceContext and merged with STEPControl_Unit
 //abv 30.02.00: ability to write file in units other than MM
 
-#include <STEPConstruct_UnitContext.ixx>
-
-#include <TCollection_HAsciiString.hxx>
-
-#include <StepBasic_SiUnit.hxx>
-#include <StepBasic_SiPrefix.hxx>
-#include <StepBasic_NamedUnit.hxx>
-#include <StepBasic_LengthUnit.hxx>
-#include <StepBasic_PlaneAngleUnit.hxx>
-#include <StepBasic_SolidAngleUnit.hxx>
-#include <StepBasic_SiUnitAndLengthUnit.hxx>
-#include <StepBasic_SiUnitAndPlaneAngleUnit.hxx>
-#include <StepBasic_SiUnitAndSolidAngleUnit.hxx>
-#include <StepBasic_SiUnitAndAreaUnit.hxx>
-#include <StepBasic_SiUnitAndVolumeUnit.hxx>
-#include <StepBasic_UncertaintyMeasureWithUnit.hxx>
-#include <StepBasic_DimensionalExponents.hxx>
-#include <StepBasic_MeasureValueMember.hxx>
-#include <StepBasic_MeasureWithUnit.hxx>
-#include <StepBasic_LengthMeasureWithUnit.hxx>
-#include <StepBasic_PlaneAngleMeasureWithUnit.hxx>
-#include <StepBasic_SolidAngleMeasureWithUnit.hxx>
+#include <Interface_Static.hxx>
+#include <StepBasic_ConversionBasedUnit.hxx>
+#include <StepBasic_ConversionBasedUnitAndAreaUnit.hxx>
 #include <StepBasic_ConversionBasedUnitAndLengthUnit.hxx>
 #include <StepBasic_ConversionBasedUnitAndPlaneAngleUnit.hxx>
 #include <StepBasic_ConversionBasedUnitAndSolidAngleUnit.hxx>
-#include <StepBasic_ConversionBasedUnitAndAreaUnit.hxx>
 #include <StepBasic_ConversionBasedUnitAndVolumeUnit.hxx>
+#include <StepBasic_DimensionalExponents.hxx>
 #include <StepBasic_HArray1OfNamedUnit.hxx>
 #include <StepBasic_HArray1OfUncertaintyMeasureWithUnit.hxx>
+#include <StepBasic_LengthMeasureWithUnit.hxx>
+#include <StepBasic_LengthUnit.hxx>
+#include <StepBasic_MeasureValueMember.hxx>
+#include <StepBasic_MeasureWithUnit.hxx>
+#include <StepBasic_NamedUnit.hxx>
+#include <StepBasic_PlaneAngleMeasureWithUnit.hxx>
+#include <StepBasic_PlaneAngleUnit.hxx>
+#include <StepBasic_SiPrefix.hxx>
+#include <StepBasic_SiUnit.hxx>
+#include <StepBasic_SiUnitAndAreaUnit.hxx>
+#include <StepBasic_SiUnitAndLengthUnit.hxx>
+#include <StepBasic_SiUnitAndPlaneAngleUnit.hxx>
+#include <StepBasic_SiUnitAndSolidAngleUnit.hxx>
+#include <StepBasic_SiUnitAndVolumeUnit.hxx>
+#include <StepBasic_SolidAngleMeasureWithUnit.hxx>
+#include <StepBasic_SolidAngleUnit.hxx>
+#include <StepBasic_UncertaintyMeasureWithUnit.hxx>
+#include <STEPConstruct_UnitContext.hxx>
+#include <StepGeom_GeomRepContextAndGlobUnitAssCtxAndGlobUncertaintyAssCtx.hxx>
+#include <StepRepr_GlobalUncertaintyAssignedContext.hxx>
+#include <StepRepr_GlobalUnitAssignedContext.hxx>
+#include <TCollection_HAsciiString.hxx>
 #include <UnitsMethods.hxx>
-#include <Interface_Static.hxx>
 
 //=======================================================================
 //function : STEPConstruct_UnitContext
 //purpose  : 
 //=======================================================================
-
-STEPConstruct_UnitContext::STEPConstruct_UnitContext() : done(Standard_False)
+STEPConstruct_UnitContext::STEPConstruct_UnitContext()
+: done(Standard_False),
+  lengthFactor(0.0),
+  planeAngleFactor(0.0),
+  solidAngleFactor(0.0),
+  areaFactor(0.0),
+  volumeFactor(0.0)
 {
   lengthDone = planeAngleDone = solidAngleDone = hasUncertainty = 
     areaDone = volumeDone = Standard_False;
@@ -234,7 +241,7 @@ Standard_Boolean STEPConstruct_UnitContext::SiUnitNameFactor(const Handle(StepBa
   case StepBasic_sunSteradian: 
     return Standard_True;
   default:
-//	cout << "Unknown SiUnitName : " << aSiUnit->Name() << endl;
+//	std::cout << "Unknown SiUnitName : " << aSiUnit->Name() << std::endl;
     return Standard_False;
   }
 }
@@ -259,7 +266,7 @@ Standard_Integer STEPConstruct_UnitContext::ComputeFactors(const Handle(StepRepr
   
   if (aContext.IsNull()) {
 #ifdef OCCT_DEBUG
-    cout<<" -- STEPConstruct_UnitContext:ComputeFactor, Context undefined -> default"<<endl;
+    std::cout<<" -- STEPConstruct_UnitContext:ComputeFactor, Context undefined -> default"<<std::endl;
 #endif
     return 1;
   }
@@ -273,7 +280,7 @@ Standard_Integer STEPConstruct_UnitContext::ComputeFactors(const Handle(StepRepr
     status = ComputeFactors(theNamedUnit);
 #ifdef OCCT_DEBUG
     if(status == -1)
-      cout << " -- STEPConstruct_UnitContext:ComputeFactor: Unit item no." << i << " is not recognized" << endl;
+      std::cout << " -- STEPConstruct_UnitContext:ComputeFactor: Unit item no." << i << " is not recognized" << std::endl;
 #endif    
   }
   return status;
@@ -326,11 +333,11 @@ Standard_Integer STEPConstruct_UnitContext::ComputeFactors(const Handle(StepBasi
 	}
 	// Treat the SiUnitName
 	if (!SiUnitNameFactor(theSIU,theSIUNF)) status = 11; // et continue
-	//cout << "The SiUnitNameFactor is :";
-	//cout << theSIUNF << endl;
+	//std::cout << "The SiUnitNameFactor is :";
+	//std::cout << theSIUNF << std::endl;
       }
       else {
-	//      cout << "Recursive algo required - Aborted" << endl;
+	//      std::cout << "Recursive algo required - Aborted" << std::endl;
 	return 3;
       }
       Standard_Real theMVAL = theMWU->ValueComponent();
@@ -343,7 +350,7 @@ Standard_Integer STEPConstruct_UnitContext::ComputeFactors(const Handle(StepBasi
     else {
       status = 14;
 #ifdef OCCT_DEBUG
-      cout << "Error in the file : parameter double defined" << endl;
+      std::cout << "Error in the file : parameter double defined" << std::endl;
 #endif
     }
   }    
@@ -368,7 +375,7 @@ Standard_Integer STEPConstruct_UnitContext::ComputeFactors(const Handle(StepBasi
     else {
       status = 14;
 #ifdef OCCT_DEBUG
-      cout << "Error in the file : parameter double defined" << endl;
+      std::cout << "Error in the file : parameter double defined" << std::endl;
 #endif
     }
   }
@@ -376,7 +383,7 @@ Standard_Integer STEPConstruct_UnitContext::ComputeFactors(const Handle(StepBasi
   // Defining a type of unit
   if(!parameterDone) {
 #ifdef OCCT_DEBUG
-    cout << "Unit Type not implemented" << endl;
+    std::cout << "Unit Type not implemented" << std::endl;
 #endif 
     return 0;
   }
@@ -393,7 +400,7 @@ Standard_Integer STEPConstruct_UnitContext::ComputeFactors(const Handle(StepBasi
     else {
       status = 14;
 #ifdef OCCT_DEBUG
-      cout << "Error in the file : LengthFactor double defined" << endl;
+      std::cout << "Error in the file : LengthFactor double defined" << std::endl;
 #endif    
     }
   }  // end of LengthUnit
@@ -454,7 +461,7 @@ Standard_Integer STEPConstruct_UnitContext::ComputeTolerance
     Handle(StepBasic_UncertaintyMeasureWithUnit) aUMWU = aContext->UncertaintyValue(un);
     if (aUMWU.IsNull()) {
 #ifdef OCCT_DEBUG
-      cout<<"BAD Uncertainty Measure with Units, n0."<<un<<endl;
+      std::cout<<"BAD Uncertainty Measure with Units, n0."<<un<<std::endl;
 #endif
       continue;
     }
@@ -484,7 +491,7 @@ Standard_Integer STEPConstruct_UnitContext::ComputeTolerance
   }
 
 #ifdef OCCT_DEBUG
-  if (hasUncertainty) cout << "UNCERTAINTY read as " << theUncertainty << endl;
+  if (hasUncertainty) std::cout << "UNCERTAINTY read as " << theUncertainty << std::endl;
 #endif
   return status;
 }

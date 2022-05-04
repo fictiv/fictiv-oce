@@ -14,30 +14,23 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepGeom_GeomRepContextAndGlobUnitAssCtxAndGlobUncertaintyAssCtx.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepBasic_NamedUnit.hxx>
+#include <StepBasic_UncertaintyMeasureWithUnit.hxx>
 #include <StepGeom_GeometricRepresentationContext.hxx>
-
+#include <StepGeom_GeomRepContextAndGlobUnitAssCtxAndGlobUncertaintyAssCtx.hxx>
+#include <StepRepr_GlobalUncertaintyAssignedContext.hxx>
 #include <StepRepr_GlobalUnitAssignedContext.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepGeom_GeomRepContextAndGlobUnitAssCtxAndGlobUncertaintyAssCtx,StepRepr_RepresentationContext)
 
 // --------------------------------------------------------------------------------------------------
 // Method  :
 // Purpose :
 // --------------------------------------------------------------------------------------------------
-
 StepGeom_GeomRepContextAndGlobUnitAssCtxAndGlobUncertaintyAssCtx::StepGeom_GeomRepContextAndGlobUnitAssCtxAndGlobUncertaintyAssCtx ()  {}
-
-// --------------------------------------------------------------------------------------------------
-// Method  :
-// Purpose :
-// --------------------------------------------------------------------------------------------------
-
-void StepGeom_GeomRepContextAndGlobUnitAssCtxAndGlobUncertaintyAssCtx::Init
-(const Handle(TCollection_HAsciiString)& aContextIdentifier,
- const Handle(TCollection_HAsciiString)& aContextType)
-{
-  StepRepr_RepresentationContext::Init(aContextIdentifier, aContextType);
-}
 
 // --------------------------------------------------------------------------------------------------
 // Method  :

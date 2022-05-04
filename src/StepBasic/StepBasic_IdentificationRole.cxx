@@ -15,13 +15,16 @@
 
 // Generator:	ExpToCas (EXPRESS -> CASCADE/XSTEP Translator) V1.1
 
-#include <StepBasic_IdentificationRole.ixx>
+#include <Standard_Type.hxx>
+#include <StepBasic_IdentificationRole.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepBasic_IdentificationRole,Standard_Transient)
 
 //=======================================================================
 //function : StepBasic_IdentificationRole
 //purpose  : 
 //=======================================================================
-
 StepBasic_IdentificationRole::StepBasic_IdentificationRole ()
 {
   defDescription = Standard_False;

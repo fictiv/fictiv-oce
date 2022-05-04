@@ -11,25 +11,28 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepData_StepReaderTool.ixx>
+
+#include <Interface_Check.hxx>
+#include <Interface_InterfaceModel.hxx>
+#include <Interface_Macros.hxx>
+#include <Message.hxx>
+#include <Message_Messenger.hxx>
 #include <Standard_ErrorHandler.hxx>
 #include <Standard_Failure.hxx>
-#include <StepData_StepModel.hxx>
 #include <Standard_Transient.hxx>
+#include <StepData_FileRecognizer.hxx>
+#include <StepData_Protocol.hxx>
 #include <StepData_ReadWriteModule.hxx>
+#include <StepData_StepModel.hxx>
+#include <StepData_StepReaderData.hxx>
+#include <StepData_StepReaderTool.hxx>
 #include <StepData_UndefinedEntity.hxx>
-
-#include <Message_Messenger.hxx>
-#include <Message.hxx>
-#include <Interface_Macros.hxx>
 #include <TCollection_AsciiString.hxx>
-
 
 //=======================================================================
 //function : StepData_StepReaderTool
 //purpose  : 
 //=======================================================================
-
 StepData_StepReaderTool::StepData_StepReaderTool
   (const Handle(StepData_StepReaderData)& reader,
    const Handle(StepData_Protocol)& protocol)
@@ -94,10 +97,10 @@ void StepData_StepReaderTool::Prepare (const Standard_Boolean optim)
       stepdat->SetEntityNumbers(optim);
       SetEntities();
     }
-    catch(Standard_Failure) {
-      Handle(Message_Messenger) sout = Message::DefaultMessenger();
+    catch(Standard_Failure const& anException) {
+      Message_Messenger::StreamBuffer sout = Message::SendInfo();
       sout << " Exception Raised during Preparation :\n";
-      sout << Standard_Failure::Caught()->GetMessageString();
+      sout << anException.GetMessageString();
       sout << "\n Now, trying to continue, but with presomption of failure\n";
     }
   }
@@ -156,7 +159,7 @@ void StepData_StepReaderTool::PrepareHeader
 void StepData_StepReaderTool::BeginRead
   (const Handle(Interface_InterfaceModel)& amodel)
 {
-  Handle(Message_Messenger) sout = Message::DefaultMessenger();
+  Message_Messenger::StreamBuffer sout = Message::SendTrace();
   DeclareAndCast(StepData_StepModel,model,amodel);
   DeclareAndCast(StepData_StepReaderData,stepdat,Data());
 
@@ -181,17 +184,21 @@ void StepData_StepReaderTool::BeginRead
       Handle(Interface_Check) mch = model->GlobalCheck();
       Standard_Integer nbmess = ach->NbWarnings();
       sout<<nbmess<<" Warnings on Reading Header Entity N0."<<i<<":";
-      if (!ent.IsNull()) sout << ent->DynamicType()->Name() << endl;
-      for (Standard_Integer nf = 1; nf <= nbmess; nf ++)
-	sout << ach->CWarning(nf) << "\n";
+      if (!ent.IsNull()) sout << ent->DynamicType()->Name() << std::endl;
+      for (Standard_Integer nf = 1; nf <= nbmess; nf++)
+      {
+        sout << ach->CWarning(nf) << "\n";
+      }
     }
     if (ach->HasFailed()) {
       Handle(Interface_Check) mch = model->GlobalCheck();
       Standard_Integer nbmess = ach->NbFails();
-      sout << " Errors on Reading Header Entity N0."<<i<<":";
-      if (!ent.IsNull()) sout << ent->DynamicType()->Name() << endl;
-      for (Standard_Integer nf = 1; nf <= nbmess; nf ++)
-	sout << ach->CFail(nf) << "\n";
+      sout << " Fails on Reading Header Entity N0." << i << ":";
+      if (!ent.IsNull()) sout << ent->DynamicType()->Name() << std::endl;
+      for (Standard_Integer nf = 1; nf <= nbmess; nf++)
+      {
+        sout << ach->CFail(nf) << "\n";
+      }
     }
   }
 }
@@ -208,9 +215,14 @@ Standard_Boolean StepData_StepReaderTool::AnalyseRecord
    Handle(Interface_Check)& acheck)
 {
   DeclareAndCast(StepData_StepReaderData,stepdat,Data());
-  Handle(StepData_ReadWriteModule) module;  Standard_Integer CN;
-  if (therlib.Select(anent,module,CN))
+  Handle(Interface_ReaderModule) imodule;
+  Standard_Integer CN;
+  if (therlib.Select(anent,imodule,CN))
+  {
+    Handle(StepData_ReadWriteModule) module =
+      Handle(StepData_ReadWriteModule)::DownCast (imodule);
     module->ReadStep(CN,stepdat,num,acheck,anent);
+  }
   else {
 //  Pas trouve : tenter UndefinedEntity de StepData
     DeclareAndCast(StepData_UndefinedEntity,und,anent);

@@ -15,13 +15,18 @@
 
 // Generator:	ExpToCas (EXPRESS -> CASCADE/XSTEP Translator) V1.2
 
-#include <StepElement_AnalysisItemWithinRepresentation.ixx>
+#include <Standard_Type.hxx>
+#include <StepElement_AnalysisItemWithinRepresentation.hxx>
+#include <StepRepr_Representation.hxx>
+#include <StepRepr_RepresentationItem.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepElement_AnalysisItemWithinRepresentation,Standard_Transient)
 
 //=======================================================================
 //function : StepElement_AnalysisItemWithinRepresentation
 //purpose  : 
 //=======================================================================
-
 StepElement_AnalysisItemWithinRepresentation::StepElement_AnalysisItemWithinRepresentation ()
 {
 }

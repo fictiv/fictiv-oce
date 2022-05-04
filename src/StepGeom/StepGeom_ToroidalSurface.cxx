@@ -11,18 +11,15 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepGeom_ToroidalSurface.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepGeom_Axis2Placement3d.hxx>
+#include <StepGeom_ToroidalSurface.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepGeom_ToroidalSurface,StepGeom_ElementarySurface)
 
 StepGeom_ToroidalSurface::StepGeom_ToroidalSurface ()  {}
-
-void StepGeom_ToroidalSurface::Init(
-	const Handle(TCollection_HAsciiString)& aName,
-	const Handle(StepGeom_Axis2Placement3d)& aPosition)
-{
-
-	StepGeom_ElementarySurface::Init(aName, aPosition);
-}
 
 void StepGeom_ToroidalSurface::Init(
 	const Handle(TCollection_HAsciiString)& aName,

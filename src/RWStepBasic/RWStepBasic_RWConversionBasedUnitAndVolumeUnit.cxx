@@ -14,7 +14,15 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <RWStepBasic_RWConversionBasedUnitAndVolumeUnit.ixx>
+
+#include <Interface_Check.hxx>
+#include <Interface_EntityIterator.hxx>
+#include <RWStepBasic_RWConversionBasedUnitAndVolumeUnit.hxx>
+#include <StepBasic_ConversionBasedUnitAndVolumeUnit.hxx>
+#include <StepBasic_DimensionalExponents.hxx>
+#include <StepBasic_MeasureWithUnit.hxx>
+#include <StepData_StepReaderData.hxx>
+#include <StepData_StepWriter.hxx>
 
 RWStepBasic_RWConversionBasedUnitAndVolumeUnit::RWStepBasic_RWConversionBasedUnitAndVolumeUnit ()
 {
@@ -40,7 +48,7 @@ void RWStepBasic_RWConversionBasedUnitAndVolumeUnit::ReadStep(const Handle(StepD
   Handle(StepBasic_DimensionalExponents) aDimensions;
   data->ReadEntity(num, 1,"dimensions", ach, STANDARD_TYPE(StepBasic_DimensionalExponents), aDimensions);
   
-  data->NamedForComplex("VOLUME_UNIT",num0,num,ach);
+  data->NamedForComplex("VOLUME_UNIT","VLMUNT",num0,num,ach);
   if (!data->CheckNbParams(num,0,ach,"volume_unit")) return;
   
   ent->Init(aDimensions,aName,aConversionFactor);

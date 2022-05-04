@@ -16,13 +16,17 @@
 
 // Generator:	ExpToCas (EXPRESS -> CASCADE/XSTEP Translator) V1.0
 
-#include <StepRepr_ConfigurationDesign.ixx>
+#include <Standard_Type.hxx>
+#include <StepRepr_ConfigurationDesign.hxx>
+#include <StepRepr_ConfigurationDesignItem.hxx>
+#include <StepRepr_ConfigurationItem.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepRepr_ConfigurationDesign,Standard_Transient)
 
 //=======================================================================
 //function : StepRepr_ConfigurationDesign
 //purpose  : 
 //=======================================================================
-
 StepRepr_ConfigurationDesign::StepRepr_ConfigurationDesign ()
 {
 }

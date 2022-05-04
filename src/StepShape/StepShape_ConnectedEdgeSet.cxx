@@ -15,13 +15,16 @@
 
 // Generator:	ExpToCas (EXPRESS -> CASCADE/XSTEP Translator) V1.1
 
-#include <StepShape_ConnectedEdgeSet.ixx>
+#include <Standard_Type.hxx>
+#include <StepShape_ConnectedEdgeSet.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepShape_ConnectedEdgeSet,StepShape_TopologicalRepresentationItem)
 
 //=======================================================================
 //function : StepShape_ConnectedEdgeSet
 //purpose  : 
 //=======================================================================
-
 StepShape_ConnectedEdgeSet::StepShape_ConnectedEdgeSet ()
 {
 }

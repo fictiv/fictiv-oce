@@ -11,17 +11,16 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepGeom_TrimmedCurve.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepGeom_Curve.hxx>
+#include <StepGeom_TrimmedCurve.hxx>
+#include <StepGeom_TrimmingSelect.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepGeom_TrimmedCurve,StepGeom_BoundedCurve)
 
 StepGeom_TrimmedCurve::StepGeom_TrimmedCurve ()  {}
-
-void StepGeom_TrimmedCurve::Init(
-	const Handle(TCollection_HAsciiString)& aName)
-{
-
-	StepRepr_RepresentationItem::Init(aName);
-}
 
 void StepGeom_TrimmedCurve::Init(
 	const Handle(TCollection_HAsciiString)& aName,

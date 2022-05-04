@@ -14,12 +14,20 @@
 //:n5 abv 15 Feb 99: S4132: added complex type bounded_curve + surface_curve
 //:j4 gka 11 Mar 99 S4134 :  added new types for DIS
 //    gka 09.04.99: S4136: new name of parameter write.step.schema 
-#include <StepAP214_Protocol.ixx>
+
+#include <Interface_Protocol.hxx>
+#include <Standard_Type.hxx>
+#include <StepAP214_Protocol.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepAP214_Protocol,StepData_Protocol)
 
 static Standard_CString schemaAP214CD  = "AUTOMOTIVE_DESIGN_CC2 { 1 2 10303 214 -1 1 5 4 }";
 static Standard_CString schemaAP214DIS = "AUTOMOTIVE_DESIGN { 1 2 10303 214 0 1 1 1 }";
 static Standard_CString schemaAP214IS  = "AUTOMOTIVE_DESIGN { 1 0 10303 214 1 1 1 1 }";
 static Standard_CString schemaAP203    = "CONFIG_CONTROL_DESIGN";
+static Standard_CString schemaAP242DIS = "AP242_MANAGED_MODEL_BASED_3D_ENGINEERING_MIM_LF. {1 0 10303 442 1 1 4 }";
+
+#include <HeaderSection_Protocol.hxx>
 
 #include <StepBasic_Address.hxx>
 #include <StepShape_AdvancedBrepShapeRepresentation.hxx>
@@ -283,6 +291,7 @@ static Standard_CString schemaAP203    = "CONFIG_CONTROL_DESIGN";
 #include <StepBasic_SecurityClassificationLevel.hxx>
 #include <StepRepr_ShapeAspect.hxx>
 #include <StepRepr_ShapeAspectRelationship.hxx>
+#include <StepRepr_FeatureForDatumTargetRelationship.hxx>
 #include <StepRepr_ShapeAspectTransition.hxx>
 #include <StepShape_ShapeDefinitionRepresentation.hxx>
 #include <StepShape_ShapeRepresentation.hxx>
@@ -640,6 +649,7 @@ static Standard_CString schemaAP203    = "CONFIG_CONTROL_DESIGN";
 #include <StepDimTol_ConcentricityTolerance.hxx>
 #include <StepDimTol_CircularRunoutTolerance.hxx>
 #include <StepDimTol_CoaxialityTolerance.hxx>
+#include <StepDimTol_CylindricityTolerance.hxx>
 #include <StepDimTol_FlatnessTolerance.hxx>
 #include <StepDimTol_LineProfileTolerance.hxx>
 #include <StepDimTol_ParallelismTolerance.hxx>
@@ -667,11 +677,86 @@ static Standard_CString schemaAP203    = "CONFIG_CONTROL_DESIGN";
 // added by skl 10.02.2004 for TRJ13
 #include <StepBasic_ConversionBasedUnitAndMassUnit.hxx>
 #include <StepBasic_MassMeasureWithUnit.hxx>
+#include <StepBasic_CharacterizedObject.hxx>
+#include <StepFEA_CurveElementEndCoordinateSystem.hxx>
+#include <StepFEA_SymmetricTensor22d.hxx>
+#include <StepFEA_SymmetricTensor42d.hxx>
+#include <StepFEA_SymmetricTensor43d.hxx>
+
+// Added by ika for GD&T AP242
+#include <StepRepr_Apex.hxx>
+#include <StepRepr_CentreOfSymmetry.hxx>
+#include <StepRepr_GeometricAlignment.hxx>
+#include <StepRepr_ParallelOffset.hxx>
+#include <StepRepr_PerpendicularTo.hxx>
+#include <StepRepr_Tangent.hxx>
+#include <StepAP242_GeometricItemSpecificUsage.hxx>
+#include <StepAP242_IdAttribute.hxx>
+#include <StepAP242_ItemIdentifiedRepresentationUsage.hxx>
+#include <StepRepr_AllAroundShapeAspect.hxx>
+#include <StepRepr_BetweenShapeAspect.hxx>
+#include <StepRepr_CompositeGroupShapeAspect.hxx>
+#include <StepRepr_ContinuosShapeAspect.hxx>
+#include <StepDimTol_GeometricToleranceWithDefinedAreaUnit.hxx>
+#include <StepDimTol_GeometricToleranceWithDefinedUnit.hxx>
+#include <StepDimTol_GeometricToleranceWithMaximumTolerance.hxx>
+#include <StepDimTol_GeometricToleranceWithModifiers.hxx>
+#include <StepDimTol_UnequallyDisposedGeometricTolerance.hxx>
+#include <StepDimTol_NonUniformZoneDefinition.hxx>
+#include <StepDimTol_ProjectedZoneDefinition.hxx>
+#include <StepDimTol_RunoutZoneDefinition.hxx>
+#include <StepDimTol_RunoutZoneOrientation.hxx>
+#include <StepDimTol_ToleranceZone.hxx>
+#include <StepDimTol_ToleranceZoneDefinition.hxx>
+#include <StepDimTol_ToleranceZoneForm.hxx>
+#include <StepShape_ValueFormatTypeQualifier.hxx>
+#include <StepDimTol_DatumReferenceCompartment.hxx>
+#include <StepDimTol_DatumReferenceElement.hxx>
+#include <StepDimTol_DatumReferenceModifierWithValue.hxx>
+#include <StepDimTol_DatumSystem.hxx>
+#include <StepDimTol_GeneralDatumReference.hxx>
+#include <StepRepr_ReprItemAndPlaneAngleMeasureWithUnit.hxx>
+#include <StepRepr_ReprItemAndLengthMeasureWithUnitAndQRI.hxx>
+#include <StepRepr_ReprItemAndPlaneAngleMeasureWithUnitAndQRI.hxx>
+#include <StepDimTol_GeoTolAndGeoTolWthDatRef.hxx>
+#include <StepDimTol_GeoTolAndGeoTolWthDatRefAndGeoTolWthMod.hxx>
+#include <StepDimTol_GeoTolAndGeoTolWthMod.hxx>
+#include <StepDimTol_GeoTolAndGeoTolWthDatRefAndUneqDisGeoTol.hxx>
+#include <StepRepr_CompGroupShAspAndCompShAspAndDatumFeatAndShAsp.hxx>
+#include <StepRepr_CompShAspAndDatumFeatAndShAsp.hxx>
+#include <StepRepr_IntegerRepresentationItem.hxx>
+#include <StepRepr_ValueRepresentationItem.hxx>
+#include <StepAP242_DraughtingModelItemAssociation.hxx>
+#include <StepDimTol_GeoTolAndGeoTolWthDatRefAndGeoTolWthMaxTol.hxx>
+#include <StepDimTol_GeoTolAndGeoTolWthMaxTol.hxx>
+#include <StepVisual_AnnotationCurveOccurrence.hxx>
+#include <StepVisual_AnnotationPlane.hxx>
+#include <StepVisual_DraughtingCallout.hxx>
 
 
-static int init = 0;
-static Interface_DataMapOfTransientInteger types(500);
+#include <StepVisual_TessellatedAnnotationOccurrence.hxx>
+#include <StepVisual_TessellatedItem.hxx>
+#include <StepVisual_TessellatedGeometricSet.hxx>
+#include <StepVisual_TessellatedCurveSet.hxx>
+#include <StepVisual_CoordinatesList.hxx>
+#include <StepRepr_CharacterizedRepresentation.hxx>
+#include <StepRepr_ConstructiveGeometryRepresentation.hxx>
+#include <StepRepr_ConstructiveGeometryRepresentationRelationship.hxx>
+#include <StepVisual_CharacterizedObjAndRepresentationAndDraughtingModel.hxx>
+#include <StepVisual_AnnotationFillArea.hxx>
+#include <StepVisual_AnnotationFillAreaOccurrence.hxx>
+#include <StepVisual_CameraModelD3MultiClipping.hxx>
+#include <StepVisual_CameraModelD3MultiClippingIntersection.hxx>
+#include <StepVisual_CameraModelD3MultiClippingUnion.hxx>
+#include <StepVisual_AnnotationCurveOccurrenceAndGeomReprItem.hxx>
 
+#include <StepVisual_SurfaceStyleTransparent.hxx>
+#include <StepVisual_SurfaceStyleReflectanceAmbient.hxx>
+#include <StepVisual_SurfaceStyleRendering.hxx>
+#include <StepVisual_SurfaceStyleRenderingWithProperties.hxx>
+
+static int THE_StepAP214_Protocol_init = 0;
+static Interface_DataMapOfTransientInteger types(800);
 
 //=======================================================================
 //function : StepAP214_Protocol
@@ -680,14 +765,18 @@ static Interface_DataMapOfTransientInteger types(500);
 
 StepAP214_Protocol::StepAP214_Protocol ()
 {
-  if (init) return;  init = 1;
+  if (THE_StepAP214_Protocol_init)
+  {
+    return;
+  }
+  THE_StepAP214_Protocol_init = 1;
 
   types.Bind (STANDARD_TYPE(StepBasic_Address), 1);
   types.Bind (STANDARD_TYPE(StepShape_AdvancedBrepShapeRepresentation), 2);
   types.Bind (STANDARD_TYPE(StepShape_AdvancedFace), 3);
-//  types.Bind (STANDARD_TYPE(StepVisual_AnnotationCurveOccurrence), 4);
-//  types.Bind (STANDARD_TYPE(StepVisual_AnnotationFillArea), 5);
-//  types.Bind (STANDARD_TYPE(StepVisual_AnnotationFillAreaOccurrence), 6);
+  types.Bind (STANDARD_TYPE(StepVisual_AnnotationCurveOccurrence), 4);
+  types.Bind (STANDARD_TYPE(StepVisual_AnnotationFillArea), 5);
+  types.Bind (STANDARD_TYPE(StepVisual_AnnotationFillAreaOccurrence), 6);
   types.Bind (STANDARD_TYPE(StepVisual_AnnotationOccurrence), 7);
 //  types.Bind (STANDARD_TYPE(StepVisual_AnnotationSubfigureOccurrence), 8);
 //  types.Bind (STANDARD_TYPE(StepVisual_AnnotationSymbol), 9);
@@ -785,7 +874,7 @@ StepAP214_Protocol::StepAP214_Protocol ()
   types.Bind (STANDARD_TYPE(StepBasic_DimensionalExponents), 104);
   types.Bind (STANDARD_TYPE(StepGeom_Direction), 105);
   types.Bind (STANDARD_TYPE(StepVisual_DraughtingAnnotationOccurrence), 106);
-//  types.Bind (STANDARD_TYPE(StepVisual_DraughtingCallout), 107);
+  types.Bind (STANDARD_TYPE(StepVisual_DraughtingCallout), 107);
   types.Bind (STANDARD_TYPE(StepVisual_DraughtingPreDefinedColour), 108);
   types.Bind (STANDARD_TYPE(StepVisual_DraughtingPreDefinedCurveFont), 109);
 //  types.Bind (STANDARD_TYPE(StepVisual_DraughtingSubfigureRepresentation), 110);
@@ -1277,6 +1366,7 @@ StepAP214_Protocol::StepAP214_Protocol ()
   types.Bind (STANDARD_TYPE(StepBasic_DocumentProductEquivalence),601);
    
   //TR12J 4.06.2003 G&DT entities
+  types.Bind (STANDARD_TYPE(StepDimTol_CylindricityTolerance), 609);
   types.Bind (STANDARD_TYPE(StepShape_ShapeRepresentationWithParameters),610);
   types.Bind (STANDARD_TYPE(StepDimTol_AngularityTolerance),611);
   types.Bind (STANDARD_TYPE(StepDimTol_ConcentricityTolerance),612);
@@ -1311,7 +1401,76 @@ StepAP214_Protocol::StepAP214_Protocol ()
   // added by skl 10.02.2004 for TRJ13
   types.Bind (STANDARD_TYPE(StepBasic_ConversionBasedUnitAndMassUnit),650);
   types.Bind (STANDARD_TYPE(StepBasic_MassMeasureWithUnit), 651);
+
+  // Added by ika for GD&T AP242
+  types.Bind (STANDARD_TYPE(StepRepr_Apex), 660);
+  types.Bind (STANDARD_TYPE(StepRepr_CentreOfSymmetry), 661);
+  types.Bind (STANDARD_TYPE(StepRepr_GeometricAlignment), 662);
+  types.Bind (STANDARD_TYPE(StepRepr_PerpendicularTo), 663);
+  types.Bind (STANDARD_TYPE(StepRepr_Tangent), 664);
+  types.Bind (STANDARD_TYPE(StepRepr_ParallelOffset), 665);
+  types.Bind (STANDARD_TYPE(StepAP242_GeometricItemSpecificUsage), 666);
+  types.Bind (STANDARD_TYPE(StepAP242_IdAttribute), 667);
+  types.Bind (STANDARD_TYPE(StepAP242_ItemIdentifiedRepresentationUsage), 668);
+  types.Bind (STANDARD_TYPE(StepRepr_AllAroundShapeAspect), 669);
+  types.Bind (STANDARD_TYPE(StepRepr_BetweenShapeAspect), 670);
+  types.Bind (STANDARD_TYPE(StepRepr_CompositeGroupShapeAspect), 671);
+  types.Bind (STANDARD_TYPE(StepRepr_ContinuosShapeAspect), 672);
+  types.Bind (STANDARD_TYPE(StepDimTol_GeometricToleranceWithDefinedAreaUnit), 673);
+  types.Bind (STANDARD_TYPE(StepDimTol_GeometricToleranceWithDefinedUnit), 674);
+  types.Bind (STANDARD_TYPE(StepDimTol_GeometricToleranceWithMaximumTolerance), 675);
+  types.Bind (STANDARD_TYPE(StepDimTol_GeometricToleranceWithModifiers), 676);
+  types.Bind (STANDARD_TYPE(StepDimTol_UnequallyDisposedGeometricTolerance), 677);
+  types.Bind (STANDARD_TYPE(StepDimTol_NonUniformZoneDefinition), 678);
+  types.Bind (STANDARD_TYPE(StepDimTol_ProjectedZoneDefinition), 679);
+  types.Bind (STANDARD_TYPE(StepDimTol_RunoutZoneDefinition), 680);
+  types.Bind (STANDARD_TYPE(StepDimTol_RunoutZoneOrientation), 681);
+  types.Bind (STANDARD_TYPE(StepDimTol_ToleranceZone), 682);
+  types.Bind (STANDARD_TYPE(StepDimTol_ToleranceZoneDefinition), 683);
+  types.Bind (STANDARD_TYPE(StepDimTol_ToleranceZoneForm), 684);
+  types.Bind (STANDARD_TYPE(StepShape_ValueFormatTypeQualifier), 685);
+  types.Bind (STANDARD_TYPE(StepDimTol_DatumReferenceCompartment), 686);
+  types.Bind (STANDARD_TYPE(StepDimTol_DatumReferenceElement), 687);
+  types.Bind (STANDARD_TYPE(StepDimTol_DatumReferenceModifierWithValue), 688);
+  types.Bind (STANDARD_TYPE(StepDimTol_DatumSystem), 689);
+  types.Bind (STANDARD_TYPE(StepDimTol_GeneralDatumReference), 690);
+  types.Bind (STANDARD_TYPE(StepRepr_ReprItemAndPlaneAngleMeasureWithUnit), 691);
+  types.Bind (STANDARD_TYPE(StepRepr_ReprItemAndLengthMeasureWithUnitAndQRI), 692);
+  types.Bind (STANDARD_TYPE(StepRepr_ReprItemAndPlaneAngleMeasureWithUnitAndQRI), 693);
+  types.Bind (STANDARD_TYPE(StepDimTol_GeoTolAndGeoTolWthDatRef), 694);
+  types.Bind (STANDARD_TYPE(StepDimTol_GeoTolAndGeoTolWthDatRefAndGeoTolWthMod), 695);
+  types.Bind (STANDARD_TYPE(StepDimTol_GeoTolAndGeoTolWthMod), 696);
+  types.Bind (STANDARD_TYPE(StepDimTol_GeoTolAndGeoTolWthDatRefAndUneqDisGeoTol), 697);
+  types.Bind (STANDARD_TYPE(StepRepr_CompGroupShAspAndCompShAspAndDatumFeatAndShAsp), 698);
+  types.Bind (STANDARD_TYPE(StepRepr_CompShAspAndDatumFeatAndShAsp), 699);
+  types.Bind (STANDARD_TYPE(StepRepr_IntegerRepresentationItem), 700);
+  types.Bind (STANDARD_TYPE(StepRepr_ValueRepresentationItem), 701);
+  types.Bind (STANDARD_TYPE(StepRepr_FeatureForDatumTargetRelationship), 702);
+  types.Bind (STANDARD_TYPE(StepAP242_DraughtingModelItemAssociation), 703);
+  types.Bind (STANDARD_TYPE(StepVisual_AnnotationPlane), 704);
+  types.Bind (STANDARD_TYPE(StepDimTol_GeoTolAndGeoTolWthDatRefAndGeoTolWthMaxTol), 705);
+  types.Bind (STANDARD_TYPE(StepDimTol_GeoTolAndGeoTolWthMaxTol), 706);
+  //AP242 tesselated
+  types.Bind (STANDARD_TYPE(StepVisual_TessellatedAnnotationOccurrence), 707);
+  types.Bind (STANDARD_TYPE(StepVisual_TessellatedItem), 708);
+  types.Bind (STANDARD_TYPE(StepVisual_TessellatedGeometricSet), 709);
+  types.Bind (STANDARD_TYPE(StepVisual_TessellatedCurveSet), 710);
+  types.Bind (STANDARD_TYPE(StepVisual_CoordinatesList), 711);
+  types.Bind (STANDARD_TYPE(StepRepr_ConstructiveGeometryRepresentation), 712);
+  types.Bind (STANDARD_TYPE(StepRepr_ConstructiveGeometryRepresentationRelationship), 713);
+  types.Bind (STANDARD_TYPE(StepRepr_CharacterizedRepresentation), 714);
+  types.Bind (STANDARD_TYPE(StepVisual_CharacterizedObjAndRepresentationAndDraughtingModel), 715);
+  types.Bind (STANDARD_TYPE(StepVisual_CameraModelD3MultiClipping), 716);
+  types.Bind (STANDARD_TYPE(StepVisual_CameraModelD3MultiClippingIntersection), 717);
+  types.Bind (STANDARD_TYPE(StepVisual_CameraModelD3MultiClippingUnion), 718);
+  types.Bind (STANDARD_TYPE(StepVisual_AnnotationCurveOccurrenceAndGeomReprItem), 719);
+  types.Bind (STANDARD_TYPE(StepVisual_SurfaceStyleTransparent), 720);
+  types.Bind (STANDARD_TYPE(StepVisual_SurfaceStyleReflectanceAmbient), 721);
+  types.Bind (STANDARD_TYPE(StepVisual_SurfaceStyleRendering), 722);
+  types.Bind (STANDARD_TYPE(StepVisual_SurfaceStyleRenderingWithProperties), 723);
 }
+
+
 
 //=======================================================================
 //function : TypeNumber
@@ -1339,6 +1498,7 @@ Standard_CString StepAP214_Protocol::SchemaName() const
   case 2 : return schemaAP214DIS; break; 
   case 3 : return schemaAP203;    break;
   case 4:  return schemaAP214IS; break;
+  case 5 : return schemaAP242DIS; break;
   }
 }
 

@@ -15,13 +15,15 @@
 
 // Generator:	ExpToCas (EXPRESS -> CASCADE/XSTEP Translator) V1.2
 
-#include <StepBasic_ThermodynamicTemperatureUnit.ixx>
+#include <Standard_Type.hxx>
+#include <StepBasic_ThermodynamicTemperatureUnit.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepBasic_ThermodynamicTemperatureUnit,StepBasic_NamedUnit)
 
 //=======================================================================
 //function : StepBasic_ThermodynamicTemperatureUnit
 //purpose  : 
 //=======================================================================
-
 StepBasic_ThermodynamicTemperatureUnit::StepBasic_ThermodynamicTemperatureUnit ()
 {
 }

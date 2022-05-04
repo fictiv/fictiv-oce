@@ -11,17 +11,14 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepRepr_DescriptiveRepresentationItem.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepRepr_DescriptiveRepresentationItem.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepRepr_DescriptiveRepresentationItem,StepRepr_RepresentationItem)
 
 StepRepr_DescriptiveRepresentationItem::StepRepr_DescriptiveRepresentationItem ()  {}
-
-void StepRepr_DescriptiveRepresentationItem::Init(
-	const Handle(TCollection_HAsciiString)& aName)
-{
-
-	StepRepr_RepresentationItem::Init(aName);
-}
 
 void StepRepr_DescriptiveRepresentationItem::Init(
 	const Handle(TCollection_HAsciiString)& aName,

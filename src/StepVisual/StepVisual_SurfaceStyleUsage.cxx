@@ -11,8 +11,12 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepVisual_SurfaceStyleUsage.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepVisual_SurfaceSideStyle.hxx>
+#include <StepVisual_SurfaceStyleUsage.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepVisual_SurfaceStyleUsage,Standard_Transient)
 
 StepVisual_SurfaceStyleUsage::StepVisual_SurfaceStyleUsage ()  {}
 

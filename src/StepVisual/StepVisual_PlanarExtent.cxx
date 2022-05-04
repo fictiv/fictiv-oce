@@ -11,17 +11,14 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepVisual_PlanarExtent.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepVisual_PlanarExtent.hxx>
+#include <TCollection_HAsciiString.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepVisual_PlanarExtent,StepGeom_GeometricRepresentationItem)
 
 StepVisual_PlanarExtent::StepVisual_PlanarExtent ()  {}
-
-void StepVisual_PlanarExtent::Init(
-	const Handle(TCollection_HAsciiString)& aName)
-{
-
-	StepRepr_RepresentationItem::Init(aName);
-}
 
 void StepVisual_PlanarExtent::Init(
 	const Handle(TCollection_HAsciiString)& aName,

@@ -14,7 +14,12 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepBasic_ConversionBasedUnitAndAreaUnit.ixx>
+
+#include <Standard_Type.hxx>
+#include <StepBasic_AreaUnit.hxx>
+#include <StepBasic_ConversionBasedUnitAndAreaUnit.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepBasic_ConversionBasedUnitAndAreaUnit,StepBasic_ConversionBasedUnit)
 
 StepBasic_ConversionBasedUnitAndAreaUnit::StepBasic_ConversionBasedUnitAndAreaUnit()
 {

@@ -11,13 +11,20 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <STEPEdit_EditContext.ixx>
+
+#include <IFSelect_EditForm.hxx>
+#include <Interface_InterfaceModel.hxx>
 #include <Interface_TypedValue.hxx>
+#include <Standard_Transient.hxx>
+#include <Standard_Type.hxx>
+#include <StepBasic_ApplicationProtocolDefinition.hxx>
+#include <STEPConstruct_ContextTool.hxx>
+#include <StepData_StepModel.hxx>
+#include <STEPEdit_EditContext.hxx>
+#include <TCollection_AsciiString.hxx>
 #include <TCollection_HAsciiString.hxx>
 
-#include <StepData_StepModel.hxx>
-#include <STEPConstruct_ContextTool.hxx>
-
+IMPLEMENT_STANDARD_RTTIEXT(STEPEdit_EditContext,IFSelect_Editor)
 
 STEPEdit_EditContext::STEPEdit_EditContext ()
 : IFSelect_Editor (5)

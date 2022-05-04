@@ -11,7 +11,13 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepBasic_ApprovalDateTime.ixx>
+
+#include <Standard_Type.hxx>
+#include <StepBasic_Approval.hxx>
+#include <StepBasic_ApprovalDateTime.hxx>
+#include <StepBasic_DateTimeSelect.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepBasic_ApprovalDateTime,Standard_Transient)
 
 StepBasic_ApprovalDateTime::StepBasic_ApprovalDateTime ()  {  }
 

@@ -11,8 +11,12 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#include <StepVisual_PreDefinedColour.ixx>
 
+#include <Standard_Type.hxx>
+#include <StepVisual_PreDefinedColour.hxx>
+#include <StepVisual_PreDefinedItem.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(StepVisual_PreDefinedColour,StepVisual_Colour)
 
 StepVisual_PreDefinedColour::StepVisual_PreDefinedColour ()  
 {

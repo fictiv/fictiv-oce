@@ -14,32 +14,42 @@
 //:n7 abv 16.02.99: treatment of CARTESIAN_TRSF_OP_3D placed to StepGeom_MkTransformed3d
 // sln 23.10.2001. CTS23496: Verifying on error creation of directions is added (StepToTopoDS_MakeTransformed::Compute(...) function)
 
-#include <StepToTopoDS_MakeTransformed.ixx>
-#include <Transfer_Binder.hxx>
-#include <TransferBRep_ShapeBinder.hxx>
-
-#include <StepToGeom_MakeAxis2Placement.hxx>
 #include <Geom_Axis2Placement.hxx>
-#include <gp_Ax3.hxx>
-#include <gp_TrsfForm.hxx>
-#include <TopLoc_Location.hxx>
-
-#include <StepRepr_RepresentationMap.hxx>
-#include <StepRepr_Representation.hxx>
-
-//  + pour CartesianOperator3d
 #include <Geom_CartesianPoint.hxx>
 #include <Geom_Direction.hxx>
+#include <gp_Ax3.hxx>
+#include <gp_Trsf.hxx>
+#include <gp_TrsfForm.hxx>
+#include <StepGeom_Axis2Placement3d.hxx>
 #include <StepGeom_CartesianPoint.hxx>
+#include <StepGeom_CartesianTransformationOperator3d.hxx>
 #include <StepGeom_Direction.hxx>
-#include <StepToGeom_MakeCartesianPoint.hxx>
-#include <StepToGeom_MakeDirection.hxx>
-#include <StepToGeom_MakeTransformation3d.hxx>
+#include <StepRepr_ItemDefinedTransformation.hxx>
+#include <StepRepr_MappedItem.hxx>
+#include <StepRepr_Representation.hxx>
+#include <StepRepr_RepresentationMap.hxx>
+#include <StepToGeom.hxx>
+#include <StepToTopoDS_MakeTransformed.hxx>
+#include <TopLoc_Location.hxx>
+#include <TopoDS_Shape.hxx>
+#include <Transfer_Binder.hxx>
+#include <Transfer_TransientProcess.hxx>
+#include <TransferBRep_ShapeBinder.hxx>
 
+//  + pour CartesianOperator3d
+//=======================================================================
+//function : StepToTopoDS_MakeTransformed
+//purpose  : 
+//=======================================================================
 
 StepToTopoDS_MakeTransformed::StepToTopoDS_MakeTransformed ()
 {
 }
+
+//=======================================================================
+//function : Compute
+//purpose  : 
+//=======================================================================
 
 Standard_Boolean  StepToTopoDS_MakeTransformed::Compute
   (const Handle(StepGeom_Axis2Placement3d)& Origin,
@@ -49,11 +59,11 @@ Standard_Boolean  StepToTopoDS_MakeTransformed::Compute
   if (Origin.IsNull() || Target.IsNull()) return Standard_False;
 
   // sln 23.10.2001 : If the directions have not been created do nothing.  
-  Handle(Geom_Axis2Placement) theOrig;
-  if (!StepToGeom_MakeAxis2Placement::Convert(Origin,theOrig))
+  Handle(Geom_Axis2Placement) theOrig = StepToGeom::MakeAxis2Placement (Origin);
+  if (theOrig.IsNull())
     return Standard_False;
-  Handle(Geom_Axis2Placement) theTarg;
-  if (!StepToGeom_MakeAxis2Placement::Convert(Target,theTarg))
+  Handle(Geom_Axis2Placement) theTarg = StepToGeom::MakeAxis2Placement (Target);
+  if (theTarg.IsNull())
     return Standard_False;
 
   const gp_Ax3 ax3Orig(theOrig->Ax2());
@@ -64,16 +74,31 @@ Standard_Boolean  StepToTopoDS_MakeTransformed::Compute
   return Standard_True;
 }
 
+//=======================================================================
+//function : Compute
+//purpose  : 
+//=======================================================================
+
 Standard_Boolean  StepToTopoDS_MakeTransformed::Compute
   (const Handle(StepGeom_CartesianTransformationOperator3d)& Operator)
 {
-  return StepToGeom_MakeTransformation3d::Convert(Operator,theTrsf);
+  return StepToGeom::MakeTransformation3d (Operator, theTrsf);
 }
+
+//=======================================================================
+//function : Transformation
+//purpose  : 
+//=======================================================================
 
 const gp_Trsf&  StepToTopoDS_MakeTransformed::Transformation () const
 {
   return theTrsf;
 }
+
+//=======================================================================
+//function : Transform
+//purpose  : 
+//=======================================================================
 
 Standard_Boolean  StepToTopoDS_MakeTransformed::Transform
   (TopoDS_Shape& shape) const
@@ -81,13 +106,18 @@ Standard_Boolean  StepToTopoDS_MakeTransformed::Transform
   if (theTrsf.Form() == gp_Identity) return Standard_False;
   TopLoc_Location theLoc(theTrsf);
   shape.Move (theLoc);
-//  shape.Location(theLoc);
   return Standard_True;
 }
 
+//=======================================================================
+//function : TranslateMappedItem
+//purpose  : 
+//=======================================================================
+
 TopoDS_Shape  StepToTopoDS_MakeTransformed::TranslateMappedItem
 (const Handle(StepRepr_MappedItem)& mapit,
- const Handle(Transfer_TransientProcess)& TP)
+ const Handle(Transfer_TransientProcess)& TP,
+ const Message_ProgressRange& theProgress)
 {
   TopoDS_Shape theResult;
 
@@ -103,8 +133,6 @@ TopoDS_Shape  StepToTopoDS_MakeTransformed::TranslateMappedItem
 
   Handle(StepGeom_CartesianTransformationOperator3d) CartOp =
     Handle(StepGeom_CartesianTransformationOperator3d)::DownCast(mapit->MappingTarget());
-//  Handle(StepRepr_ItemDefinedTransformation) ItemDef =
-//    Handle(StepRepr_ItemDefinedTransformation)::DownCast(mapit->MappingTarget());
 
   Standard_Boolean ok = Standard_False;
   if (!Origin.IsNull() && !Target.IsNull()) ok = Compute (Origin,Target);
@@ -115,7 +143,7 @@ TopoDS_Shape  StepToTopoDS_MakeTransformed::TranslateMappedItem
   //  La Shape, et la mise en position
   Handle(StepRepr_Representation) maprep = mapit->MappingSource()->MappedRepresentation();
   Handle(Transfer_Binder) binder = TP->Find(maprep);
-  if (binder.IsNull())    binder = TP->Transferring(maprep);
+  if (binder.IsNull())    binder = TP->Transferring(maprep, theProgress);
   Handle(TransferBRep_ShapeBinder) shbinder =
     Handle(TransferBRep_ShapeBinder)::DownCast(binder);
   if (shbinder.IsNull())  TP->AddWarning(mapit,"No Shape Produced");
