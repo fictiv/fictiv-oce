@@ -44,6 +44,7 @@ const Standard_Real Precision    = Precision::PConfusion();
 const Standard_Real Precision2   = Precision * Precision;
 
 namespace {
+#include <iostream>
   //! Sort two points in projection on vector (1,1)
   struct ComparatorOfVertexOfDelaun 
   {

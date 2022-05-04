@@ -21,6 +21,9 @@
 #include <IMeshTools_MeshAlgo.hxx>
 #include <OSD_Parallel.hxx>
 
+#include <map>
+#include <string>
+
 IMPLEMENT_STANDARD_RTTIEXT(BRepMesh_FaceDiscret, IMeshTools_ModelAlgo)
 
 //=======================================================================
@@ -90,7 +93,8 @@ Standard_Boolean BRepMesh_FaceDiscret::performInternal(
   }
 
   FaceListFunctor aFunctor(this, theRange);
-  OSD_Parallel::For(0, myModel->FacesNb(), aFunctor, !(myParameters.InParallel && myModel->FacesNb() > 1));
+  OSD_Parallel::For(0, myModel->FacesNb(), aFunctor, Standard_True);
+  // OSD_Parallel::For(0, myModel->FacesNb(), aFunctor, !(myParameters.InParallel && myModel->FacesNb() > 1));
   if (!theRange.More())
   {
     return Standard_False;
@@ -98,6 +102,26 @@ Standard_Boolean BRepMesh_FaceDiscret::performInternal(
 
   myModel.Nullify(); // Do not hold link to model.
   return Standard_True;
+}
+
+std::string GetFaceTypeString(const GeomAbs_SurfaceType &facetype)
+{
+  static std::map<GeomAbs_SurfaceType, std::string> facetype2string;
+  if (facetype2string.size() == 0)
+  {
+    facetype2string[GeomAbs_Plane] = "GeomAbs_Plane";
+    facetype2string[GeomAbs_Cylinder] = "GeomAbs_Cylinder";
+    facetype2string[GeomAbs_Cone] = "GeomAbs_Cone";
+    facetype2string[GeomAbs_Sphere] = "GeomAbs_Sphere";
+    facetype2string[GeomAbs_Torus] = "GeomAbs_Torus";
+    facetype2string[GeomAbs_BezierSurface] = "GeomAbs_BezierSurface";
+    facetype2string[GeomAbs_BSplineSurface] = "GeomAbs_BSplineSurface";
+    facetype2string[GeomAbs_SurfaceOfRevolution] = "GeomAbs_SurfaceOfRevolution";
+    facetype2string[GeomAbs_SurfaceOfExtrusion] = "GeomAbs_SurfaceOfExtrusion";
+    facetype2string[GeomAbs_OffsetSurface] = "GeomAbs_OffsetSurface";
+    facetype2string[GeomAbs_OtherSurface] = "GeomAbs_OtherSurface";
+  }
+  return facetype2string[facetype];
 }
 
 //=======================================================================
@@ -132,7 +156,16 @@ void BRepMesh_FaceDiscret::process(const Standard_Integer theFaceIndex,
       aDFace->SetStatus (IMeshData_UserBreak);
       return;
     }
+    GeomAbs_SurfaceType surfacetype;
+    const TopoDS_Face &oceface = aDFace->GetFace();
+    if (!BRep_Tool::Surface(oceface).IsNull())
+    { // Get the surface type
+      BRepAdaptor_Surface First(oceface, Standard_False);
+      surfacetype = First.GetType();
+      std::cout << "Begin " << GetFaceTypeString(surfacetype) << std::endl;
+    }
     aMeshingAlgo->Perform(aDFace, myParameters, theRange);
+    std::cout << "End " << GetFaceTypeString(surfacetype) << std::endl;
   }
   catch (Standard_Failure const&)
   {

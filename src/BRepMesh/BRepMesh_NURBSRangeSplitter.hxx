@@ -44,8 +44,10 @@ public:
   Standard_EXPORT virtual Handle(IMeshData::ListOfPnt2d) GenerateSurfaceNodes(
     const IMeshTools_Parameters& theParameters) const Standard_OVERRIDE;
 
-protected:
+  //! Registers border point.
+  Standard_EXPORT virtual void AddPoint(const gp_Pnt2d &thePoint) Standard_OVERRIDE;
 
+protected:
   //! Initializes U and V parameters lists using CN continuity intervals.
   Standard_EXPORT virtual Standard_Boolean initParameters() const;
 

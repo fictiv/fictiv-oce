@@ -18,6 +18,7 @@
 
 #include <BRepMesh_NodeInsertionMeshAlgo.hxx>
 #include <BRepMesh_GeomTool.hxx>
+#include <iostream>
 
 //! Extends base Delaunay meshing algo in order to enable possibility 
 //! of addition of free vertices and internal nodes into the mesh.
@@ -109,8 +110,10 @@ protected:
     BRepMesh_Delaun&                      theMesher,
     const Message_ProgressRange&          theRange)
   {
+    std::cout << "Begin insertNodes" << std::endl;
     if (theNodes.IsNull() || theNodes->IsEmpty())
     {
+      std::cout << "End insertNodes A" << std::endl;
       return Standard_False;
     }
 
@@ -129,8 +132,11 @@ protected:
     theMesher.AddVertices (aVertexIndexes, theRange);
     if (!theRange.More())
     {
+      std::cout << "End insertNodes B" << std::endl;
       return Standard_False;
     }
+    std::cout << "End insertNodes C" << std::endl;
+
     return !aVertexIndexes.IsEmpty();
   }
 

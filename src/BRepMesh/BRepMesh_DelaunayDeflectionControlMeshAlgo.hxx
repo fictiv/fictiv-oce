@@ -61,7 +61,7 @@ protected:
     if (this->getParameters().ControlSurfaceDeflection &&
         this->getStructure()->ElementsOfDomain().Extent() > 0)
     {
-      optimizeMesh(theMesher, aPS.Next());
+      optimizeMesh(theMesher, aPS.Next()); //This inserts vertices at triangle centers and edge centers if the deflection exceeds limits.
     }
     else
     {

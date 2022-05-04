@@ -51,6 +51,7 @@ void BRepMesh_BaseMeshAlgo::Perform(
   const IMeshTools_Parameters&  theParameters,
   const Message_ProgressRange&  theRange)
 {
+  // poop
   try
   {
     OCC_CATCH_SIGNALS
