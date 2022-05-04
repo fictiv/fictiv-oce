@@ -15,6 +15,9 @@
 
 #include <BRepMesh_ConeRangeSplitter.hxx>
 #include <GCPnts_TangentialDeflection.hxx>
+#include <set>
+#include <algorithm>
+#include <iostream>
 
 //=======================================================================
 // Function: GetSplitSteps
@@ -66,15 +69,66 @@ Handle(IMeshData::ListOfPnt2d) BRepMesh_ConeRangeSplitter::GenerateSurfaceNodes(
     new NCollection_IncAllocator(IMeshData::MEMORY_BLOCK_SIZE_HUGE);
   Handle(IMeshData::ListOfPnt2d) aNodes = new IMeshData::ListOfPnt2d(aTmpAlloc);
 
+
   const Standard_Real aPasMaxV = aRangeV.second - aSteps.second*0.5;
   const Standard_Real aPasMaxU = aRangeU.second - aSteps.first *0.5;
-  for (Standard_Real aPasV = aRangeV.first + aSteps.second; aPasV < aPasMaxV; aPasV += aSteps.second)
-  {
-    for (Standard_Real aPasU = aRangeU.first + aSteps.first; aPasU < aPasMaxU; aPasU += aSteps.first)
-    {
-      aNodes->Append(gp_Pnt2d(aPasU, aPasV));
+  std::vector<Standard_Real> vpnts;
+  std::vector<Standard_Real> upnts;
+  for(auto&& pnt : boundaryPnts){
+    upnts.push_back(pnt.X());
+    vpnts.push_back(pnt.Y());
+  }
+  std::sort(upnts.begin(), upnts.end());
+  std::sort(vpnts.begin(), vpnts.end());
+  if(vpnts.size()<1 || upnts.size()<1){
+    return aNodes;
+  }
+
+  //for (Standard_Real aPasV = aRangeV.first + aSteps.second; aPasV < aPasMaxV; aPasV += aSteps.second){
+  Standard_Real aPasVprev = vpnts[0];
+  for (unsigned int i=0; i<vpnts.size(); i++){
+    Standard_Real aPasV = vpnts[i];
+    if(i>0){
+      Standard_Real deltaV = aPasV-aPasVprev;
+      if(deltaV==0){
+        continue;
+      }
+      else if(false && deltaV>aSteps.second){ //I'm not sure how this would happen given that the boundary sampling should follow the same logic
+        //Insert an intermediate point
+        aPasV = aPasVprev + aSteps.second;
+        i--;  //We'll try this boundary point again
+      }
     }
+    //for (Standard_Real aPasU = aRangeU.first + aSteps.first; aPasU < aPasMaxU; aPasU += aSteps.first){
+    Standard_Real aPasUprev = upnts[0];
+    for(unsigned int j=0; j<upnts.size(); j++){
+      Standard_Real aPasU = upnts[j];
+      Standard_Real deltaU = aPasU-aPasUprev;
+      if(j>0){
+        if(deltaU==0){
+          continue;
+        }
+        else if(deltaU>aSteps.first){ //I'm not sure how this would happen given that the boundary sampling should follow the same logic
+          //Insert an intermediate point
+          aPasU = aPasUprev + aSteps.first;
+          j--;  //We'll try this boundary point again
+        }
+      }
+
+      aNodes->Append(gp_Pnt2d(aPasU, aPasV));
+
+      aPasUprev = aPasU;
+    }
+    aPasVprev = aPasV;
   }
 
   return aNodes;
 }
+
+void BRepMesh_ConeRangeSplitter::AddPoint(const gp_Pnt2d &thePoint)
+{
+  std::cout<<"Using BRepMesh_ConeRangeSplitter::AddPoint"<<std::endl;
+  BRepMesh_DefaultRangeSplitter::AddPoint(thePoint);
+  boundaryPnts.push_back(thePoint);
+}
+
