@@ -481,6 +481,15 @@ private:
           int stepSize = 1;//(int)floor(interpPnts.size() * .2);
           if(stepSize>0){
             for(int k=stepSize; k<=(int)interpPnts.size() - stepSize; k+=stepSize){
+              //The usePoint code below has been in production for 3 years, but it has an issue
+              //where index i might be out of bounds. It feels like it should index k instead, but when 
+              //I change it to that I get some bad meshing, like regression test 420-5071-00-2.step
+              //has a thinwall that makes no sense. Multiple other regression tests also have spurious
+              //thinwall issues when using index k. It would take me a long time to refresh my memory about
+              //what this code is trying to do, so instead I'm just going to skip when i would be out of bounds.
+              if(i<0 || i>=interpPnts.size()){
+                continue;
+              }
               usePoint (interpPnts[i], LineDeviation (theNodesInfo[i].Point, theNodesInfo[j].Point));
             }
           }
