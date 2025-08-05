@@ -251,7 +251,6 @@ void BRepMesh_Delaun::initCirclesTool (const Bnd_Box2d&       theBox,
 
 void DeterministicallyScrambleVertices(IMeshData::VectorOfInteger &theVertexIndices)
 {
-  std::cout << "Begin Scrambling " << theVertexIndices.Size() << std::endl;
   if (theVertexIndices.Size() < 1)
   {
     // return;
@@ -261,25 +260,18 @@ void DeterministicallyScrambleVertices(IMeshData::VectorOfInteger &theVertexIndi
   std::vector<int> prime_numbers = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173};
   int prime_index = prime_numbers.size() - 1;
   int pivot_index = 0;
-  std::cout << "theVertexIndices.Size()=" << theVertexIndices.Size() << ", theVertexIndices.Size() - 1=" << (theVertexIndices.Size() - 1) << std::endl;
   for (int elem_index = theVertexIndices.Size() - 1; elem_index >= 1; elem_index--)
   {
-    std::cout << "elem_index=" << elem_index << ", theVertexIndices.Size()=" << theVertexIndices.Size() << std::endl;
     while (prime_numbers[prime_index] >= elem_index && prime_index > 1)
     {
       prime_index--;
     }
-    std::cout << "prime_index=" << prime_index << ", prime_numbers.size()=" << prime_numbers.size() << std::endl;
     pivot_index = (pivot_index + prime_numbers[prime_index]) % elem_index;
-    std::cout << "pivot_index=" << pivot_index << ", theVertexIndices.Size()=" << theVertexIndices.Size() << std::endl;
-    std::cout << "Swapping " << elem_index << " with " << pivot_index << std::endl;
     std::swap(theVertexIndices[elem_index], theVertexIndices[pivot_index]);
-    std::cout << "\tSuccessfully swapped" << std::endl;
   }
   // Trying to emulate this
   // auto rng = std::default_random_engine{};
   // std::shuffle(std::begin(theVertexIndices), std::end(theVertexIndices), rng);
-  std::cout << "Finished Scrambling" << std::endl;
 }
 
 //=======================================================================
